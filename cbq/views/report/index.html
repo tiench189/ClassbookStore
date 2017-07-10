@@ -1,0 +1,231 @@
+{{extend 'layout.html'}}
+<script type="text/javascript" src="{{=URL('static', 'js', 'treetable.js')}}"></script>
+<div>
+    <input type="hidden" value="1" id="span">
+    <table>
+        <tr>
+            <!--<td>Parent category: <select id="sclParent"></select></td>
+            <td>Parent category: <select id="sclChild"></select></td>
+            <td>Parent category: <select id="sclCategory"></select></td>-->
+        </tr>
+    </table>
+    <br><br><br>
+
+    <div id="report_area">
+
+    </div>
+</div>
+
+<script>
+load_parent_list();
+
+load_data(null);
+$(document).ready(function () {
+    $("#sclParent").change(function () {
+        load_child_list();
+    });
+
+    $("#sclChild").change(function () {
+        load_data_by_category();
+    });
+
+    $("#sclCategory").change(function () {
+
+    });
+});
+
+function expand_category(table_id, category_id) {
+    //get_lit_tree_category
+    if ($('#' + table_id + '_' + 0).length) {
+        $.ajax({
+            url: "{{=URL('cbq', 'quiz_category', 'get_list_tree_category.json')}}",
+            type: "POST",
+            data: {parent_id: category_id},
+            success: function (data) {
+                $.each(data, function (key, value) {
+                    if (key == 'result') {
+                        if ($('#' + table_id + '_' + 0).css('display') == 'none') {
+                            $.each(value, function (k, v) {
+                                $("." + v.id).show();
+                            });
+                        } else {
+                            $.each(value, function (k, v) {
+                                $("." + v.id).hide();
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    } else {
+
+
+        $.ajax({
+            url: "{{=URL('cbq', 'report', 'report_question_by_parent.json')}}",
+            type: "POST",
+            data: {parent_id: category_id},
+            success: function (data) {
+                var count = 0;
+                var content = '';
+                var space = '';
+
+                $.each(data, function (key, value) {
+                    if (key == 'result') {
+                        $.each(value, function (k, v) {
+                            for (var i = 0; i < parseInt(v.level)-1; i ++ )
+                            {
+                                space += '&nbsp;&nbsp;&nbsp;&nbsp;';
+                            }
+                            content += '<tr id="' + table_id + '_' + count + '" class="' + v.id + '"><td>' + space + '<a href="#" onclick="expand_category(\'' + table_id + '_' + count + '\', ' + v.id + ');"> ' + v.name + '</a>' + '</td><td>' + v.value + '</td></tr>';
+                            count += 1;
+                            space = '';
+                        });
+                    }
+                });
+                $(content).insertAfter("#" + table_id);
+
+            }
+        });
+    }
+}
+
+function load_data(parent_id) {
+    $.ajax({
+        url: "{{=URL('cbq', 'report', 'report_question_by_parent.json')}}",
+        type: "POST",
+        data: {parent_id: parent_id},
+        success: function (data) {
+            var count = 0;
+            var content = '<table id="table1">';
+            content += '<thead>' +
+                    '<th> Tên category</th>' +
+                    '<th>Số lượng</th>' +
+                    '</thead>';
+            $.each(data, function (key, value) {
+                if (key == 'result') {
+                    $.each(value, function (k, v) {
+//                            content += '<tr id="table1_0_' + count +'" class="' + v.id +'"><td>' + v.name + '</td><td>' + v.value + '</td></tr>';
+//                            if ($('#table1_0_' + count).length) {
+//                                if ($('#table1_0_' + count).css('display') == 'none') {
+//                                    $('#table1_0_' + count).show();
+//                                } else {
+//                                    $("tr[id^='table1_0_']").hide();
+////                                    $('#table1_0_' + count).css('display', 'none');
+//                                }
+//                            } else {
+                        content += '<tr id="table1_0_' + count + '" class="' + v.id + '"><td><a href="#" onclick="expand_category(\'table1_0_' + count + '\', ' + v.id + ');"> ' + v.name + '</a>' + '</td><td>' + v.value + '</td></tr>';
+                        count += 1;
+//                            }
+
+                    });
+                }
+            });
+            content += "</table>"
+            $("#report_area").html(content);
+        }
+
+    });
+}
+
+function load_parent_list() {
+    $.ajax({
+        url: "{{=URL("cbq", "quiz_category", "get_list_category_has_null_parent.json", host=True)}}",
+        type: "POST",
+        success: function (data) {
+            var content = '';
+            content += '<option value=-1>Chọn lớp</option>';
+            $.each(data, function (key, value) {
+                if (key == 'category_list') {
+                    $.each(value, function (k, v) {
+                        content += '<option value=' + v.id + '>' + v.category_name + '</option>';
+                    });
+
+                }
+            });
+            $('#sclParent').html(content);
+        }
+
+    });
+
+}
+
+function load_child_list() {
+    var parent_id = $('#sclParent :selected').val();
+    $.ajax({
+        url: "{{=URL("cbq", "quiz_category", "get_list_quiz_category_by_parent_id.json", host=True)}}",
+        type: "POST",
+        data: {parent_id: parent_id},
+        success: function (data) {
+            var subject_id = null;
+            var content = '';
+            content += '<option value=-1>Chọn môn</option>';
+            $.each(data, function (key, value) {
+                if (key == 'category_list') {
+                    $.each(value, function (k, v) {
+                        if (subject_id == null) {
+                            subject_id = v.id;
+                            content += '<option value=' + v.id + '>' + v.category_name + '</option>';
+                        } else {
+                            content += '<option value=' + v.id + ' selected = "selected">' + v.category_name + '</option>';
+                        }
+
+                    });
+                }
+            });
+            $('#sclChild').html(content);
+        }
+    });
+}
+
+function load_category() {
+
+    var parent_id = $("#sclChild").val();
+
+    $.ajax({
+        url: "{{=URL("cbq", "quiz_category", "get_list_quiz_category_by_parent_id.json", host=True)}}",
+        type: "POST",
+        data: {parent_id: parent_id},
+        success: function (data) {
+            var content = "";
+            content += '<option value=-1>Chọn category</option>';
+            content += '<div id="question_info">';
+            $.each(data, function (key, value) {
+                if (key == 'category_list') {
+                    $.each(value, function (k, v) {
+                        content += '<option value=' + v.id + '>' + v.category_name + '</option>';
+                    });
+                }
+            });
+            $("#sclCategory").html(content);
+        }
+    });
+}
+
+function load_data_by_category() {
+    var child_id = $('#sclChild :selected').val();
+    $.ajax({
+        url: "{{=URL('cbq', 'report', 'report_question_by_category.json')}}",
+        type: "POST",
+        data: {child_id: child_id},
+        success: function (data) {
+            var content = '<table>'
+            content += '<thead>';
+            content += '    <th> Tên category </th>';
+            content += '    <th> Số lượng </th>';
+            content += '</thead>';
+            $.each(data, function (k, v) {
+                if (k == 'result') {
+                    $.each(v, function (key, value) {
+                        content += '<tr>';
+                        content += '    <td>' + value.name + '</td>';
+                        content += '    <td>' + value.value + '</td>';
+                        content += '</tr>';
+                    });
+                }
+            });
+            $('#report_area').html(content);
+        }
+
+    });
+}
+</script>

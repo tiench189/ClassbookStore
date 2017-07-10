@@ -1,0 +1,17 @@
+{{extend "layout.html"}}
+<div class="mess {{='' if result else 'err'}}">{{=mess}}</div>
+<form method="post">
+    Chuyển sách từ tài khoản: <br>
+    <input name="u1" type="text" placeholder="Tài khoản cũ"><br>
+    Đến tài khoản: <br>
+    <input name="u2" type="text" placeholder="Tài khoản mới"><br>
+    <input type="submit" value="Submit">
+</form>
+<style>
+    .mess{
+        color: green;
+    }
+    .mess.err{
+        color: red;
+    }
+</style>

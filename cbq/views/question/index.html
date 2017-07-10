@@ -1,0 +1,373 @@
+{{extend 'layout.html'}}
+
+<form id="myForm" action="">
+    <input type="hidden" value="" id="action" name="action"/>
+    <input type="hidden" value="1" id="page_index" name="page_index"/>
+    <input type="hidden" value="{{=exam_id}}" id="exam_id" name="exam_id"/>
+    <input type="hidden" value="{{=segment_id}}" id="segment_id" name="segment_id"/>
+    <input type="hidden" value="" id="arrSelectedQuestion" name="arrSelectedQuestion"/>
+    <table class="basic_table">
+
+        <tr>
+            <td style="max-width: 100px;">
+                Từ khóa :
+            </td>
+            <td>
+                <input type='text' id='txtKeyWord' name='txtKeyWord' style="width: 200px;">
+            </td>
+            <td>
+                Kiểu câu hỏi
+            </td>
+            <td>
+                <select id="questionType" name="questionType">
+                    <option value="">Tất cả</option>
+                    <option value="MC_1">Mutilchoice</option>
+                    <option value="MATCHING">Matching</option>
+                    <option value="TRUEFALSE">True - False</option>
+                    <option value="FILLIN">Fill in</option>
+                    <option value="PC">PC</option>
+                    <option value="MC">Radio</option>
+                </select>
+            </td>
+
+            <td>Độ khó</td>
+            <td>
+                <select id="sclDifficultLevel">
+                    <option value="0">Dễ</option>
+                    <option value="2">Trung bình</option>
+                    <option value="3">Nâng cao</option>
+                    <option value="4">Khó</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Chọn lớp</td>
+            <td>
+                <select id="sclParent">
+
+                </select>
+            </td>
+            <td>Chọn môn</td>
+            <td>
+                <select id="sclChild">
+                    <option value="-1">Chọn môn</option>
+                </select>
+            </td>
+            <td>Chọn category</td>
+            <td>
+                <select id="sclCategory">
+                    <option value="-1">Chọn category</option>
+                </select>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                Số câu :
+            </td>
+            <td>
+                <select id="number_question">
+                    <option value="5">Mặc định</option>
+                    <option value="2">2 câu</option>
+                    <option value="5">5 câu</option>
+                    <option value="10">10 câu</option>
+                    <option value="15">15 câu</option>
+                </select>
+            </td>
+             <td>
+                Từ ngày:
+             </td>
+            <td >
+                <input type="text" id="start_date" name="start_date" style="width: 200px;">
+            </td>
+            <td>
+                Đến ngày: </td><td><input type="text" id="end_date" name="end_date" style="width: 200px;">
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>
+                <input type="checkbox" id="chkHasImg"/> Có hình ảnh</td>
+            <td >
+                <input type="checkbox" id="chkHasAudio" style="margin-left: 50px;"/> Có audio
+                </td><td>
+                   <input type="checkbox" id="chkHasVideo"/> Có video
+            </td>
+            <td><input type="button" id="btnGenQuiz" value="Tìm kiếm"/><span></span><input type="button"
+                                                                                           id="btnDelete"
+                                                                                           value="Xóa"/>
+            </td>
+            <td>
+                <input type="button" id="btnGenerateQuiz" name="btnGenerateQuiz" value="Lưu câu hỏi."/>
+            </td>
+        </tr>
+    </table>
+
+    <br/>
+
+    <div id="question_preview_area">
+
+
+    </div>
+    <div id="footer">
+        <input type="button" value="Xem thêm" id="btnMore" name="btnMore"/>
+    </div>
+</form>
+
+
+<script>
+$(document).ready(function () {
+
+    load_parent_list();
+    $("#start_date").val("");
+    $("#end_date").val("");
+    search(1);
+
+    $(function () {
+        $('#start_date').appendDtpicker();
+        $('#end_date').appendDtpicker();
+    });
+    $("#sclParent").change(function () {
+        load_child_list();
+    });
+
+    $("#sclChild").change(function () {
+        load_category();
+    });
+
+    $("#btnDelete").click(function () {
+        var arr_id = $("#arrSelectedQuestion").val();
+        if (arr_id == '' || arr_id == ',') {
+            alert("Bạn chưa chọn câu hỏi muốn xóa");
+            return;
+        }
+        delete_question();
+    });
+
+    $("#btnMore").click(function () {
+        var page = parseInt($("#page_index").val());
+        page = page + 1;
+        $("#page_index").val(page);
+        var content = search(0);
+        $("#question_preview_area").append(content);
+
+    });
+
+    $("#btnGenQuiz").click(function () {
+        var content = search(1);
+        $("#question_preview_area").html(content);
+    });
+
+});
+
+function delete_question() {
+    var question_id_arr = $("#arrSelectedQuestion").val();
+    $.ajax({
+        url: "{{=URL("cbq", "question", "delete_question.json", host=True)}}",
+        type: "POST",
+        data: {question_id_arr: question_id_arr},
+        success: function (data) {
+            $.each(data, function (key, value) {
+                if (key == 'result') {
+                    if (value > 0) {
+                        alert('Xóa câu hỏi thành công.');
+                        search(1);
+                    }
+                    else {
+                        alert('Có lỗi xảy ra trong quá trình xóa.');
+                    }
+                }
+            });
+
+        }
+    });
+}
+
+    $("#btnGenerateQuiz").click(function () {
+        var id_list = $("#arrSelectedQuestion").val();
+        var exam_id = $("#exam_id").val();
+        var segment_id = $("#segment_id").val();
+        $.ajax({
+            url: "{{=URL("cbq", "question", "generate_quiz.json", host=True)}}",
+            type: "POST",
+            data: {id_list: id_list, exam_id: exam_id, segment_id: segment_id},
+            success: function (data) {
+                $.each(data, function (key, value) {
+                    if (key == 'result') {
+                        if (value == -1) {
+                            window.location = "http://192.168.50.75:8003/cbq/exam/exam_manager?exam_id=" + exam_id;
+                        }
+                        else {
+                            if (confirm('Thêm câu hỏi cho segment thành công, bạn có tiếp tục thêm câu hỏi cho segment tiếp theo không: ?')) {
+                                window.location = "http://192.168.50.75:8003/cbq/question/index?exam_id=" + exam_id + "&segment_id=" + value;
+                            } else {
+                                window.location = "http://192.168.50.75:8003/cbq/exam/exam_manager?exam_id=" + exam_id;
+                            }
+                        }
+                    }
+                });
+
+            }
+        });
+    });
+
+function search(type) {
+    var content = "";
+    var difficult_level = $("#sclDifficultLevel").val();
+    var count = $("#number_question").val();
+    var keyWord = $("#txtKeyWord").val();
+    var question_type = $("#questionType").val()
+    var hasImg = false, hasAudio = false, hasVideo = false;
+    var page = $("#page_index").val();
+    var cate_id = $("#sclCategory").val();
+    var start_date = $("#start_date").val();
+    var end_date = $("#end_date").val();
+
+    if (question_type == 'None') {
+        question_type = null;
+    }
+
+    if ($("#chkHasImg").is(':checked')) {
+        hasImg = true
+    }
+    if ($("#chkHasAudio").is(':checked')) {
+        hasAudio = true
+    }
+    if ($("#chkHasVideo").is(':checked')) {
+        hasVideo = true
+    }
+    $.ajax({
+        url: "{{=URL("cbq", "question", "gen_random_list_question.json", host=True)}}",
+        type: "POST",
+        data: {difficult_level: difficult_level, count: count, cate_id: cate_id, keyWord: keyWord, hasImg: hasImg,
+            hasAudio: hasAudio, hasVideo: hasVideo, question_type: question_type, page: page, start_date: start_date, end_date: end_date},
+        success: function (data) {
+            content += '<div id="question_info">';
+            $.each(data, function (key, value) {
+                if (key == 'question_list') {
+                    if (value == null || value == '') {
+                        content += "<p>Không có nội dung để hiển thị</p>";
+                    } else {
+                        $.each(value, function (k, v) {
+                            content += '<table class="question_table">';
+                            content += '<tr>';
+                            content += '    <td><input type="checkbox" id = "' + v.id + '" onchange="select_question(' + v.id + ');"> Chọn câu hỏi<td>';
+                            content += '    <td><a href="{{=URL('cbq', 'question', 'edit')}}">Edit</a></td>';
+                            content += '</tr>';
+                            content += '<tr>';
+                            content += '    <td class="label_td">Mã câu hỏi :</td>';
+                            content += '    <td>' + v.id + '</td>';
+                            content += '</tr>';
+                            content += '<tr>';
+                            content += '    <td class="label_td">Yêu cầu câu hỏi :</td>';
+                            content += '    <td>' + v.question_guide + '</td>';
+                            content += '</tr>';
+                            content += '<tr>';
+                            content += '    <td  class="label_td"> Loại câu hỏi </td>';
+                            content += '    <td>' + v.question_type + '</td>';
+                            content += '</tr>';
+                            content += '<tr>';
+                            content += '    <td  class="label_td">Nội dung câu hỏi</td>';
+                            content += '    <td>' + v.question_content + '</td>';
+                            content += '</tr>';
+                            content += '<tr>';
+                            content += '    <td  class="label_td"> Danh sách câu trả lời</td>';
+                            content += '    <td class="answer_list">' + v.question_answer + '</td>';
+                            content += '</tr>'
+                            content += '</table>'
+                            content += "<p>";
+                        });
+                    }
+                }
+            });
+            content += '</div>';
+            if (type == 1) {
+                $("#question_preview_area").html(content);
+            } else {
+                $("#question_preview_area").append(content);
+            }
+        }
+    });
+
+}
+
+function load_parent_list() {
+    $.ajax({
+        url: "{{=URL("cbq", "quiz_category", "get_list_category_has_null_parent.json", host=True)}}",
+        type: "POST",
+        success: function (data) {
+            var content = '';
+            content += '<option value=-1>Chọn lớp</option>';
+            $.each(data, function (key, value) {
+                if (key == 'class_list') {
+                    $.each(value, function (k, v) {
+                        content += '<option value=' + v.id + '>' + v.category_name + '</option>';
+                    });
+
+                }
+            });
+            $('#sclParent').html(content);
+        }
+
+    });
+
+}
+
+function load_child_list() {
+    var parent_id = $('#sclParent :selected').val();
+    $.ajax({
+        url: "{{=URL("cbq", "quiz_category", "get_list_quiz_category_by_parent_id.json", host=True)}}",
+        type: "POST",
+        data: {parent_id: parent_id},
+        success: function (data) {
+            var subject_id = null;
+            var content = '';
+            content += '<option value=-1>Chọn môn</option>';
+            $.each(data, function (key, value) {
+                if (key == 'category_list') {
+                    $.each(value, function (k, v) {
+                        content += '<option value=' + v.id + '>' + v.category_name + '</option>';
+                    });
+                }
+            });
+            $('#sclChild').html(content);
+        }
+    });
+}
+
+function load_category() {
+    var parent_id = $("#sclChild").val();
+    $.ajax({
+        url: "{{=URL("cbq", "quiz_category", "get_list_quiz_category_by_parent_id.json", host=True)}}",
+        type: "POST",
+        data: {parent_id: parent_id},
+        success: function (data) {
+            var content = "";
+            content += '<div id="question_info">';
+            $.each(data, function (key, value) {
+                if (key == 'category_list') {
+                    $.each(value, function (k, v) {
+                        content += '<option value=' + v.id + '>' + v.category_name + '</option>';
+                    });
+                }
+            });
+            $("#sclCategory").html(content);
+        }
+    });
+}
+function select_question(question_id) {
+    var selectedQuestion = $("#arrSelectedQuestion").val();
+    var lines = selectedQuestion.split(',');
+    var check = jQuery.inArray(question_id.toString(), lines);
+    if (check < 0) {
+        $("#arrSelectedQuestion").val(selectedQuestion + "," + question_id);
+    } else {
+        lines.splice($.inArray(question_id.toString(), lines), 1);
+        selectedQuestion = lines + "";
+        $("#arrSelectedQuestion").val(selectedQuestion);
+    }
+}
+</script>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+<link href="{{=URL('static','css/datepicker.css')}}" type="text/css"  rel="stylesheet"/>
+<script src="{{=URL('static','js/canvg/canvg.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/jsapi')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/rgbcolor.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/bootstrap-datepicker.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/locales/bootstrap-datepicker.vi.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/jquery.tablesorter.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/tableToExcel.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/chartToImage.js')}}" type="text/javascript"></script>
+
+<div class="clsb_container">
+<form style="position: relative; text-align: center;">
+<button class="btn" style="float: right;" onclick="tableToExcel('tablelistTotal', 'Danh sách STK')">Xuất ra Excel</button>
+</form>
+            {{=TABLE(
+                    THEAD(
+                            TR(
+                                TH("Product ID", _class="header"),
+                                TH("Product Code", _class="header"),
+                                TH("Product Title", _class="header"),
+                                TH("Product Category", _class="header"),
+                                TH("Product Price", _class="header"),
+                                TH("Created on", _class="header"),
+                            ),
+                    ),
+                    *[TR(
+                        TD(product[i]['product_id']),
+                        TD(product[i]['product_code']),
+                        TD(product[i]['product_title']),
+                        TD(product[i]['product_category']),
+                        TD(product[i]['product_price']),
+                        TD(product[i]['created_on']),
+                        TD(product[i]['product_status']),
+                     ) if int(product[i]['product_id']) > 0 else TR() for i in range(len(product))],
+                    _id="tablelistTotal",
+                    _class="tablesorter"
+            )}}
+</div>
+</head>
+<body>
+
+</body>
+</html>

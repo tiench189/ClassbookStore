@@ -1,0 +1,585 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="{{=URL('static','js/jquery.min.js')}}"></script>
+    <script src="{{=URL('static','js/jquery.form.js')}}"></script>
+	<link rel="stylesheet" type="text/css" href="{{=URL('static','css/template.css')}}" />
+	<title>Biên tập</title>
+</head>
+
+<body>
+<div id="frame">
+	<div id="container"></div>
+</div>
+
+<div id="setting">
+    Màn hình: <select id="screen_size" onchange="settingScreen()">
+	  <option value="size169">16/9</option>
+	  <option value="size43">4/3</option>
+	</select><br><br>
+    Chiều quay: <select id="screen_orientation" onchange="settingScreen()">
+	  <option value="landscape">Chiều ngang</option>
+	  <option value="portrait">Chiều dọc</option>
+	</select><br><br>
+    Thời gian: <select id="time_out" onchange="settingScreen()">
+	    <option value="0">Không đặt</option>
+	    <option value="30">30s</option>
+        <option value="60">60s</option>
+        <option value="90">90s</option>
+        <option value="120">120s</option>
+	</select><br><br>
+    Action sau khi thả: <select id="after_drop" onchange="settingScreen()">
+	    <option value="hide">Biến mất</option>
+	    <option value="stay">Giữ nguyên</option>
+	</select><br><br>
+    Kiểm tra kết quả: <select id="check_true" onchange="settingScreen()">
+	    <option value="step_by_step">Mỗi khi hoàn thành 1 đáp án</option>
+	    <option value="stay">Sau khi hoàn thành tất cả</option>
+	</select><br><br>
+    Chọn ảnh nền: <form id="image-bg" method="post" enctype="multipart/form-data" action='{{=URL(f="upload_image")}}'>
+        <input id="set-background" type="file" name="image">
+        <input type="text" id="file_name_bg" name="filename" style="display: none">
+        <input type="text" id="path_bg" name="path" value="{{=path}}" style="display: none">
+    </form>
+	<div class="frame_edit">
+		<div id="edit_drop">
+            Loại: <select id="input_type">
+	  <option value="drop">Thả</option>
+	  <option value="drag">Kéo</option>
+	</select><br>
+        	Chiều rộng: <input class='edit_input' type="number" id="drop_width"/> % <select id="percent_drop_width">
+        	<option value="width">Width</option><option value="height">Height</option></select> <br>
+            Chiều cao: <input class='edit_input' type="number" id="drop_height"/> % <select id="percent_drop_height">
+        	<option value="width">Width</option><option value="height">Height</option></select> <br>
+            X: <input class='edit_input' type="number" id="drop_x"/> % <select id="percent_drop_x">
+        	<option value="width">Width</option><option value="height">Height</option></select> <br>
+            Y: <input class='edit_input' type="number" id="drop_y"/> % <select id="percent_drop_y">
+        	<option value="width">Width</option><option value="height">Height</option></select> <br>
+            Drop key: <input type="text" id="drop_key"/><br>
+            Ảnh: <form id="image-set" method="post" enctype="multipart/form-data" action='{{=URL(f="upload_image")}}'>
+            <input type="file" value="image" id="drop_image" name="image"/>
+            <input type="text" id="file_name_drop" name="filename" style="display: none">
+            <input type="text" id="path_drop" name="path" value="{{=path}}" style="display: none">
+            </form>
+            <div id="show_drop_image"></div>
+            <input type="submit" id="drop_submit" value="Thêm" onclick="addElement()" style="margin-top:10px" />
+		</div>
+	</div>
+	<input type="button" value="Hoàn tất" onclick="genJson()" style="margin-top: 10px">
+
+    <form method="POST" id="final" style="margin-top: 10px; display: none">
+        <div id="ctn-form">
+            <input id="final-json" name="final_json" type="text">
+            <input id="background" name="background" type="text">
+            <input id="orientation" name="orientation" type="text" value="landscape">
+            <input id="timeOut" name="time_out" type="text" value="0">
+            <input id="afterDrop" name="after_drop" type="text" value="0">
+            <input id="checkTrue" name="check_true" type="text" value="0">
+            <input name="path" type="text" value="{{=path}}">
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+<div id="edit" style="display: none">
+	<!-- <select id="edit_type">
+	  <option value="drop">Thả</option>
+	  <option value="drag">Kéo</option>
+	</select> -->
+	<h3>Chỉnh sửa</h3>
+	<div class="frame_edit">
+		<input id="close_edit" onclick="closeEdit()" type="button" value="Đóng" />
+		<div id="edit_element">
+        	Chiều rộng: <input class='edit_input' type="number" id="edit_width"/> % <select id="percent_edit_width">
+        	<option value="width">Width</option><option value="height">Height</option></select> <br>
+            Chiều cao: <input class='edit_input' type="number" id="edit_height"/> % <select id="percent_edit_height">
+        	<option value="width">Width</option><option value="height">Height</option></select> <br>
+            X: <input class='edit_input' type="number" id="edit_x"/> % <select id="percent_edit_x">
+        	<option value="width">Width</option><option value="height">Height</option></select> <br>
+            Y: <input class='edit_input' type="number" id="edit_y"/> % <select id="percent_edit_y">
+        	<option value="width">Width</option><option value="height">Height</option></select> <br>
+            Drop key: <input type="text" id="edit_key"/><br>
+            Ảnh: <form id="image-edit" method="post" enctype="multipart/form-data" action='{{=URL(f="upload_image")}}'>
+            <input type="file" id="edit_image" name="image"/>
+            <input type="text" id="file_name_edit" name="filename" style="display: none">
+            <input type="text" id="path_edit" name="path" value="{{=path}}" style="display: none">
+            </form>
+            <div id="show_edit_image"></div><br>
+            <input type="button" id="apply_element" value="Áp dụng" onclick="applyElement()" /> 
+            <input type="button" id="delete_element" value="Xóa" onclick="deleteElement()" />
+		</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+var container;
+var setting;
+var edit;
+var drop_list = [];
+var drag_list = [];
+var windowW = 966;
+var windowH = 604;
+var edit_element;
+var current_id = 0;
+var formData = new FormData();
+$(document).ready(function(e) {
+	container = document.getElementById("container");
+    setting = document.getElementById("setting");
+    edit = document.getElementById("edit");
+
+    setting.style.setProperty("width", parseInt(window.innerWidth / 4) + "px");
+    setting.style.setProperty("height", parseInt(window.innerHeight) + "px");
+    setting.style.setProperty("left", parseInt(window.innerWidth * 7 / 10 + 40) + "px");
+
+    edit.style.setProperty("width", parseInt(window.innerWidth / 4) + "px");
+    edit.style.setProperty("height", parseInt(window.innerHeight) + "px");
+    edit.style.setProperty("left", parseInt(window.innerWidth * 7 / 10 + 40) + "px");
+    {{if edit:}}
+    document.getElementById("after_drop").selectedIndex = {{=data['afterDrop']}};
+    document.getElementById("time_out").selectedIndex = {{=data['timeOut']}};
+    document.getElementById("file_name_bg").value = "{{=data['background']}}";
+    container.style.setProperty("background-image",
+                            "url(/cba/static/temp/{{=path}}/img/{{=data['background']}})");
+    {{if data['orientation'] == 'landscape':}}
+    document.getElementById("orientation").selectedIndex = 0;
+    {{else:}}
+    document.getElementById("orientation").selectedIndex = 1;
+    {{pass}}
+    {{pass}}
+    settingScreen();
+
+    {{if edit:}}
+    {{for element in data['final_json']:}}
+    var width_o = {{=element['width_o']}};
+    var width_p = {{=element['width_p']}};
+    var height_o = {{=element['height_o']}};
+    var height_p = {{=element['height_p']}};
+    var left_o = {{=element['left_o']}};
+    var left_p = {{=element['left_p']}};
+    var top_o = {{=element['top_o']}};
+    var top_p = {{=element['top_p']}};
+    var drop_key = "{{=element['key']}}";
+    var type = "{{=element['type']}}";
+    var img_url = "{{=element['img_url']}}"
+    if (width_o == 0){
+		var width = parseInt(width_p * windowW / 100);
+	}else{
+		var width = parseInt(width_p * windowH / 100);
+	}
+
+	if (height_o == 0){
+		var height = parseInt(height_p * windowW / 100);
+	}else{
+		var height = parseInt(height_p * windowH / 100);
+	}
+
+	if (left_o == 0){
+		var left = parseInt(left_p * windowW / 100);
+	}else{
+		var left = parseInt(left_p * windowH / 100);
+	}
+
+	if (top_o == 0){
+		var top = parseInt(top_p * windowW / 100);
+	}else{
+		var top = parseInt(top_p * windowH / 100);
+	}
+
+	var id = type + current_id;
+    current_id ++;
+	var html = "<div id='" + id + "' class='" + type + " " + drop_key + "' onclick='editElement(event)'></div>"
+	container.innerHTML = container.innerHTML + html;
+	var element = document.getElementById(id);
+	element.style.setProperty("width", width + "px");
+	element.style.setProperty("height", height + "px");
+	element.style.setProperty("left", left + "px");
+	element.style.setProperty("top", top + "px");
+	element.style.setProperty("background-image", "url(/cba/static/temp/{{=path}}/img/" + img_url + ")");
+	// element.innerHTML = document.getElementById("drop_image").value.split('\\').pop();
+
+	element.setAttribute("width_p", width_p);
+	element.setAttribute("width_o", width_o);
+
+	element.setAttribute("height_p", height_p);
+	element.setAttribute("height_o", height_o);
+
+	element.setAttribute("left_p", left_p);
+	element.setAttribute("left_o", left_o);
+
+	element.setAttribute("top_p", top_p);
+	element.setAttribute("top_o", top_o);
+
+	element.setAttribute("drop_key", drop_key);
+	element.setAttribute("img_url", img_url);
+	element.setAttribute("type", type);
+
+	drop_list = document.getElementsByClassName("drop");
+	drag_list = document.getElementsByClassName("drag");
+    {{pass}}
+    {{pass}}
+
+    $('#drop_image').live('change', function(){
+			           $("#show_drop_image").html('');
+			    $("#show_drop_image").html('<img src="{{=URL("static","images/loader.gif")}}" alt="Uploading...."/>');
+            document.getElementById("file_name_drop").value = document.getElementById("drop_image").value.split('\\').pop();
+			$("#image-set").ajaxForm({
+						target: '#show_drop_image'
+		}).submit();
+
+	});
+
+    $('#edit_image').live('change', function(){
+			           $("#show_edit_image").html('');
+			    $("#show_edit_image").html('<img src="{{=URL("static","images/loader.gif")}}" alt="Uploading...."/>');
+            document.getElementById("file_name_edit").value = document.getElementById("edit_image").value.split('\\').pop();
+			$("#image-edit").ajaxForm({
+						target: '#show_edit_image'
+		}).submit();
+
+	});
+
+    $('#set-background').live('change', function(){
+            document.getElementById("file_name_bg").value = document.getElementById("set-background").value.split('\\').pop();
+			$("#image-bg").ajaxForm({
+						success: function(){
+                            container.style.setProperty("background-image",
+                            "url(/cba/static/temp/{{=path}}/img/" + document.getElementById("set-background").value.split('\\').pop() + ")");
+                        }
+		}).submit();
+
+	});
+
+});
+
+function settingScreen(){
+    document.getElementById("timeOut").value = document.getElementById("time_out").selectedIndex;
+    document.getElementById("afterDrop").value = document.getElementById("after_drop").selectedIndex;
+    document.getElementById("checkTrue").value = document.getElementById("check_true").selectedIndex;
+    if (document.getElementById("screen_orientation").selectedIndex == 0){
+        document.getElementById("orientation").value = "landscape"
+        if (document.getElementById("screen_size").selectedIndex == 0){
+            container.style.setProperty("width", parseInt(window.innerWidth * 7 / 10) + "px");
+            container.style.setProperty("height", parseInt((window.innerWidth * 7 / 10) * 9 / 16) + "px");
+            container.style.setProperty("left", 0);
+        }else{
+            container.style.setProperty("width", parseInt(window.innerWidth * 7 / 10) + "px");
+            container.style.setProperty("height", parseInt((window.innerWidth * 7 / 10) * 3 / 4) + "px");
+            container.style.setProperty("left", 0);
+        }
+    }else{
+        document.getElementById("orientation").value = "portrait"
+        if (document.getElementById("screen_size").selectedIndex == 0){
+            container.style.setProperty("width", parseInt(window.innerHeight * 9 / 16) + "px");
+            container.style.setProperty("height", parseInt(window.innerHeight) + "px");
+            container.style.setProperty("left",
+                    parseInt((window.innerWidth * 7 / 10 - window.innerHeight * 9 / 16)/2) + "px");
+        }else{
+            container.style.setProperty("width", parseInt(window.innerHeight * 3 / 4) + "px");
+            container.style.setProperty("height", parseInt(window.innerHeight) + "px");
+            container.style.setProperty("left",
+                    parseInt((window.innerWidth * 7 / 10 - window.innerHeight * 3 / 4)/2) + "px");
+        }
+    }
+    windowW = container.offsetWidth;
+    windowH = container.offsetHeight;
+    console.log(container.offsetWidth + "/" + container.offsetHeight);
+}
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            if (input.id == "set-background"){
+                container.style.setProperty("background-image",
+                        "url(static/template/img/" + document.getElementById("set-background").value.split('\\').pop() + ")");
+            }else{
+                $('#show_' + input.id).attr('src', e.target.result);
+            }
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function addElement(){
+	if (document.getElementById("percent_drop_width").selectedIndex == 0){
+		var width = parseInt(parseInt(document.getElementById("drop_width").value) * windowW / 100);
+	}else{
+		var width = parseInt(parseInt(document.getElementById("drop_width").value) * windowH / 100);
+	}
+
+	if (document.getElementById("percent_drop_height").selectedIndex == 0){
+		var height = parseInt(parseInt(document.getElementById("drop_height").value) * windowW / 100);
+	}else{
+		var height = parseInt(parseInt(document.getElementById("drop_height").value) * windowH / 100);
+	}
+
+	if (document.getElementById("percent_drop_x").selectedIndex == 0){
+		var left = parseInt(parseInt(document.getElementById("drop_x").value) * windowW / 100);
+	}else{
+		var left = parseInt(parseInt(document.getElementById("drop_x").value) * windowH / 100);
+	}
+
+	if (document.getElementById("percent_drop_y").selectedIndex == 0){
+		var top = parseInt(parseInt(document.getElementById("drop_y").value) * windowW / 100);
+	}else{
+		var top = parseInt(parseInt(document.getElementById("drop_y").value) * windowH / 100);
+	}
+
+	var drop_key = document.getElementById("drop_key").value;
+	var img_src = document.getElementById("show_drop_image").getAttribute("src");
+    var img_url = document.getElementById("drop_image").value.split('\\').pop();
+
+	if (document.getElementById("input_type").selectedIndex == 0){
+		var type = "drop";
+		var list = drop_list;
+	}else{
+		var type = "drag";
+		list = drag_list;
+	}
+
+	var id = type + current_id;
+    current_id ++;
+	var html = "<div id='" + id + "' class='" + type + " " + drop_key + "' onclick='editElement(event)'></div>"
+	container.innerHTML = container.innerHTML + html;
+	var element = document.getElementById(id);
+	element.style.setProperty("width", width + "px");
+	element.style.setProperty("height", height + "px");
+	element.style.setProperty("left", left + "px");
+	element.style.setProperty("top", top + "px");
+	element.style.setProperty("background-image", "url(/cba/static/temp/{{=path}}/img/" + img_url + ")");
+	// element.innerHTML = document.getElementById("drop_image").value.split('\\').pop();
+
+	element.setAttribute("width_p", document.getElementById("drop_width").value);
+	element.setAttribute("width_o", document.getElementById("percent_drop_width").selectedIndex);
+
+	element.setAttribute("height_p", document.getElementById("drop_height").value);
+	element.setAttribute("height_o", document.getElementById("percent_drop_height").selectedIndex);
+
+	element.setAttribute("left_p", document.getElementById("drop_x").value);
+	element.setAttribute("left_o", document.getElementById("percent_drop_x").selectedIndex);
+
+	element.setAttribute("top_p", document.getElementById("drop_y").value);
+	element.setAttribute("top_o", document.getElementById("percent_drop_y").selectedIndex);
+
+	element.setAttribute("drop_key", drop_key);
+	element.setAttribute("img_url", document.getElementById("drop_image").value.split('\\').pop());
+	element.setAttribute("type", type);
+
+	drop_list = document.getElementsByClassName("drop");
+	drag_list = document.getElementsByClassName("drag");
+}
+
+function editElement(event){
+	$("#edit").css("display", "inherit");
+	$("#setting").css("display", "none");
+	var element = event.target;
+	edit_element = element;
+
+	document.getElementById("edit_width").value = element.getAttribute("width_p");
+	document.getElementById("percent_edit_width").selectedIndex = element.getAttribute("width_o");
+
+	document.getElementById("edit_height").value = element.getAttribute("height_p");
+	document.getElementById("percent_edit_height").selectedIndex = element.getAttribute("height_o");
+
+	document.getElementById("edit_x").value = element.getAttribute("left_p");
+	document.getElementById("percent_edit_x").selectedIndex = element.getAttribute("left_o");
+
+	document.getElementById("edit_y").value = element.getAttribute("top_p");
+	document.getElementById("percent_edit_y").selectedIndex = element.getAttribute("top_o");
+
+	document.getElementById("edit_key").value = element.getAttribute("drop_key");
+    console.log(element.getAttribute("img_url"))
+//    document.getElementById("edit_image").value = element.getAttribute("img_url");
+	document.getElementById("show_edit_image").src = "static/temp/{{=path}}/img/" + element.getAttribute("img_url");
+}
+
+function closeEdit(){
+	$("#edit").css("display", "none");
+	$("#setting").css("display", "inherit");
+}
+
+function deleteElement(){
+	container.removeChild(edit_element);
+	drop_list = document.getElementsByClassName("drop");
+	drag_list = document.getElementsByClassName("drag");
+}
+
+function applyElement(){
+	if (document.getElementById("percent_edit_width").selectedIndex == 0){
+		var width = parseInt(parseInt(document.getElementById("edit_width").value) * windowW / 100);
+	}else{
+		var width = parseInt(parseInt(document.getElementById("edit_width").value) * windowH / 100);
+	}
+
+	if (document.getElementById("percent_edit_height").selectedIndex == 0){
+		var height = parseInt(parseInt(document.getElementById("edit_height").value) * windowW / 100);
+	}else{
+		var height = parseInt(parseInt(document.getElementById("edit_height").value) * windowH / 100);
+	}
+
+	if (document.getElementById("percent_edit_x").selectedIndex == 0){
+		var left = parseInt(parseInt(document.getElementById("edit_x").value) * windowW / 100);
+	}else{
+		var left = parseInt(parseInt(document.getElementById("edit_x").value) * windowH / 100);
+	}
+
+	if (document.getElementById("percent_edit_y").selectedIndex == 0){
+		var top = parseInt(parseInt(document.getElementById("edit_y").value) * windowW / 100);
+	}else{
+		var top = parseInt(parseInt(document.getElementById("edit_y").value) * windowH / 100);
+	}
+
+	var drop_key = document.getElementById("edit_key").value;
+    var img_url = document.getElementById("edit_image").value.split('\\').pop();
+	// var img_src = document.getElementById("show_edit_image").getAttribute("src");
+
+	var element = edit_element;
+	element.style.setProperty("width", width + "px");
+	element.style.setProperty("height", height + "px");
+	element.style.setProperty("left", left + "px");
+	element.style.setProperty("top", top + "px");
+    if (document.getElementById("edit_image").value != ""){
+        element.style.setProperty("background-image",
+                "url(/cba/static/temp/{{=path}}/img/" + img_url + ")");
+    }
+	// element.innerHTML = document.getElementById("drop_image").value.split('\\').pop();
+
+	element.setAttribute("width_p", document.getElementById("edit_width").value);
+	element.setAttribute("width_o", document.getElementById("percent_edit_width").selectedIndex);
+
+	element.setAttribute("height_p", document.getElementById("edit_height").value);
+	element.setAttribute("height_o", document.getElementById("percent_edit_height").selectedIndex);
+
+	element.setAttribute("left_p", document.getElementById("edit_x").value);
+	element.setAttribute("left_o", document.getElementById("percent_edit_x").selectedIndex);
+
+	element.setAttribute("top_p", document.getElementById("edit_y").value);
+	element.setAttribute("top_o", document.getElementById("percent_edit_y").selectedIndex);
+
+	element.setAttribute("drop_key", drop_key);
+    if (document.getElementById("edit_image").value != ""){
+	    element.setAttribute("img_url", document.getElementById("edit_image").value.split('\\').pop());
+    }
+//    formData.append('photos[]', document.getElementById("edit_image").files[0], element.id);
+}
+
+function genJson(){
+
+
+    insertName();
+
+
+}
+
+function send2GenHtml(name){
+    var json = []
+	for (var i = 0; i < drop_list.length; i++){
+        var element = drop_list[i];
+		json[json.length] = genObject(element);
+	}
+	for (var i = 0; i < drag_list.length; i++){
+		var element = drag_list[i];
+		json[json.length] = genObject(element);
+	}
+
+    var final_json = JSON.stringify(json);
+    var background = document.getElementById("file_name_bg").value;
+    var orientation = document.getElementById("orientation").value;
+    var timeOut = document.getElementById("timeOut").value;
+    var afterDrop = document.getElementById("afterDrop").value;
+    var checkTrue = document.getElementById("checkTrue").value;
+    var path = "{{=path}}"
+    {{if edit:}}
+    var edit = 1;
+    {{else:}}
+    var edit = 0;
+    {{pass}}
+    var formData = {final_json:final_json,background:background,orientation:orientation,timeOut:timeOut,afterDrop:afterDrop,afterDrop:afterDrop,checkTrue:checkTrue,path:path,name:name,edit:edit}
+    $.ajax({
+        url : "/cba/template/index.json",
+        type: "POST",
+        data : formData,
+        success: function(data, textStatus, jqXHR)
+        {
+            //data - response from server
+            if (confirm("Thành công! Bạn có muốn xem demo ngay không?")){
+                window.open("/cba/static/temp/" + data.path + "/index.html", "_blank");
+            }
+        },
+        error: function(xhr, status, error) {
+          var err = eval("(" + xhr.responseText + ")");
+          alert(err.Message);
+        }
+    });
+
+//	document.getElementById("final-json").value = JSON.stringify(json);
+//    document.getElementById("background").value = document.getElementById("set-background").value.split('\\').pop();
+//    document.forms["final"].submit();
+}
+
+function insertName(){
+    {{if edit:}}
+    $.ajax({
+            url : "/cba/template/check_name_exist.json",
+            data: {name:""},
+            type: "POST",
+            success: function(data, textStatus, jqXHR)
+            {
+                if (data.exist){
+                    alert("Tên đã tồn tại");
+                    insertName();
+                }else{
+                    send2GenHtml(name)
+                }
+            },
+            error: function(xhr, status, error) {
+              var err = eval("(" + xhr.responseText + ")");
+              alert(err.Message);
+            }
+        });
+    {{else:}}
+    var name = prompt("Nhập tên cho phần biên tập:", "{{=path}}");
+    if (name == null){
+        alert("Bạn chưa nhập tên");
+    }else{
+        $.ajax({
+            url : "/cba/template/check_name_exist.json",
+            data: {name:name},
+            type: "POST",
+            success: function(data, textStatus, jqXHR)
+            {
+                if (data.exist){
+                    alert("Tên đã tồn tại");
+                    insertName();
+                }else{
+                    send2GenHtml(name)
+                }
+            },
+            error: function(xhr, status, error) {
+              var err = eval("(" + xhr.responseText + ")");
+              alert(err.Message);
+            }
+        });
+    }
+    {{pass}}
+}
+
+function genObject(element){
+    var json_obj = {};
+    json_obj["key"] = element.getAttribute("drop_key");
+    json_obj["type"] = element.getAttribute("type");
+    json_obj["width_p"] = element.getAttribute("width_p");
+    json_obj["width_o"] = element.getAttribute("width_o");
+    json_obj["height_p"] = element.getAttribute("height_p");
+    json_obj["height_o"] = element.getAttribute("height_o");
+    json_obj["left_p"] = element.getAttribute("left_p");
+    json_obj["left_o"] = element.getAttribute("left_o");
+    json_obj["top_p"] = element.getAttribute("top_p");
+    json_obj["top_o"] = element.getAttribute("top_o");
+    json_obj["img_url"] = element.getAttribute("img_url");
+
+	return json_obj;
+}
+</script>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>{{extend "layout.html"}}
+{{import scripts}}
+{{from datetime import datetime, timedelta}}
+{{
+getTime = 2
+if request.vars.getbyyear:
+    getTime = int(request.vars.getbyyear)
+pass
+getby = "mm-yyyy"
+viewMod = 1
+getbyTmp = "%m-%Y"
+if getTime == 1:
+        getby = "yyyy"
+        getbyTmp = "%Y"
+        viewMod = 2
+pass
+if getTime == 3:
+        getby = "dd-mm-yyyy"
+        getbyTmp = "%d-%m-%Y"
+        viewMod = 0
+pass
+}}
+{{dict_vars = request.vars}}
+{{more_view=request.vars['more_from'] if request.vars['more_from'] else ""}}
+{{dict_vars['more_from'] = "downloaded"}}
+<link href="{{=URL('static','css/datepicker.css')}}" type="text/css"  rel="stylesheet"/>
+<script src="{{=URL('static','js/canvg/canvg.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/jsapi')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/rgbcolor.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/bootstrap-datepicker.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/locales/bootstrap-datepicker.vi.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/jquery.tablesorter.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/tableToExcel.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/chartToImage.js')}}" type="text/javascript"></script>
+
+<div class="clsb_container">
+    <div class="clsb_main_content" id="content_left">
+        <div class="label">Thống kê Doanh thu Ngân Lượng
+            <span style="display: inline-block; float: right; height: 20px; padding: 0; margin-top: -3px;">
+                <ul style="list-style: none;">
+                    <li style="display: inline-block; cursor: pointer; background: url('{{=URL('static','images/chart_line.png')}}'); width: 21px; height: 20px;" id="style_chart_Line" onclick="changeChartStyle('Line')" title="Biểu đồ đường"></li>
+                    <li style="display: inline-block; cursor: pointer; background: url('{{=URL('static','images/chart_pie.png')}}'); width: 21px; height: 20px;" id="style_chart_Pie" onclick="changeChartStyle('Pie')" title="Biểu đồ hình quạt"></li>
+                    <li style="display: inline-block; cursor: pointer; background: url('{{=URL('static','images/chart_column.png')}}'); width: 21px; height: 20px;" id="style_chart_Column" onclick="changeChartStyle('Column')" title="Biểu đồ cột"></li>
+                </ul>
+            </span>
+        </div>
+        <div id="div_chart" class="clsb_chart_content" style="cursor: pointer;">
+
+        </div>
+    </div>
+    <div class="clsb_right_menu" id="right_menu">
+       <div class="clsb_report_border">
+           <div class="label">Lựa chọn thống kê</div>
+            <form style="position: relative; text-align: center;">
+                <input name="style" type="text" id="styleValue" style="display: none;"/>
+                <table style="margin: 0px auto;">
+                    <tr>
+                        <td>
+                            <b>Giới hạn thời gian:</b> <br/>
+                            <select name="getbyyear" id="select_time" class="selectpicker show-menu-arrow pull-right">
+                                <option value="3" {{='selected' if request.vars.getbyyear and int(request.vars.getbyyear) == 3 else ''}}>Thống kê theo ngày</option>
+                                <option value="2" {{='selected' if not request.vars.getbyyear or (request.vars.getbyyear and int(request.vars.getbyyear) == 2) else ''}}>Thống kê theo tháng</option>
+                                <option value="1" {{='selected' if request.vars.getbyyear and int(request.vars.getbyyear) == 1 else ''}}>Thống kê theo năm</option>
+                            </select><br/>
+                            <b>Thời gian:</b> <br/>
+                            <input type="text" class="datetimepicker" style="max-width: 88px;" value="{{=request.vars.start if request.vars.start else datetime.strptime(str(datetime.now().year)+"-1-1", "%Y-%m-%d").strftime(getbyTmp)}}" name="start"/><span style="vertical-align: super;">:</span> <input type="text" class="datetimepicker" style="max-width: 88px;" value="{{=request.vars.end if request.vars.end else datetime.now().strftime(getbyTmp)}}" name="end"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="submit" value="Xem thống kê"/></td>
+                    </tr>
+                </table>
+            </form>
+       </div>
+
+    </div>
+</div>
+<div class="clr"></div>
+<div class="clsb_container"   style="margin-top: 20px;">
+            <div align="left" style="font-weight: bold; width: 100%;">Thống kê Ngân Lượng <button class="btn" style="float: right;" onclick="tableToExcel('tablelistTotal', 'Total NL ')">Xuất ra Excel</button></div><br/>
+            {{if request.vars.total != "1":}}
+
+            {{=TABLE(
+                    THEAD(
+                            TR(
+                                TH("Thời gian", _class="header"),
+                                TH("Thẻ ", _class="header"),
+                                TH("Thẻ tặng", _class="header"),
+                            ),
+                    ),
+                    *[TR(
+                        TD(listTotal[i]['time']),
+                        TD(scripts.style_money(listTotal[i]['0'])+" ₫"),
+                        TD(scripts.style_money(listTotal[i]['1'])+" ₫"),
+                     ) for i in range(len(listTotal))],
+                    _id="tablelistTotal",
+                    _class="tablesorter"
+            )}}
+            {{pass}}
+</div>
+
+<script type="text/javascript">
+    var data;
+    var style = "Pie";
+
+    function changeChartStyle(str){
+        $("#style_chart_Pie").css('background','url({{=URL('static', 'images/chart_pie.png')}})');
+        $("#style_chart_Column").css('background','url({{=URL('static', 'images/chart_column.png')}})');
+        $("#style_chart_Line").css('background','url({{=URL('static', 'images/chart_line.png')}})');
+        $("#style_chart_"+str).css('background','url({{=URL('static', 'images/chart')}}_'+str.toLowerCase()+'_sel.png)');
+        $("#styleValue").val(str);
+        style = str;
+        data = new google.visualization.DataTable();
+        var year = "{{=request.vars.getbyyear}}";
+        if(year == "1") data.addColumn('string', 'Năm');
+        else data.addColumn('string', 'Tháng');
+        data.addColumn('number', 'Tổng số');
+        data.addRows({{=XML(response.json(data))}})
+
+        var checkData = '{{=0 if len(data) == 0 else (len(data) if len(data) > 1 else data[0][1])}}';
+        if((checkData == 0) && (str=="Pie")){
+            $("#div_chart").html("<h3 style='color: red'>Không có dữ liệu</h3>");
+        }
+        else{
+            document.getElementById('div_chart').innerHTML = "";
+            if(str=="Column") barsVisualization = new google.visualization.ColumnChart(document.getElementById('div_chart'));
+            if(str=="Pie") barsVisualization = new google.visualization.PieChart(document.getElementById('div_chart'));
+            if(str=="Line") barsVisualization = new google.visualization.LineChart(document.getElementById('div_chart'));
+
+            barsVisualization.draw(data, {
+                title: "Doanh thu",
+//                height: $("#right_menu").height()-60,
+                is3D: true,
+                hAxis: {title: year=="1"?"Năm":"Tháng"},
+                vAxis: {
+                    title: "Doanh thu",
+                    viewWindow: {
+                        min:0
+                    }
+                },
+                legend: 'bottom',
+                pointSize: 5
+    //            chartArea: {left:100, width: 150}
+    //            curveType: 'function'
+            });
+        }
+    }
+    _flagMoreTable = false;
+    if("{{=more_view}}" != ""){
+        _flagMoreTable = true;
+        $("#moreTable").css('height','auto');
+    }
+
+
+    google.load('visualization', '1.0', {'packages':['corechart']});
+
+    google.setOnLoadCallback(function(){
+        $("#content_left").css('min-height', $("#right_menu").height()+'px');
+
+        style = "{{=request.vars.style}}";
+        if (style == "None") style = "Line";
+        changeChartStyle(style);
+        try{
+            $("#tablelist").tablesorter();
+            $("#tablelistTotal").tablesorter();
+        }
+        catch(e){
+
+        }
+         $('.datetimepicker').datepicker({
+            format:'{{=getby}}',
+            viewMode: parseInt('{{=viewMod}}'),
+            minViewMode: parseInt('{{=viewMod}}'),
+            autoclose: true,
+            language: 'vi'
+        });
+        $("#select_time").change(function(){
+            $('.datetimepicker').datepicker('remove');
+            if($("#select_time").val() == 1){
+                $('.datetimepicker').val("");
+                $('.datetimepicker').datepicker({
+                    format:'yyyy',
+                    viewMode: 2,
+                    minViewMode: 2,
+                    autoclose: true,
+                    language: 'vi'
+                });
+            }
+            if($("#select_time").val() == 2){
+                $('.datetimepicker').val("");
+                $('.datetimepicker').datepicker({
+                    format:'mm-yyyy',
+                    viewMode: 1,
+                    minViewMode: 1,
+                    autoclose: true,
+                    language: 'vi'
+                })
+            }
+            if($("#select_time").val() == 3){
+                $('.datetimepicker').val("");
+                $('.datetimepicker').datepicker({
+                    format:'dd-mm-yyyy',
+                    viewMode: 0,
+                    minViewMode: 0,
+                    autoclose: true,
+                    language: 'vi'
+                })
+            }
+
+        });
+    });
+    $("#tablelistTotal").append('{{=TR(TD(B("Tổng số"), _colspan=1, _style="background: #FCF49C;"), TD(B(scripts.style_money(total_type["0"])+" ₫"), _style="background: #FCF49C"), TD(B(scripts.style_money(total_type["1"])+" ₫"), _style="background: #FCF49C"))}}')
+</script>
+<script src="{{=URL('static','js/bootstrap-select.min.js')}}" type="text/javascript"></script>
+<script>
+    $(".selectpicker").selectpicker();
+
+</script>
+<style>
+    #tablelistType tr,table td, #tablelistType th{
+        border:1px solid #ddd;
+        padding: 10px;
+    }
+
+    .chietkhau{
+        font-size: 11px;
+    }
+
+    .pay{
+        font-size: 13px;
+    }
+
+    .table-header{
+        padding: 5px 20px;
+        background-color: #EAEAEA;
+        color: #0088D1;
+    }
+    .total_type{
+        background-color: #fcf49c;
+    }
+</style>
+</head>
+<body>
+
+</body>
+</html>

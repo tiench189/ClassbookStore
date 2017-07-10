@@ -1,0 +1,219 @@
+    {{if URL() == URL('store') or URL() == URL('store_detail') or URL() == URL('tien'):}}
+    <form id="form_search"
+            action="{{=URL('store/search')}}"
+          method="get">
+        <div id="search_multiple" class="search_multiple" style="display:block; padding-bottom: 0;">
+
+        <!-- 06/18/2013 PhuongNH : edit layout search form -->
+
+        <div class="menu_left_title box_radius_top left"  >
+                <div id="" class="menu_left_title_text left fs18" style="margin-bottom: 0;">Tìm kiếm chi tiết
+                </div>
+        </div>
+
+        <table class="basic_table" >
+            <tr>
+                <td class = "title">
+                    Từ khóa
+                </td>
+                <td class = "column">
+                        <input id="store_search_input" name="store_search" type="text"  class="basic_textbox" placeholder="">
+                </td>
+            </tr>
+            <tr>
+                <td class = "title">
+                    Danh mục
+                </td>
+                <td class = "column">
+                    <label for="category_select_box"></label>
+                    <select id="category_select_box" name="category_id" class="basic_combobox">
+                        <option value=""></option>
+                        {{for item  in categories_search['categories']:}}
+                            <option id="{{=item['category_id']}}" value="{{=item['category_id']}}">{{=item['category_name']}}</option>
+                        {{pass}}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class = "title">
+                    Môn
+                </td>
+                <td class = "column">
+                    <label for="subject_select_box"></label>
+                    <select id="subject_select_box" name="subject_id" class="basic_combobox" onchange="subjectGetClasses();">
+                        <option value=""></option>
+                        {{for item  in subjects_search['items']:}}
+                            <option id="{{=item['id']}}" value="{{=item['id']}}">{{=item['subject_name']}}</option>
+                        {{pass}}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class = "title">
+                    Lớp
+                </td>
+                <td class = "column">
+                    <label for="class_select_box"></label>
+                    <select id="class_select_box" name="class_id" class="basic_combobox">
+                        <option value=""></option>
+                        {{for item  in classes_search['items']:}}
+                            <option id="{{=item['id']}}" value="{{=item['id']}}">{{=item['class_name']}}</option>
+                        {{pass}}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input id="search_multiple_submit" type="submit" class="basic_button" size="50px" value="Tìm kiếm"/></td>
+            </tr>
+        </table>
+
+
+        <!-- end comment PhuongNH source code -->
+
+
+
+
+        <!-- HaNT
+
+
+            <div class="menu_left_title box_radius_top left"  >
+                <div id="" class="menu_left_title_text left fs18" style="margin-bottom: 0px;">Tìm kiếm chi tiết
+                </div>
+            </div>
+            <div id="search_multiple_category" class="">Từ Khóa
+                <input id="store_search_input" name="store_search" type="text" style="width:138px; float:right; border: solid 1px rgba(0, 0, 0, .5); margin-right: 4px;"></input>
+            </div>
+            <div id="search_multiple_category" >Danh Mục
+                <select id="category_select_box" name="category_id" class="search_multiple_select_box">
+                    <option value=""></option>
+                    {{for item  in categories_search['categories']:}}
+                        <option id="{{=item['category_id']}}" value="{{=item['category_id']}}">{{=item['category_name']}}</option>
+                    {{pass}}
+                </select>
+            </div>
+
+            <div id="search_multiple_subject" >Môn
+                <select id="subject_select_box" name="subject_id" class="search_multiple_select_box" onchange="subjectGetClasses();">
+                    <option value=""></option>
+                    {{for item  in subjects_search['items']:}}
+                        <option id="{{=item['id']}}" value="{{=item['id']}}">{{=item['subject_name']}}</option>
+                    {{pass}}
+                </select>
+            </div>
+
+            <div id="search_multiple_class" >Lớp
+                <select id="class_select_box" name="class_id" class="search_multiple_select_box">
+                    <option value=""></option>
+                    {{for item  in classes_search['items']:}}
+                        <option id="{{=item['id']}}" value="{{=item['id']}}">{{=item['class_name']}}</option>
+                    {{pass}}
+                </select>
+            </div>
+
+            <div id="search_multiple_subject" style="height:30px;">
+                <input id="search_multiple_submit" type="submit" class="search_multiple button" size="50px" value="Tìm kiếm"></input>
+            </div>
+
+
+            <!-- end comment HaNT source -->
+
+        </div>
+    </form>
+    {{pass}}
+
+    <script>
+        var formLineSearch = $('.form_line_search');
+        formLineSearch.focus(function()
+        {
+            $('.form_line_search').val('');
+        });
+
+        formLineSearch.blur(function()
+        {
+            if(formLineSearch.val().length === 0){
+                $('.form_line_search').val('Tìm kiếm');
+            }
+        });
+
+        formLineSearch.keypress(function(event)
+        {
+            if (event.which == 13)
+            {
+                //var val_search = $('.form_line_search').val();
+                $('#form_search').submit();
+                event.preventDefault();
+            }
+        });
+
+        function subjectGetClasses()
+        {
+            var subjectId = $('#subject_select_box').val();
+            $.getJSON("{{=URL(f='classes')}}/" + subjectId, function(msg){
+                addItem(msg['classes'], 'class_id', 'class_name', 'class_select_box');
+            });
+        }
+
+        function addItem(arrayItem, itemId, itemName, fieldInput){
+            var itemList = 	'<option value=""></option>';
+            $.each(arrayItem, function(index, value)
+            {
+                itemList += '<option id="'+ value[itemId] +'" value="'+ value[itemId] +'">' + value[itemName] + '</option>'
+            });
+            $('#' + fieldInput).html(itemList);
+        }
+    </script>
+    <div class="menu_left_title box_radius_top left">
+        <div class="menu_left_title_text left fs18">
+            Danh Mục
+        </div>
+    </div>
+	
+    <div id="accordion" style="margin-top: -100px">
+        <div class="menu_left_item left" style="cursor:pointer; display: none">
+    		<span class="left fs14 fcb">Test</span>
+    		<div class="right btn_dropdown_active"></div>
+	    </div>
+        <div style="display: none; height: 0px">
+	    	<div class="menu_left_item_list left" style="height: 0px">
+	    		<div onclick="getProduct('1', '');" style="cursor:pointer; display: none">
+	    			<span class="menu_left_item_child left">Test</span>
+	    		</div>
+	    	</div>
+	    </div>
+    {{for index in range(len(categories) - 1):}}
+	    <div class="menu_left_item left" style="cursor:pointer;">
+    		<span class="left fs14 fcb">{{=categories[index]['category_name']}}</span>
+    		<div class="right btn_dropdown"></div>
+	    </div>
+	    <div>
+	    {{children = categories[index]['children']}}
+	    {{for cindex in range(len(children)):}}
+	    	<div class="menu_left_item_list left">
+	    		{{if children[cindex]['category_type'] == 'Book' or children[cindex]['category_type'] == 'Application':}}
+	    		<div onclick="getProduct('{{=children[cindex]['category_id']}}', '');" style="cursor:pointer;">
+	    			<span class="menu_left_item_child left">{{=children[cindex]['category_name']}}</span>
+	    		</div>
+	    		{{elif children[cindex]['category_type'] == 'Exam' or children[cindex]['category_type'] == 'Exercise':}}
+	    		<div onclick="getProduct('{{=children[cindex]['category_id']}}');" style="cursor:pointer;">
+	    			<span class="menu_left_item_child left">{{=children[cindex]['category_name']}}</span>
+	    		</div>
+	    		{{pass}}
+	    	</div>
+	    {{pass}}
+	    </div>
+    {{pass}}
+	</div>
+<div class="menu_left_footer box_radius_bot left"></div>
+
+<script>
+<!--
+$("#accordion").accordion({ animate: 10, activate: function( event, ui )
+	{
+		ui.oldHeader.find('.btn_dropdown_active').attr('class', 'right btn_dropdown');
+		ui.newHeader.find('.btn_dropdown').attr('class', 'right btn_dropdown_active');
+	}
+});
+
+-->
+</script>

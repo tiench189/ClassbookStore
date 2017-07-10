@@ -1,0 +1,1 @@
+CONFIRM_DELETE = 'Bạn có chắc chắn muốn xóa các dòng đã lựa chọn không?'

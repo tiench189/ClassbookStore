@@ -1,0 +1,88 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}
+	<div class="banner_sub banner_manager"></div>
+	<!--div style="margin:0 auto; width:650px;height:70px;margin-top:-70px;"><a class="btn_download_large right" href="{{=URL('download')}}"></a></div-->
+{{end}}
+
+{{block title_content}}{{end}}
+
+
+<script>
+	jQuery(document).ready(function(){
+   		jQuery('#guild_1_xp').click(function(){jQuery('#xp_content').slideToggle("fast")});
+   		jQuery('#guild_w8').click(function(){jQuery('#w8_content').slideToggle("fast")});
+   		jQuery('#guild_w8_0').click(function(){jQuery('#w8_content_0').slideToggle("fast")});
+   		
+});
+</script>
+<style type="text/css">
+    #tech_specs { width:95%; border:1px solid #D9D5BE; margin: 25px; background:white; border-collapse:collapse; }
+    #tech_specs td { border:1px solid #D9D5BE; }
+    #tech_specs .col1 {
+        vertical-align: top;
+        font-size: medium;
+        width:30%;
+    }
+    .mw-list-spot li{
+        margin-left: 40px;
+        list-style-type: square;
+    }
+    h2 {
+        color: #004488;
+        margin-top: 80px;
+        margin-left: 25px;
+
+    }
+    h3{
+        font-weight: normal;
+        color: #004488;
+    }
+</style>
+<div class="box_store_product box_radius mtop_normal left">
+
+    <div class="product_related left">
+		<div class="box_content_right_main left">
+			<div class="box_right_title_product left">
+				<a class="box_right_tab_item fs18 left" href="{{=URL('manager')}}">
+					Các tính năng chính
+				</a>
+				<a class="box_right_tab_item  fs18 mleft_huge left" href="{{=URL('classroom_technical_specs')}}">
+					Thông số kĩ thuật
+				</a>
+                <a class="box_right_tab_item  fs18 mleft_huge left" href="{{=URL('classroom_interactive')}}">Nội dung tương tác</a>
+                <a class="box_right_tab_item box_right_tab_item_active fs18 mleft_huge left" href="{{=URL('classroom_support')}}">Hỗ trợ</a>
+			</div>
+
+            <div>
+
+                <div class="box_right_product left mtop_normal mbot_normal">
+                    <table class="table_width">
+                                <tr class="table_head">
+                                    <th class="fw fcb fs14" style="width:450px;">Tên file</th>
+                                    <th class="fw fcb fs14">Ngôn ngữ</th>
+                                    <th class="fw fcb fs14">Link</th>
+                                </tr>
+                                <tr>
+                                    <td>Hướng dẫn sử dụng (Manual guide)</td>
+                                    <td>Tiếng Anh(English)</td>
+                                    <td><a href="http://classbook.vn/cbw/static/classroomfiles/Classroom-Management-for-Windows-User-Manual-141113.pdf"
+                                           target="_blank" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Download</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Video giới thiệu tính năng</td>
+                                    <td>Tiếng Anh (English)</td>
+                                    <td><a href="https://www.youtube.com/watch?v=gPvZ9TVaHd0" target="_blank" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Xem video</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Brochure</td>
+
+                                    <td>Tiếng Việt</td>
+                                    <td><a href="http://classbook.vn/cbw/static/classroomfiles/brochure3-6 final.jpg" target="_blank" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Download</a></td>
+                                </tr>
+                    </table>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>

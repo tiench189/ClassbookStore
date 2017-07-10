@@ -1,0 +1,115 @@
+{{extend 'layout.html'}}
+
+<div class="web2py_grid">
+    <div class="web2py_table">
+        <div class="web2py_htmltable">
+            <form id="myForm" action="">
+                <input type="hidden" value="" id="action" name="action"/>
+                <input type="hidden" value="" id="item_id" name="item_id"/>
+                <div id = "frmSearch">
+                    <label>Tên đề thi :</label> <input type="text" id = "txtSearchName" name = "txtSearchName" value=""/>
+                    <input type ="button" id="btnSearch" name value="Tìm kiếm"/>
+                </div>
+
+                <input type="button" id="btnAdd" value="Add"/>
+                    <table>
+                        <thead>
+                        <th>Id</th>
+                        <th>Exam name</th>
+                        <th>Duration</th>
+                        <th>Total mark</th>
+                        <th>Total question</th>
+                        <th> Edit</th>
+                        <th> Delete</th>
+                        <th>Add question</th>
+                        </thead>
+                        <tbody id="tbl_result">
+
+
+                        </tbody>
+                    </table>
+
+                <div id="footer">
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $("#btnAdd").click(function () {
+            $("#action").val('add');
+            $("#myForm").submit();
+        });
+
+        $("#btnSearch").click(function(){
+            var exam_name = $("#txtSearchName").val();
+            load_data(1, exam_name);
+        });
+        goToPage('1');
+    });
+    function goToPage(page) {
+        load_data(page, null)
+    }
+
+    function load_data(page, exam_name) {
+
+        $.ajax({
+            url: "{{=URL("cbq", "exam", "get_data_json.json", host=True)}}",
+            type: "POST",
+            data: {page: page, exam_name: exam_name},
+            success: function (data) {
+                var content = "";
+                var total_page ;
+                var total_record;
+                $.each(data, function (key, value) {
+                    $.each(value, function (k, v) {
+                        content += '<tr>'
+                        content += '<td>' + v.id + '</td>';
+                        content += '<td>' + v.name + '</td>';
+                        content += '<td>' + v.duration + '</td>';
+                        content += '<td>' + v.total_mark + '</td>';
+                        content += '<td>' + v.number_question + '</td>';
+                        content += '<td><a href="index.html?action=edit&id=' + v.id + '">Edit</a>'  + '</td>';
+                        content += '<td><a href="delete?exam_id=' + v.id + '">Delete</a>'  + '</td>';
+                        content += '<td><a href="exam_manager?exam_id=' + v.id + '">Manager</a>'  + '</td>';
+                        content += '</tr>'
+                    });
+                    if (key=='total_page')
+                    {
+                        total_page = parseInt( value);
+                    }
+                    if (key == 'total_record')
+                    {
+                        total_record = parseInt(value);
+                    }
+                });
+                $("#tbl_result").html(content);
+                content = "";
+                for (var j = 0; j < total_page; j ++)
+                {
+                    content += '<a style="cursor:pointer ;" onclick="goToPage(' + (j+1) + ')">' + (j+1) + '</a>';
+                }
+                if (total_page > 1)
+                {
+                    content += '<a style="cursor:pointer ;" onclick="goToPage(' + total_page + ')">>></a>';
+                }
+                $("#footer").html(content);
+            },
+            error: function (data) {
+                alert(data)
+            }
+        });
+    }
+
+    function load_footer(page)
+    {
+
+
+    }
+
+
+</script>

@@ -1,0 +1,195 @@
+<div class="container">
+    	<div class="navbar-left">
+        	<span class="nav-title mr20">Sách điện tử và nội dung giáo dục</span>
+            <!--<span class="nav-hotline mr20"><i class="fa fa-phone mr5"></i>Hotline: 0902.138.004</span>-->
+            <a href="mailto:info@edcom.vn"><span class="nav-email mr20"><i class="fa fa-envelope mr5"></i>info@edcom.vn</span></a>
+            <span class="nav-title mr20" id="noti_promotion" style="display: none; color: red">
+                Chúc mừng bạn đã trúng thưởng
+            </span>
+            <span class="clearfix"></span>
+        </div>
+        <div class="navbar-right nav-guest">
+            {{if not session.authorized or session.expired is True:}}
+        	<span class="nav-text"></span>
+            <div class="nav-login">
+            	<a class="nav-login-text" title="Đăng nhập">Đăng nhập</a>
+                <div class="nav-login-pop">
+                	<div class="title">Đăng nhập Classbook</div>
+                    	<div class="block mb10">
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                                <input type="text" name="username" class="form-control" id="username" placeholder="Tên đăng nhập">
+                            </div>
+                        </div>
+                        <div class="block mb10">
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-lock"></i></div>
+                                <input onkeydown="passKeyPress(event)" type="password" name="password" class="form-control" id="password" placeholder="Mật khẩu">
+                            </div>
+                        </div>
+                        <div class="block"><button onclick="submitLogin()" class="btn btn-success btn-block">Đăng nhập</button></div>
+                        <div class="login-via">Hoặc đăng nhập qua <a href="javascript:loginFB()" title=""><i class="fa fa-facebook"></i></a><a href="javascript:loginGG()" title=""><i class="fa fa-google-plus"></i></a></div>
+                        <div class="nav-login-bottom text-center"><a href="/signup" title="">Chưa có tài khoản? <strong>Đăng ký ngay</strong></a></div>
+                </div>
+            </div>
+            <a href="/signup" class="nav-register" title="Đăng ký">Đăng ký</a>
+            {{else:}}
+            <div class="navbar-right nav-logged">
+                <div class="nav-user">
+                    <div class="nu-text" title="">Xin chào, <strong>{{=session.display_name}}</strong><i class="fa fa-angle-down ml10"></i></div>
+                    <div class="nu-content">
+                        <ul>
+                            <li><a href="/nganluong" title="">TK: <strong>{{=session.userfund}}</strong></a></li>
+                            <li><a href="/profile" title="">Quản lý tài khoản</a></li>
+                            <li><a href="/all_user_device" title="">Danh sách thiết bị sở hữu</a></li>
+                            <li><a href="javascript:actionLogout()" title="">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!--<span class="nav-text" style="cursor:pointer; text-decoration: underline;
+    font-style: italic; color: #f28013; margin-right: 20px" onclick="window.location.href='/profile'">{{=session.username}}</span>
+            <span id="header-fund" class="nav-text" style="cursor:pointer; text-decoration: underline;
+        font-style: italic;color: #f28013" onclick="window.location.href='/nganluong'">{{=session.userfund}}</span>
+            <a href="javascript:actionLogout()" class="nav-register" title="Đăng xuất">Đăng xuất</a>-->
+            {{pass}}
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+<script>
+    function submitLogin(){
+        var username = $("#username").val();
+        var password = $("#password").val();
+        console.log(username + "/" + password);
+         var link = "{{=URL(f='login.json')}}";
+        $.ajax({
+            url: link,
+            type: "POST",
+            data: {"username":username, "password":password},
+            success: function(data){
+                if (data.result){
+                    window.location.reload();
+                }else{
+                    openAlert(data.mess)
+                }
+            },
+            error: function(data){
+                openAlert("Có lỗi xảy ra")
+            }
+        })
+    }
+
+    function actionLogout(){
+        var link = "{{=URL(f='logout')}}";
+        $.ajax({
+            url: link,
+            type: "POST",
+            success: function(data){
+                if (data.error){
+                    openAlert(data.error)
+                }else{
+                    window.location.reload();
+                }
+            },
+            error: function(data){
+                openAlert("Có lỗi xảy ra")
+            }
+        })
+    }
+
+    function passKeyPress(event){
+        if (event.which == 13){
+           submitLogin();
+        }
+    }
+</script>
+
+<script>
+  function getUserData() {
+	FB.api('/me', function(response) {
+		document.getElementById('response').innerHTML = 'Hello ' + response.name;
+	});
+}
+
+window.fbAsyncInit = function() {
+	//SDK loaded, initialize it
+	FB.init({
+		appId      : '880795605285397',
+		xfbml      : true,
+		version    : 'v2.2'
+	});
+
+	//check user session and refresh it
+	FB.getLoginStatus(function(response) {
+		if (response.status === 'connected') {
+			//user is authorized
+			document.getElementById('loginBtn').style.display = 'none';
+			getUserData();
+		} else {
+			//user is not authorized
+		}
+	});
+};
+
+//load the JavaScript SDK
+(function(d, s, id){
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) {return;}
+	js = d.createElement(s); js.id = id;
+	js.src = "//connect.facebook.net/en_US/sdk.js";
+	fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+//add event listener to login button
+function loginFB(){
+	//do the logi
+	FB.login(function(response) {
+		if (response.authResponse) {
+            var access_token =   FB.getAuthResponse()['accessToken'];
+            console.log('Access Token = '+ access_token);
+            window.location.href = "/login?type=fb&access_token=" + access_token + "&location={{=URL()}}";
+		}
+	}, {scope: 'email,public_profile', return_scopes: true});
+}
+</script>
+
+<script>
+    function onLoadCallback()
+    {
+        gapi.client.setApiKey('AIzaSyDxWAgzZH9wB0MCVlJ7DXTHE1l0a-g-7Ks'); //set your API KEY
+        gapi.client.load('plus', 'v1',function(){});//Load Google + API
+    }
+    function loginGG()
+    {
+      var myParams = {
+        'clientid' : '211735881359-kkkmk84phqgglqgq1o578s0i89ngd5ur.apps.googleusercontent.com', //You need to set client id
+        'cookiepolicy' : 'single_host_origin',
+        'callback' : 'loginCallback', //callback function
+        'approvalprompt':'force',
+        'scope' : 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email'
+      };
+      gapi.auth.signIn(myParams);
+    }
+    function loginCallback(result)
+    {
+        if(result['status']['signed_in'])
+        {
+            window.location.href = "/login?type=gg&access_token=" + result['access_token'] + "&location={{=URL()}}";
+        }
+    }
+</script>
+<script>
+    function openPromotion(){
+        openAlert("Chúc mừng bạn đã trúng thưởng");
+    }
+</script>
+<style>
+    .nav-gift{
+        width: 10px;
+        height: 10px;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-image: url("{{=URL('static','store2.2/images/giftbox3.png')}}");
+    }
+</style>

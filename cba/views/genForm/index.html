@@ -1,0 +1,45 @@
+{{extend "layout.html"}}
+<script src="{{=URL('static','js/jquery.auto-complete.js')}}"></script>
+<link href="{{=URL('static', 'css/jquery.auto-complete.css')}}" rel="stylesheet" type="text/css"/>
+<select id="choose" onchange="chooseTable.call(this);">
+    <option value="">Chọn Table</option>
+    {{for table in tables:}}
+    <option value="{{=table}}">{{=table}}</option>
+    {{pass}}
+</select>
+<input id="input_table"  type="text" placeholder="Table name" autofocus style="width:100%;max-width:600px;outline:0" onkeydown="enterTable(this)">
+{{if args:}}
+{{=grid}}
+{{pass}}
+
+<script>
+    function chooseTable(){
+        var table = this.value;
+        window.location = "/cba/genForm/index/" + table;
+    }
+
+    $(document).ready(function(e) {
+        var data = [];
+        "{{for table in tables:}}"
+        data[data.length] = '{{=table}}';
+        "{{pass}}"
+        console.log(data)
+        $('#input_table').autoComplete({
+                minChars: 1,
+                source: function(term, suggest){
+                    term = term.toLowerCase();
+                    var choices = data;
+                    var suggestions = [];
+                    for (var i=0;i<choices.length;i++)
+                        if (~choices[i].toLowerCase().indexOf(term)) suggestions.push(choices[i]);
+                    suggest(suggestions);
+                }
+            });
+    });
+
+    function enterTable(ele) {
+        if(event.keyCode == 13) {
+            window.location = "/cba/genForm/index/" + ele.value;
+        }
+    }
+</script>

@@ -1,0 +1,123 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+
+{{if session.authorized == False:}}
+<script>
+    $(document).ready(function () {
+        $('#form_login').lightbox_me({
+            centered: true,
+            onLoad: function () {
+                $('#form_login').find('input:first').focus();
+                $('#relogin').css('display', 'block');
+            }
+        });
+    });
+    {{if session.delete_devices_message is not None and session.delete_devices_message != '':}}
+        $('#err_mess').html('{{=session.delete_devices_message}}')
+        delete_device();
+    {{pass}}
+</script>
+
+
+<div class="box_store_product box_radius mtop_normal left">
+    <div class="product_related left">
+        <div class="box_content_right_main left">
+            <div class="box_right_title_product left">
+                <div class="box_right_tab_item box_right_tab_item_active fs18 left">
+                    Thông tin tài khoản
+                </div>
+            </div>
+            <div class="box_right_product left mtop_normal mbot_normal" style="height:300px">
+                <div class="slide_product left">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{else:}}
+<div id="breadcrumb">
+            <ol class="breadcrumb">
+              <li><a href="/">Trang chủ</a></li>
+              <li class="active">Quản lý tài khoản</li>
+            </ol>
+        </div>
+        <!--/breadcrumb -->
+        <!-- profile container -->
+        <div class="profiles-page-container cp-pull-left">
+        	<div class="cpc-left">
+            	<div class="box" id="mine">
+                	<div class="box-mine">
+                    	<span class="name">{{=user['firstName']}} {{=user['lastName']}}</span>
+                        <span class="email">{{=user['username']}}</span>
+                        <div class="balance"><span>{{=str2price(str(user['fund']))}} vnđ<a href="/nganluong" title=""><i class="fa fa-plus-square"></i></a></span></div>
+                        <div class="clearfix"></div>
+                    </div>
+                	<div class="box-content">
+                    	<ul class="box-list">
+                            <li class="active"><a href="#" title="">Quản lý tài khoản</a></li>
+                            <li><a href="/all_user_device" title="">Danh sách thiết bị sở hữu</a></li>
+                            <li><a href="/download_history" title="">Lịch sử tải</a></li>
+                            <li><a href="/buy_history" title="">Lịch sử mua</a></li>
+                            <li><a href="/paycode" title="">Sử dụng mã thẻ</a></li>
+                            <li><a href="/changepass" title="">Đổi mật khẩu</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="cpc-right">
+            	<div class="box">
+                	<div class="box-title">Quản lý tài khoản</div>
+                	<div class="box-content">
+                    	<div class="f-form mt20 mb10" style="border-right: none;">
+                            <form method="post" class="form-horizontal" id="update_user">
+                                <div class="form-group">
+                                	<label class="col-sm-3 control-label">Họ và tên</label>
+                                    <div class="col-sm-6">
+                                        <input name="fullName" type="text" value="{{=user['firstName']}} {{=user['lastName']}}" class="form-control" id="name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                	<label class="col-sm-3 control-label">Email</label>
+                                    <div class="col-sm-6">
+                                        <input type="email" value="{{=user['username']}}" disabled class="form-control" id="email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                	<label class="col-sm-3 control-label">Số điện thoại</label>
+                                    <div class="col-sm-6">
+                                        <input name="phoneNumber" type="text" value="{{=user['phoneNumber']}}" class="form-control" id="phone">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                	<label class="col-sm-3 control-label">Địa chỉ</label>
+                                    <div class="col-sm-6">
+                                        <input name="address" type="text" value="{{=user['address']}}" class="form-control" id="address">
+                                    </div>
+                                </div>
+
+                                <div class="form-group mt20">
+                                	<div class="row mt10"></div>
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-6">
+                                        <a href="javascript:submit_update()" class="btn btn-classbook btn-lg">Cập nhật tài khoản</a>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+{{pass}}
+<script>
+      function submit_update(){
+          $("#update_user").submit();
+      }
+</script>
+

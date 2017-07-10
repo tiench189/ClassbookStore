@@ -1,0 +1,171 @@
+{{extend "layout.html"}}
+<script src="{{=URL('static','js/jquery-ui.min.js')}}"></script>
+<link href="{{=URL('static', 'css/jquery-ui.min.css')}}" rel="stylesheet" type="text/css" />
+<script>
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+</script>
+<div style="display: none" id="div-hide"></div>
+<div id="count-all"></div>
+<div style="float: right; margin-top: -30px">
+    <span><input type="button" value="Uncheck All" onclick="uncheckAll()"></span>
+    <span><input type="button" value="Submit" onclick="submitRecommend()"></span>
+</div>
+<div id="tabs">
+    <ul>
+        <li><a href="#tab-picker">Đã chọn</a></li>
+        {{for cate in categories:}}
+        <li><a href="#tab{{=cate['id']}}">{{=cate['name']}} <span id="count-{{=cate['id']}}"></span></a></li>
+        {{pass}}
+    </ul>
+    <div id="tab-picker">
+        <ul id="picker">
+        </ul>
+    </div>
+    {{for cate in categories:}}
+    <div id="tab{{=cate['id']}}">
+    <ul class="product-list">
+        {{for product in cate['products']:}}
+        <li><input id="cb-{{=product['product_id']}}" class="count-{{=cate['id']}}" title="{{=product['product_title']}}" type="checkbox" name="product" value="{{=product['product_id']}}" {{='checked' if product['product_id'] in recomends else ''}}>
+            <span>
+                <a target="_blank" href="http://classbook.vn/store_detail/{{=product['product_id']}}">
+                <img src="http://classbook.vn/static/covers/{{=product['product_code']}}/thumb.png">
+                </a></span>
+            <span class="product_title">{{=product['product_title']}} ({{=product['count']}})</span>
+        </li>
+        {{pass}}
+    </ul>
+    </div>
+    {{pass}}
+</div>
+<style>
+    .product-list{
+        list-style: none;
+    }
+
+    .product-list li{
+        padding-bottom: 20px;
+        font-size: 18px;
+    }
+
+    .product-list li img{
+        height: 140px;
+        margin-left: 10px;
+    }
+
+    .product_title{
+        margin-left: 10px;
+    }
+
+    #picker li{
+        padding: 10px;
+        font-size: 16px;
+        margin-bottom: 10px;
+        list-style: none;
+        cursor: pointer;
+    }
+
+    .btn-remove{
+        float: right;
+        font-weight: bold;
+    }
+
+    li a:hover{
+        color: #F38013;
+    }
+</style>
+<script>
+    "{{for p in olds:}}"
+    $("#div-hide").append("<div class='hide-pick' id='{{=p['product_id']}}' title='{{=p['product_title']}}'>");
+    "{{pass}}"
+    count_checked();
+    function count_checked(){
+//        var count = 0
+//        $('input[type=checkbox]').each(function () {
+//           count += (this.checked ? 1 : 0);
+//        });
+        $("#count-all").html("Đã chọn: " + document.getElementsByClassName("hide-pick").length);
+
+        "{{for cate in categories:}}"
+        var count_cate = 0
+        $(".count-{{=cate['id']}}").each(function() {
+                count_cate += (this.checked ? 1 : 0);
+        });
+        $("#count-{{=cate['id']}}").html("(" + count_cate + ")");
+        "{{pass}}"
+
+        setListPicked();
+    }
+
+    function uncheckAll(){
+        $('input[type=checkbox]').each(function () {
+           this.checked = false;
+        });
+        $("#div-hide").html("");
+        count_checked();
+    }
+
+    $('input[type=checkbox]').change(function(){
+        if (this.checked){
+            $("#div-hide").append("<div class='hide-pick' id='" + this.value +"' title='" + this.title + "'>");
+        }else{
+            $("#" + this.value).remove();
+        }
+        count_checked();
+    });
+
+
+    function setListPicked(){
+        $("#picker").html("");
+        var picker = []
+        $('.hide-pick').each(function(){
+            picker[picker.length] = {id: this.id,  title: this.title};
+        });
+
+        for (var i = 0; i < picker.length; i++){
+            var html = "<li class='ui-state-default' id='" + picker[i].id + "' title='" + picker[i].title + "'>";
+            html += "<a target='_blank' href='http://classbook.vn/store_detail/" + picker[i].id + "'>"
+            html += picker[i].title;
+            html += "</a>"
+            html += "<input class='btn-remove' type='button' value='X' onclick='remove_picked(" + picker[i].id +")'>";
+            html += "</li>"
+            $("#picker").append(html)
+        }
+        $( "#picker" ).sortable();
+        $( "#picker" ).disableSelection();
+    }
+
+    function submitRecommend(){
+        var link = "/cba/home_topic_item/submit_recommend.json"
+        $(".ui-state-default").each(function(){
+            if (this.id != ""){
+                link += "/" + this.id;
+            }
+        });
+        console.log(link);
+        $.ajax({
+            url: link,
+            success: function(data){
+                if(data.result){
+                    window.location.reload();
+                }else{
+                    alert(data.error)
+                }
+            },
+            error: function (err) {
+                alert("Lỗi Request");
+            }
+        });
+    }
+
+    function remove_picked(id){
+        $("#" + id).remove();
+        try {
+            $("#cb-" + id).prop('checked', false);
+        }catch (err){
+
+        }
+        count_checked();
+    }
+</script>

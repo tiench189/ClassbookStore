@@ -1,0 +1,350 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+
+<!-- breadcrumb -->
+        <div id="breadcrumb">
+            <ol class="breadcrumb">
+              <li><a href="/">Trang chủ</a></li>
+              <li class="active">Phòng học tương tác</li>
+            </ol>
+        </div>
+        <!--/breadcrumb -->
+        <div class="mp-dock">
+        	<div class="device"><img src="{{=URL('static','store2.2/images/device.png')}}" title="" alt=""></div>
+            <div class="info">
+            	<div class="mp-title"><p>Phiên bản</p><img src="{{=URL('static','store2.2/images/logo-dark.png')}}" title="" alt=""><span>CLASSROOM</span></div>
+                <div class="info-text">
+                	Với một loạt các tính năng ưu việt. <strong>Giải pháp phòng học tương tác sử dụng sách giáo khoa điện tử Classbook</strong> sẽ giúp giáo viên kiểm soát, quản lý lớp học hiệu quả, giám sát hoạt động của học sinh, duy trì trật tự trong lớp, truyền đạt kiến thức và kiểm tra đánh giá việc tiếp thu kiến thức của học sinh.
+                </div>
+                <div class="pack">
+                	<div class="pack-item">Phòng 25 học sinh giá<span>330.000.000 vnđ</span></div>
+                    <div class="pack-item">Phòng 35 học sinh giá<span>420.000.000 vnđ</span></div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- cate content -->
+        <div class="cate-content">
+            <div class="mp-content">
+                <ul class="nav nav-tabs line-tabs tabs-center" role="tablist">
+                    <li class="active"><a href="#tab-01" role="tab" data-toggle="tab">Các tính năng chính</a></li>
+                    <li><a href="#tab-02" role="tab" data-toggle="tab">Thông số kĩ thuật</a></li>
+                    <li><a href="#tab-03" role="tab" data-toggle="tab">Nội dung tương tác</a></li>
+                    <li><a href="#tab-04" role="tab" data-toggle="tab">Hỗ trợ</a></li>
+                </ul> 
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="tab-01">
+                    	<div class="layout3 mp-layout">
+                        	<div class="layout3-block mpl-left mp-01">
+                            	<div class="lb-title">Đối với Giáo Viên</div>
+                                <ul>
+                                	<li><span class="number">1</span> Thông qua việc tương tác trực tiếp trên màn hình và hỗ trợ bằng các thiết bị trình chiếu khác sẽ giúp giáo viên theo dõi, quản trị được đầy đủ hoạt động của học viên...</li>
+                                    <li><span class="number">2</span> Giáo viên dễ dàng quản trị lớp học, chụp trình chiếu, chia sẻ cho học sinh bài giảng cũng như bài mẫu của các bạn.</li>
+                                </ul>
+                                <div class="mpl-img" style="top: -10px;"><img src="{{=URL('static','store2.2/images/lb-01.jpg')}}" title=""></div>
+                            </div>
+                            <div class="layout3-block mpl-right mp-02">
+                            	<div class="lb-title">Đối với Học sinh</div>
+                                <ul>
+                                	<li><span class="number">1</span> Được hưởng môi trường chuyên biệt cho học tập, học sinh tham gia lớp học, đóng góp ý kiến, thảo luận nhóm và làm bài ngay trên sách giáo khoa điện tử Classbook.</li>
+                                    <li><span class="number">2</span> Đảm bảo tính tập trung của học viên và các nội dung truyền tải trong giờ học được xuyên suốt. </li>
+                                </ul>
+                                <div class="mpl-img"><img src="{{=URL('static','store2.2/images/lb-02.jpg')}}" title=""></div>
+                            </div>
+                            <div class="layout3-block mpl-left mp-03">
+                            	<div class="lb-title">Tư liệu giảng dạy phong phú</div>
+                                <ul>
+                                	<li><span class="number">1</span> Nguồn tư liệu giảng dạy phong phú, bổ sung đơn giản và dễ dàng giúp giờ học thêm sinh động và hiệu quả.</li>
+                                    <li><span class="number">2</span> Tích hợp toàn bộ sách giáo khoa từ lớp 1 đến lớp 12 của NXB Giáo dục Việt Nam.</li>
+                                    <li><span class="number">3</span> Kho bài giảng Violet, kho sách được tích hợp, giúp bài giảng thêm sống động.</li>
+                                    <li><span class="number">4</span> Dữ liệu mở rộng của giáo viên đưa trực tiếp qua thẻ nhớ.</li>
+                                    <li><span class="number">5</span> Trình duyệt, các ứng dụng sẵn sàng kết nối internet. </li>
+                                </ul>
+                                <div class="mpl-img"><img src="{{=URL('static','store2.2/images/lb-03.jpg')}}" style="width: 330px; height: auto;" title=""></div>
+                            </div>
+                            <div class="layout3-block mpl-right mp-04">
+                            	<div class="lb-title">Kiểm tra - Đánh giá</div>
+                                <ul>
+                                	<li><span class="number">1</span> Học hỏi từ phương pháp học tập truyển thống. Phòng học tương tác với sách giáo khoa điện tử Classbook cho phép giáo viên đánh giá sự tiến bộ của học sinh thông qua các bài kiểm tra. Giáo viên cũng có thể cung cấp cho học sinh bài khảo sát lấy phản hồi tức thời.</li>
+                                    <li><span class="number">2</span> Bộ công cụ hỗ trợ giáo viên soạn bài kiểm tra trắc nghiệm đơn giản, trực quan. </li>
+                                </ul>
+                                <div class="mpl-img" style="top: 10px;"><img src="{{=URL('static','store2.2/images/lb-04.jpg')}}" style="width: 250px; height: auto;" title=""></div>
+                            </div>
+                            <div class="layout3-block mpl-left mp-05">
+                            	<div class="lb-title">Kết nối dễ dàng</div>
+                                <ul>
+                                	<li><span class="number">1</span> Dễ dàng kết nối giữa thiết bị của giáo viên và học sinh để trở thành mô hình phòng học thông minh với giải pháp "phòng học tương tác sử dụng sách giáo khoa điện tử classbook" </li>
+                                </ul>
+                                <div class="mpl-img" style="top: 20px;"><img src="{{=URL('static','store2.2/images/lb-05.jpg')}}" title=""></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab-02">
+                        <div style="padding: 0px 100px">
+                         <h3>Các yêu cầu kĩ thuật cần đáp ứng cho phòng học Classbook</h3>
+                          <table id="tech_specs">
+                            <tbody>
+                              <tr>
+                                <td class="col1">Hệ điều hành</td>
+                                <td>
+                                        <h4>Máy tính giáo viên</h4>
+                                        <ul class="mw-list-spot">
+                                            <li>Windows XP/7/8/10</li>
+                                        </ul>
+
+                                        <h4>Máy tính bảng giáo viên (Android)</h4>
+                                        <ul class="mw-list-spot">
+                                            <li>Android 4.x</li>
+                                        </ul>
+
+                                        <h4>Máy tính bảng học sinh (Android)</h4>
+                                        <ul class="mw-list-spot">
+                                            <li>Android 4.x</li>
+                                        </ul>
+                                    </td>
+                              </tr>
+
+                              <tr>
+                                <td class="col1">Yêu cầu phần cứng</td>
+                                <td>
+                                        <h4>Máy tính giáo viên</h4>
+                                        <ul class="mw-list-spot">
+                                            <li>Tối thiểu: CPU P4 2.8G, 1Gbytes Memory, 128Mbytes Display Card.</li>
+                                            <li>Khuyến nghị: CPU Core 2 E6300, 2Gbytes Memory, 256Mbytes Display Card.</li>
+                                        </ul>
+
+                                        <h4>Máy tính bảng giáo viên (Android)</h4>
+                                        <ul class="mw-list-spot">
+                                            <li>Tối thiểu: CPU 1G, 1Gbytes Memory.</li>
+                                            <li>Khuyến nghị: CPU Dual-core 1.6G, 2Gbytes Memory.</li>
+                                        </ul>
+
+                                        <h4>Máy tính bảng học sinh (Android)</h4>
+                                        <ul class="mw-list-spot">
+                                            <li>Tối thiểu: CPU 1G, 512Mbytes Memory.</li>
+                                            <li>Khuyến nghị: CPU Dual-core 1G, 1Gbytes Memory.</li>
+                                        </ul>
+                                    </td>
+
+                              </tr>
+
+                              <tr>
+                                <td class="col1">Mạng wifi</td>
+                                <td>Chuẩn kết nối wifi: 802.11b/g/n.</td>
+
+                              </tr>
+                            </tbody>
+                          </table>
+
+                            <h3>Thiết bị cơ bản</h3>
+                            <table style="width: 95%;
+                border: 1px solid #D9D5BE;
+                margin: 25px;
+                background: white;
+                border-collapse: collapse;">
+                            <thead>
+                             <tr>
+                                 <th>Cấu thành</th>
+                                 <th>Số lượng</th>
+                                 <th>ĐVT</th>
+                                 <th>Sản xuất</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                  <td>Tablet / PC</td>
+                                  <td>Theo yêu cầu</td>
+                                  <td>Cái</td>
+                                  <td>Samsung Tab 4 7”</td>
+                               </tr>
+                                <tr>
+                                  <td>Tủ sạc & Bảo quản</td>
+                                  <td>1</td>
+                                  <td>Cái</td>
+                                  <td></td>
+                               </tr>
+                             <tr>
+                                  <td>Laptop cho Giáo viên</td>
+                                  <td>1</td>
+                                  <td>Cái</td>
+                                  <td></td>
+                               </tr>
+                            <tr>
+                                  <td>Bộ phát sóng wifi</td>
+                                  <td>1</td>
+                                  <td>Cái</td>
+                                  <td>Cisco Linksys </td>
+                               </tr>
+                            <tr>
+                                  <td>Nội dung (License) bản quyền và nội dung tương tác</td>
+                                  <td>1</td>
+                                  <td>Gói</td>
+                                  <td></td>
+                               </tr>
+                            <tr>
+                                  <td>Phần mềm quản trị</td>
+                                  <td>Theo yêu cầu</td>
+                                  <td>Khóa</td>
+                                  <td> </td>
+                               </tr>
+                            <tr>
+                                  <td>USB bản quyền phần mềm quản trị</td>
+                                  <td>1</td>
+                                  <td>Cái</td>
+                                  <td></td>
+                               </tr>
+                            <tr>
+                                  <td>Bảo hành/ bảo trì</td>
+                                  <td>1</td>
+                                  <td>Gói</td>
+                                  <td></td>
+                               </tr>
+                            <tr>
+                                  <td>Tập huấn/HDSD</td>
+                                  <td>1</td>
+                                  <td>Gói</td>
+                                  <td></td>
+                               </tr>
+                            </tbody>
+                            </table>
+                          </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab-03">
+                        <div class="slide_product left" style="padding: 0px 100px">
+                    <div> <!-- class="box_store_product box_radius mtop_normal left" -->
+
+                        <div class="box_detail_full left">
+
+                            <div class="left">
+                                <img src="{{=URL('static','images/classroom/1.jpg')}}" />
+                            </div>
+                            <div class="content_text_right mright_normal right">
+                                <div class="line_row_sub_withimg fs20 fcb leftm orange">
+                                    Tư liệu giảng dạy phong phú
+                                </div>
+                                <span class="left mtop_normal fs14">
+                                    Tư liệu Sách giáo khoa đầy đủ, phong phú đi kèm nội dung tương tác đa phương tiện
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="line_seperate_product mtop_mini left"></div>
+
+                    <div> <!-- class="box_store_product box_radius mtop_normal left" -->
+                        <div class="box_detail_full left">
+                            <div class="right">
+                                <img src="{{=URL('static','images/classroom/2.jpg')}}"/>
+                            </div>
+                            <div class="content_text_right mleft_normal left">
+                                <div class="line_row_sub_withimg fs20 fcb left lh25 orange">
+                                    Kho bài giảng mẫu
+                                </div>
+                                <span class="left mtop_normal fs14">
+                                    Toàn bộ các bài giảng chọn lọc đã được tinh chỉnh lại từ Violet, được sắp xếp khoa học cho từng khối lớp, môn học. Người dùng có thể tải về, biên tập lại theo yêu cầu hoặc sử dụng ngay.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="line_seperate_product mtop_mini left"></div>
+
+                    <div> <!--  class="box_store_product box_radius mtop_normal left" -->
+                        <div class="box_detail_full left">
+                            <div class="left">
+                                <img src="{{=URL('static','images/classroom/3.jpg')}}" />
+                            </div>
+                            <div class="content_text_right mright_normal right">
+                                <div class="line_row_sub_withimg fs20 fcb left orange">
+                                   Hệ thống ứng dụng bổ trợ học tập
+                                </div>
+                                <span class="left mtop_normal fs14">
+                                   Hệ thống ứng dụng bổ trợ học tập luôn được cập nhật và cung cấp miễn phí cho các lớp học Classbook:<br>
+                                    - Tiếng Anh: English test, Luyện thi, …<br>
+                                    - Hóa học: Thí nghiệm ảo, Bảng tuần hoàn hóa học,…<br>
+                                    - Sinh học: Mô phỏng cơ thể người<br>
+                                    - Toán: Bé làm toán, Công thức toán, máy tính đa năng,…<br>
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="line_seperate_product mtop_mini left"></div>
+
+                    <!-- !content default tab -->
+				</div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab-04">
+                        <div class="box_right_product left mtop_normal mbot_normal" style="padding: 0px 100px">
+                        <table class="table_width">
+                                    <tr class="table_head">
+                                        <th class="fw fcb fs14" style="width:450px;">Tên file</th>
+                                        <th class="fw fcb fs14">Ngôn ngữ</th>
+                                        <th class="fw fcb fs14">Link</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Hướng dẫn sử dụng (Manual guide)</td>
+                                        <td>Tiếng Anh(English)</td>
+                                        <td><a href="http://classbook.vn/cbw/static/classroomfiles/Classroom-Management-for-Windows-User-Manual-141113.pdf"
+                                               target="_blank" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Download</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Video giới thiệu tính năng</td>
+                                        <td>Tiếng Anh (English)</td>
+                                        <td><a href="https://www.youtube.com/watch?v=gPvZ9TVaHd0" target="_blank" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Xem video</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Brochure</td>
+
+                                        <td>Tiếng Việt</td>
+                                        <td><a href="http://classbook.vn/cbw/static/classroomfiles/brochure3-6 final.jpg" target="_blank" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Download</a></td>
+                                    </tr>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<script>
+	jQuery(document).ready(function(){
+   		jQuery('#guild_1_xp').click(function(){jQuery('#xp_content').slideToggle("fast")});
+   		jQuery('#guild_w8').click(function(){jQuery('#w8_content').slideToggle("fast")});
+   		jQuery('#guild_w8_0').click(function(){jQuery('#w8_content_0').slideToggle("fast")});
+
+});
+</script>
+<style type="text/css">
+    #tech_specs { width:95%; border:1px solid #D9D5BE; margin: 25px; background:white; border-collapse:collapse; }
+    table tr, table td, table th {
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+    #tech_specs .col1 {
+        vertical-align: top;
+        font-size: medium;
+        width:30%;
+    }
+    .mw-list-spot li{
+        margin-left: 40px;
+        list-style-type: square;
+    }
+    h3 {
+        color: #f28013;
+        margin-top: 80px;
+        margin-left: 25px;
+
+    }
+    h4{
+        font-weight: normal;
+        color: #f28013;
+    }
+
+    .orange{
+        color: #f28013;
+    }
+</style>

@@ -1,0 +1,41 @@
+{{extend 'cbw_layout.html'}}
+
+
+                    
+<div class="content_main">
+
+	<div class="box_store_product box_radius mtop_normal left">
+        <object class="loadpage" type="text/html" data="http://192.168.82.75:8004/static/huong_dan_gift_code.html">
+        </object>
+	</div>
+
+</div>
+<style>
+    .loadpage{
+        width: 100%;
+        overflow: hidden;
+        height: 5500px;
+        font-weight: 500;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    .icon-datmua{
+		background: url("{{=URL('static', 'images/icon-datmua.png')}}") no-repeat;
+		width: 184px;
+		height: 47px;
+		display: inline-block;
+		cursor: pointer;
+	}
+	.icon-datmua:hover, .icon-datmua:active{
+		background: url("{{=URL('static', 'images/icon-datmua_click.png')}}") no-repeat;
+	}
+    .icon-khampha{
+		background: url("{{=URL('static', 'images/icon-khampha.png')}}") no-repeat;
+		width: 184px;
+		height: 47px;
+		display: inline-block;
+	}
+	.icon-khampha:hover, .icon-khampha:active{
+		background: url("{{=URL('static', 'images/icon-khampha_click.png')}}") no-repeat;
+	}
+</style>
+

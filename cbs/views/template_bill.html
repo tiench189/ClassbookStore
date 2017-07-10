@@ -1,0 +1,95 @@
+<html>
+	<table style="margin:0px auto;margin-top:0px;width:600px;font-size:12px;font-family: Arial, Helvetica, sans-serif;color: #000;" border="0" cellpadding="0" cellspacing="0"><tr><td>
+        <div style="height:80px;background:#fff;-moz-border-radius:4px;-moz-border-radius:4px;-moz-border-radius:4px;border-radius:4px;border:0px solid #e3e3e3;">
+    	    <a href="http://classbook.vn">
+	            <div style=""></div>
+                <img src="http://classbook.vn/static/images/img_logo_classbook.png" style="width: 200px;height: 47px;margin: 15px 0 0 20px;"/>
+            </a>
+        </div>
+		<div style="margin-top:20px;padding:15px 20px 15px 20px;width:558px;background:#fff;-moz-border-radius: 4px;-moz-border-radius: 4px;-moz-border-radius: 4px;border-radius: 4px;border: 1px solid #e3e3e3;">
+		    <div style="background:url(http://classbook.vn/static/images/bg_top_head.png) bottom repeat-x;width:560px;">
+                <div style="font-size:20px;color:#262626;height:37px;background: url(http://classbook.vn/static/images/bg_tab_hover.png) no-repeat bottom left;margin-bottom:10px;">Phiếu xác nhận thông tin đặt hàng</div>
+            </div>
+            <div style="font-size:13px;">
+                <div class="form left mleft_normal">				
+                    <i style="background-color:#ccc;font-size:12px;">Đây là email tự động, quý khách vui lòng không trả lời vào email này!</i>
+                    <div style="margin-top:10px;">
+	                    Xin chào quý khách: {{=buyer[0]['customer_name']}}
+                    </div>						
+                    <div style="margin-top:5px;">
+	                    Công ty CP Sách điện tử giáo dục EDC - NXBGD xác nhận thông tin đặt hàng của quý khách như sau:
+                    </div>
+                    <div style="margin-top:5px;">
+	                    Mã số đơn hàng: {{=buyer[0]['id']}}
+                    </div>
+                    <div style="margin-top:5px;">
+	                    Thông tin đặt hàng đã được xác nhận vào ngày: {{=datetime.strptime( buyer[0]['order_date'], "%Y-%m-%d %H:%M:%S")}}
+                    </div>
+                    <div style="margin-top:5px;">
+	                    Địa chỉ email: <a href="mailto:{{=buyer[0]['email']}}" style="color:#000;text-decoration:none;">{{=buyer[0]['email']}}</a>
+                    </div>
+                    <div style="margin-top:5px;">
+	                    Số điện thoại liên hệ: {{=buyer[0]['phone']}}
+                    </div>
+                    <div style="margin-top:5px;">
+	                    Địa chỉ giao hàng: {{=buyer[0]['address']}}, quận (huyện) {{=district}}, thành phố (tỉnh) {{=province}}
+                    </div>
+                    <div style="margin-top:5px;">
+	                    Sản phẩm : Sách giáo khoa điện tử Classbook CB01 (Nguyên hộp, kèm theo sạc, tai nghe, bao da đặc chủng)
+                    </div>
+                     <div style="margin-top:5px;">
+	                    Các thông tin yêu cầu khác: 
+	                    <div style="margin-bottom:10px;padding:5px 5px 5px 5px;width:550px;background:#fff;-moz-border-radius: 4px;-moz-border-radius: 4px;-moz-border-radius: 4px;border-radius: 4px;border: 1px solid #e3e3e3;background-color:#eee;">
+	                        {{if buyer[0]['note']:}}{{=XML(buyer[0]['note'])}}{{pass}}
+                        </div>
+                    </div>
+                    <div style="float:right;margin-bottom:10px;">
+                    	<div>
+    	                    <div style="width:130px;font-weight:bold;float:left;">Chi tiết đơn hàng:</div>
+    	                </div>
+                     	<div>
+    	                    <div style="width:130px;font-weight:bold;float:left;">Số lượng:</div>
+    	                    <div style="width:100px;text-align:right;float:right;">{{=buyer[0]['number_devices']}}</div>
+    	                </div>
+    	                 <div>
+    	                    <div style="width:130px;font-weight:bold;float:left;">Đơn giá <i style="font-size:10px">(Đã bao gồm VAT 10%)</i>:</div>
+    	                    <div style="width:100px;text-align:right;float:right;">{{=str2price(str(unit_price))}}</div>
+    	                </div>
+                        <div>
+    	                    <div style="width:130px;font-weight:bold;float:left;">Tổng tiền:</div>
+    	                    <div style="width:100px;text-align:right;float:right;">{{=str2price(str(total))}}</div>
+    	                </div>
+                        <!--
+    	                <div>
+                            <div style="width:130px;font-weight:bold;float:left;">Chi phí vận chuyển:</div>
+                            <div style="width:100px;text-align:right;float:right;">0₫</div>
+                        </div>
+                        <div>
+                            <div style="width:130px;font-weight:bold;float:left;">Tổng cộng:</div>
+                            <div style="width:100px;text-align:right;float:right;">{total}</div>
+                        </div>-->
+                    </div>						
+
+                    <div style="clear:both;">
+	                    Xin quý khách kiểm tra lại các thông tin trên. Nếu có gì sai sót đề nghị báo ngay cho bộ phận kinh doanh theo số điện thoại Hotline: +84-4-35124007
+                    </div>						
+
+                    <div style="margin-top:5px;">
+	                    Chúng tôi sẽ giao hàng tới địa chỉ trên trong thời gian sớm nhất.
+                    </div>						
+                </div>  					
+            </div>
+	    </div>
+
+		<div style="margin:0px auto;margin-top:20px;padding:10px 10px 0px 20px;width:578px;background:#fff;-moz-border-radius: 4px;-moz-border-radius: 4px;-moz-border-radius: 4px;border-radius: 4px;border: 0px solid #e3e3e3;">
+            <a href="http://classbook.vn" style="float:left;margin-right:10px;">
+                <img src="http://classbook.vn/cbw/en/static/images/logo_EDC.png">
+            </a>
+            <div style="margin-top:5px;">Công ty cổ phần Sách điện tử giáo dục EDC – Nhà xuất bản Giáo Dục</div>
+            <div style="margin-top:5px;">Miền Bắc: 187B Giảng Võ, Đống Đa, Hà Nội</div>
+            <div style="margin-top:5px;">Miền Nam: lầu 4, tòa nhà Sogetraco, 30 Đặng Văn Ngữ, Phường 10, Quận Phú Nhuận, TPHCM</div>
+            <div style="margin-top:5px;">Hotline: +84-4-35124007 | Fax: +84-4-35124007 | Email: <a href="mailto:info@edcom.vn" style="color:#000;text-decoration:none;">info@edcom.vn</a></div>
+            <br style="clear:both;">
+	    </div>
+    </td></tr></table>
+</html>

@@ -1,0 +1,464 @@
+{{extend "layout.html"}}
+{{import scripts}}
+{{import usercp}}
+{{
+getTime = 2
+if request.vars.getbyyear:
+    getTime = int(request.vars.getbyyear)
+pass
+getby = "mm-yyyy"
+viewMod = 1
+getbyTmp = "%m-%Y"
+if getTime == 1:
+        getby = "yyyy"
+        getbyTmp = "%Y"
+        viewMod = 2
+pass
+if getTime == 3:
+        getby = "dd-mm-yyyy"
+        getbyTmp = "%d-%m-%Y"
+        viewMod = 0
+pass
+}}
+
+{{dict_vars = request.vars}}
+{{more_view=request.vars['more_from'] if request.vars['more_from'] else ""}}
+{{dict_vars['more_from'] = "payment"}}
+<link href="{{=URL('static','css/datepicker.css')}}" type="text/css"  rel="stylesheet"/>
+<script src="{{=URL('static','js/canvg/canvg.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/jsapi')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/rgbcolor.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/bootstrap-datepicker.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/locales/bootstrap-datepicker.vi.js')}}" type="text/javascript"></script>
+
+<div class="clsb_container">
+    <div class="clsb_main_content" id="content_left">
+        <div class="label">Thống kê doanh thu
+        <span style="display: inline-block; float: right; height: 20px; padding: 0; margin-top: -3px;">
+            <ul style="list-style: none;">
+                <li style="display: inline-block; cursor: pointer; background: url('{{=URL('static','images/chart_line.png')}}'); width: 21px; height: 20px;" id="style_chart_Line" onclick="changeChartStyle('Line')" title="Biểu đồ đường"></li>
+                <li style="display: inline-block; cursor: pointer; background: url('{{=URL('static','images/chart_pie.png')}}'); width: 21px; height: 20px;" id="style_chart_Pie" onclick="changeChartStyle('Pie')" title="Biểu đồ hình quạt"></li>
+                <li style="display: inline-block; cursor: pointer; background: url('{{=URL('static','images/chart_column.png')}}'); width: 21px; height: 20px;" id="style_chart_Column" onclick="changeChartStyle('Column')" title="Biểu đồ cột"></li>
+            </ul>
+        </span>
+        </div>
+        <div id="div_chart" class="clsb_chart_content" style="cursor: pointer;" onclick="zoomChart()">
+
+        </div>
+    </div>
+    <div class="clsb_right_menu" id="right_menu">
+        <div class="clsb_report_border">
+            <div class="label">Lựa chọn thống kê</div>
+           {{id = 0}}
+            {{if len(request.args)>1:}}
+            {{id = int(request.args[1])}}
+            {{pass}}
+            {{
+               def getcheck(boolValue):
+                    if boolValue:
+                        return "checked"
+                    else:
+                        return ""
+               pass
+            }}
+            <form style="position: relative; text-align: center;">
+                <input name="style" type="text" id="styleValue" style="display: none;"/>
+                <table style="margin: 0px auto;">
+                    <tr>
+                        <td>
+                            <b>Sản phẩm:</b> <br/>
+                            <select name="select" id="selectChart" class="selectpicker show-menu-arrow">
+                                <option value="all" {{='selected' if request.vars.select == "all" else ''}}>Tất cả</option>
+                                <option value="book" {{='selected' if request.vars.select == "book" else ''}}>Sách</option>
+                                <option value="exercise" {{='selected' if request.vars.select == "exercise" else ''}}>Trắc nghiệm</option>
+                                <option value="application" {{='selected' if request.vars.select == "application" else ''}}>Ứng dụng</option>
+                                <option value="select" {{='selected' if request.vars.select == "select" else ''}}>Lựa chọn nhiều SP</option>
+                            </select>
+                            <div class="clab_box_selectbook" id="selectBox">
+                                <!-- Tìm: <input placeholder="Tên sách" style="width: 80%;" id="product_search"/><hr/>-->
+                            {{
+                                pro = dict()
+                                if request.vars.selectProduct:
+                                    pro = request.vars.selectProduct
+                                    print pro
+                                    pass
+                            }}
+                            {{for item in products:}}
+                            {{=INPUT(_type="checkbox",_name="selectProduct", _checked=True if str(item['clsb20_product_cp']['id']) in pro else False,_value=item['clsb20_product_cp']['id'])}}  {{=item['clsb20_product_cp']['product_title']}}<br/>
+                            {{pass}}
+                            </div><br/>
+                            <b>Giới hạn thời gian:</b> <br/>
+                            <select name="getbyyear" id="select_time" class="selectpicker show-menu-arrow">
+                                <option value="3" {{='selected' if request.vars.getbyyear and int(request.vars.getbyyear) == 3 else ''}}>Thống kê theo ngày</option>
+                                <option value="2" {{='selected' if not request.vars.getbyyear or (request.vars.getbyyear and int(request.vars.getbyyear) == 2) else ''}}>Thống kê theo tháng</option>
+                                <option value="1" {{='selected' if request.vars.getbyyear and int(request.vars.getbyyear) == 1 else ''}}>Thống kê theo năm</option>
+                            </select><br/>
+                            <b>Loại thiết bị:</b> <br/>
+                            <select name="device" id="device" class="selectpicker show-menu-arrow">
+                                <option value="0">Tất cả các loại thiết bị</option>
+                                <option value="1" {{='selected' if request.vars.device and int(request.vars.device) == 1 else ''}}>Classbook phiên bản học sinh</option>
+                                <option value="2" {{='selected' if request.vars.device and int(request.vars.device) == 2 else ''}}>Classbook phiên bản giáo viên</option>
+                            </select><br/>
+                            <b>Tỉnh thành:</b> <br/>
+                            <select name="province" id="province" class="selectpicker show-menu-arrow"  data-live-search="true">
+                                <option value="0">Toàn quốc</option>
+                                {{for item in province:}}
+                                <option value="{{=item['id']}}" {{='selected' if request.vars.province and item['id'] == int(request.vars.province) else ''}}>{{=item['province_name']}}</option>
+                                {{pass}}
+                                <option value="-1" {{='selected' if request.vars.province and -1 == int(request.vars.province) else ''}}>Lựa chọn nhiều tỉnh thành</option>
+                            </select><br/>
+                            <div class="clab_box_selectbook" id="select_province" class="selectpicker show-menu-arrow">
+                            {{
+                                province_list = dict()
+                                if request.vars.select_province:
+                                    province_list = request.vars.select_province
+                                    pass
+                            }}
+                            {{for item in province:}}
+                            {{=INPUT(_type="checkbox",_name="select_province", _checked=True if str(item['id']) in province_list else False, _value=item['id'])}}  {{=item['province_name']}}<br/>
+                            {{pass}}
+                            </div>
+                            <b>Phân loại:</b> <br/>
+                            <select name="total" class="selectpicker show-menu-arrow">
+                                <option {{='selected' if request.vars.total and (int(request.vars.total) == 0) else ''}} value="0"> Thống kê tổng</option>
+                                <option {{='selected' if request.vars.total and (int(request.vars.total) == 1) else ''}} value="1"> Thống kê theo sản phẩm</option>
+                                <option {{='selected' if request.vars.total and (int(request.vars.total) == 2) else ''}} value="2"> Thống kê theo tỉnh thành</option>
+                            </select>
+                            <br/>
+                            <b>Thời gian:</b> <br/>
+                            <input type="text" class="datetimepicker" style="max-width: 88px;" value="{{=request.vars.start if request.vars.start else datetime.strptime(str(datetime.now().year)+"-1-1", "%Y-%m-%d").strftime(getbyTmp)}}" name="start"/><span style="vertical-align: super;">: </span><input type="text" class="datetimepicker" style="max-width: 88px;" value="{{=request.vars.end if request.vars.end else datetime.now().strftime(getbyTmp)}}" name="end"/>
+                        </td>
+                    </tr>
+                    <!--<tr>
+                        <td></td>
+                        <td>
+                            <input style="width: 30px; vertical-align: middle; margin: 0px;" type="checkbox" name="chartValue" value="product"/> Products<br/>
+                            <input style="width: 30px; vertical-align: middle; margin: 0px;" type="checkbox" name="chartValue" value="download"/> Total Download
+                        </td>
+                    </tr>-->
+                    <tr>
+                        <td><input type="submit" value="Xem thống kê"/></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="clr"></div>
+<div class="clsb_container"  style="margin-top: 20px;">
+            <div align="left" style="font-weight: bold; width: 100%;">Thống kê doanh thu<button class="btn" style="float: right;" onclick="tableToExcel('payment_table', 'Payment Table')">Xuất ra Excel</button></div><br/>
+            {{def row_style(i):}}
+            {{
+            if i%2 == 0:
+                return "odd"
+            else:
+                return "even"
+            }}
+            {{pass}}
+            {{if request.vars.total == "1":}}
+            {{=TABLE(
+                    THEAD(
+                            TR(
+                                TH("Thời gian", _class="header"),
+                                TH("Mã sản phẩm", _class="header"),
+                                TH("Tên sản phẩm", _class="header"),
+                                #TH("Kiểu thanh toán", _class="header"),
+                                TH("Thành tiền", _class="header",  _style="text-align: right; background-image: none;"),
+                                TH("Chiết khấu", _class="header",  _style="text-align: right; background-image: none;"),
+                                TH("Thực lĩnh", _class="header",  _style="text-align: right; background-image: none;"),
+                                TH("Mở rộng", _class="header"),
+                            ),
+                    ),
+                    *[TR(
+                        TD(totalData[i]['download_time']),
+                        TD(totalData[i]['product_code']),
+                        TD(A(totalData[i]['product_title']," ( Đã xóa )" if (totalData[i]['product_status'].lower().find("delete") != -1) else "", _href=URL(a='cpa', c='products', f='index', args=['view','clsb20_product_cp',totalData[i]['product_id']], user_signature=True), _target="_blank")),
+                        #TD(totalData[i]['purchase_type']),
+                        TD(scripts.style_money(totalData[i]['total_price'])+" ₫", _style="text-align: right"),
+                        TD(scripts.style_money(totalData[i]['total_discount'])+" ₫", _style="text-align: right"),
+                        TD(scripts.style_money(totalData[i]['total_payment'])+" ₫", _style="text-align: right"),
+                        TD(A("Chi tiết",_href=URL(a="cpa", c="histories", f="viewlogs", args=[totalData[i]['product_id'], totalData[i]['start'], totalData[i]['end']], vars=dict_vars, user_signature=True), _class="btn")),
+                        _class=row_style(i)
+                     ) if totalData[i]['total_price'] > 0 else TR() for i in range(len(totalData))],
+                    _id="payment_table",
+                    _class="tablesorter"
+            )}}
+            {{elif request.vars.total == "2":}}
+            {{=TABLE(
+                    THEAD(
+                            TR(
+                                TH("Thời gian", _class="header"),
+                                TH("Tỉnh thành", _class="header"),
+                                TH("Thành tiền", _class="header",  _style="text-align: right; background-image: none;"),
+                                TH("Chiết khấu", _class="header",  _style="text-align: right; background-image: none;"),
+                                TH("Thực lĩnh", _class="header",  _style="text-align: right; background-image: none;"),
+                            ),
+                    ),
+                    *[TR(
+                            TD(listProvince[i]['download_time']),
+                            TD(listProvince[i]['province']),
+                            TD(scripts.style_money(listProvince[i]['total_price'])+" ₫", _style="text-align: right"),
+                            TD(scripts.style_money(listProvince[i]['total_discount'])+" ₫", _style="text-align: right"),
+                            TD(scripts.style_money(listProvince[i]['total_payment'])+" ₫", _style="text-align: right")
+                    ) if listProvince[i]['total_price'] > 0 else TR() for i in range(len(listProvince))],
+                    _id="payment_table",
+                    _class="tablesorter"
+            )}}
+            {{else:}}
+            {{=TABLE(
+                    THEAD(
+                            TR(
+                                TH("Thời gian", _class="header"),
+                                TH("Thành tiền", _class="header", _style="text-align: right; background-image: none;"),
+                                TH("Phí thanh toán (15%)", _class="header", _style="text-align: right; background-image: none;"),
+                                TH("Chiết khấu", _class="header", _style="text-align: right; background-image: none;"),
+                                TH("Thực lĩnh", _class="header", _style="text-align: right; background-image: none;"),
+                            ),
+                    ),
+                    *[TR(
+                            TD(dataAll[i][0]),
+                            TD(scripts.style_money(dataAll[i][1])+" ₫", _style="text-align: right"),
+                            TD(scripts.style_money(dataAll[i][1]*15/100)+" ₫", _style="text-align: right"),
+                            TD(scripts.style_money((dataAll[i][1]*85/100)*usercp.get_discount_value(auth.user.id,db)/100)+" ₫", _style="text-align: right"),
+                            TD(scripts.style_money(dataAll[i][1]*85/100 - ((dataAll[i][1]*85/100)*usercp.get_discount_value(auth.user.id,db)/100))+" ₫", _style="text-align: right")
+                    ) for i in range(len(dataAll))],
+                    _id="payment_table",
+                    _class="tablesorter"
+            )}}
+            {{pass}}
+            <button class="btn" style="float: left;" onclick="toMoreTable()">Xem chi tiết</button><br/><br/>
+            <div id="moreTable" style="height: 0px; overflow: hidden;">
+                <button class="btn" style="float: right;" onclick="tableToExcel('tablelist', 'Total Download')">Xuất ra Excel</button><br/><br/>
+                {{=TABLE(
+                        THEAD(
+                                TR(
+                                    TH("Thời gian", _class="header"),
+                                    TH("Mã sản phẩm", _class="header"),
+                                    TH("Tên sản phẩm", _class="header"),
+                                    #TH("Kiểu thanh toán", _class="header"),
+                                    TH("Thành tiền", _class="header",  _style="text-align: right; background-image: none;"),
+                                    TH("Chiết khấu", _class="header",  _style="text-align: right; background-image: none;"),
+                                    TH("Thực lĩnh", _class="header",  _style="text-align: right; background-image: none;"),
+                                    TH("Mở rộng", _class="header"),
+                                ),
+                        ),
+                        *[TR(
+                            TD(tableList[i]['download_time']),
+                            TD(tableList[i]['product_code']),
+                            TD(A(tableList[i]['product_title']," ( Đã xóa )" if (tableList[i]['product_status'].lower().find("delete") != -1) else "", _href=URL(a='cpa', c='products', f='index', args=['view','clsb20_product_cp',tableList[i]['product_id']], user_signature=True), _target="_blank")),
+                            #TD(tableList[i]['purchase_type']),
+                            TD(scripts.style_money(tableList[i]['total_price'])+" ₫", _style="text-align: right"),
+                            TD(scripts.style_money(tableList[i]['total_discount'])+" ₫", _style="text-align: right"),
+                            TD(scripts.style_money(tableList[i]['total_payment'])+" ₫", _style="text-align: right"),
+                            TD(A("Chi tiết", _href=URL(a="cpa", c="histories", f="viewlogs", args=[tableList[i]['product_id'], tableList[i]['start'], tableList[i]['end']], vars=dict_vars, user_signature=True), _class="btn")),
+                                _class=row_style(i)
+                            ) if tableList[i]['total_price'] > 0 else TR() for i in range(len(tableList))],
+                        _id="tablelist",
+                        _class="tablesorter"
+                )}}
+            </div>
+</div>
+<script type="text/javascript">
+    var products = {{=XML(response.json(productsList))}}
+    var provinces = {{=XML(response.json(province_select))}}
+    var data;
+    var style = "Pie";
+
+    if($("#selectChart").val()){
+        if($("#selectChart").val() == "select") $("#selectBox").css('display','block');
+        $("#selectChart").change(function(){
+            if($("#selectChart").val() == "select") $("#selectBox").css('display','block');
+            else $("#selectBox").css('display','none');
+        })
+    }
+    if($("#province").val() == "-1") $("#select_province").css('display','block');
+    $("#province").change(function(){
+        if($("#province").val() == "-1") $("#select_province").css('display','block');
+        else $("#select_province").css('display','none');
+    });
+
+    function changeChartStyle(str){
+        $("#style_chart_Pie").css('background','url({{=URL('static', 'images/chart_pie.png')}})');
+        $("#style_chart_Column").css('background','url({{=URL('static', 'images/chart_column.png')}})');
+        $("#style_chart_Line").css('background','url({{=URL('static', 'images/chart_line.png')}})');
+        $("#style_chart_"+str).css('background','url({{=URL('static', 'images/chart')}}_'+str.toLowerCase()+'_sel.png)');
+
+        $("#styleValue").val(str);
+        style = str;
+        data = new google.visualization.DataTable();
+        var year = "{{=request.vars.getbyyear}}";
+        var check = "{{=request.vars.total}}";
+        if (check == "None") check = "0";
+        if(year == "1") data.addColumn('string', 'Năm');
+        else data.addColumn('string', 'Tháng');
+        if (str=="Pie" || parseInt(check) == 0){
+            data.addColumn('number', 'VNĐ');
+            data.addRows({{=XML(response.json(dataAll))}})
+        }
+        else if(parseInt(check) == 2){
+            for (var i=0; i<provinces.length; i++){
+                data.addColumn('number',provinces[i].id != null?provinces[i]['province_name']:provinces[i]['clsb_province']['province_name'])
+            }
+            data.addRows({{=XML(response.json(dataProvince))}})
+        }
+        else if(parseInt(check) == 1){
+            for (var i=0; i<products.length; i++){
+                data.addColumn('number',products[i]['clsb20_product_cp']['product_title'])
+            }
+            data.addRows({{=XML(response.json(data))}});
+        }
+        var checkData = '{{=0 if len(dataAll) == 0 else (len(dataAll) if len(dataAll) > 1 else dataAll[0][1])}}';
+        if(products.length == 0){
+            $("#div_chart").html("<h3 style='color: red'>Không có dữ liệu</h3>");
+        }
+        else if((checkData == 0)  && (str=="Pie")){
+            $("#div_chart").html("<h3 style='color: red'>Không có dữ liệu</h3>")
+        }
+        else{
+            document.getElementById('div_chart').innerHTML = "";
+            if(str=="Column") barsVisualization = new google.visualization.ColumnChart(document.getElementById('div_chart'));
+            if(str=="Pie") barsVisualization = new google.visualization.PieChart(document.getElementById('div_chart'));
+            if(str=="Line") barsVisualization = new google.visualization.LineChart(document.getElementById('div_chart'));
+
+            barsVisualization.draw(data, {
+                title: "Thống kê doanh thu",
+                height: $("#right_menu").height()-60,
+                is3D: true,
+                hAxis: {title: year=="1"?"Năm":"Tháng"},
+                vAxis: {
+                    title: "VNĐ",
+                    viewWindow: {
+                        min:0
+                    }
+                },
+                legend: 'bottom',
+                pointSize: 5
+    //            chartArea: {left:100, width: 150}
+    //            curveType: 'function'
+            });
+        }
+    }
+    _flagMoreTable = false;
+    if("{{=more_view}}" != ""){
+        _flagMoreTable = true;
+        $("#moreTable").css('height','auto');
+    }
+    function toMoreTable(){
+        if(!_flagMoreTable){
+            _flagMoreTable = true;
+            $("#moreTable").css('height','auto');
+        }
+        else{
+            _flagMoreTable = false;
+            $("#moreTable").css('height','0px');
+        }
+    }
+
+    function zoomChart(){
+        $("body").append($("#domForZoom").html());
+        $("#closeDomForZom").click(function(){
+            $("#div_chart_zoom_border").remove();
+        })
+        document.getElementById('div_chart_zoom').innerHTML = "";
+        if(style=="Column") barsVisualization = new google.visualization.ColumnChart(document.getElementById('div_chart_zoom'));
+        if(style=="Pie") barsVisualization = new google.visualization.PieChart(document.getElementById('div_chart_zoom'));
+        if(style=="Line") barsVisualization = new google.visualization.LineChart(document.getElementById('div_chart_zoom'));
+
+        barsVisualization.draw(data, {
+            title: "Doanh thu",
+            is3D: true,
+            hAxis: {title: "Tháng"},
+            vAxis: {
+                title: "Doanh thu",
+                viewWindow: {
+                    min:0
+                }
+            },
+            legend: 'bottom',
+            pointSize: 5
+        });
+    }
+
+    google.load('visualization', '1.0', {'packages':['corechart']});
+
+    google.setOnLoadCallback(function(){
+        style = "{{=request.vars.style}}";
+        if (style == "None") style = "Line";
+        changeChartStyle(style);
+    })
+    $(document).ready(function(){
+        $("#content_left").css('min-height', $("#right_menu").height()+'px');
+
+        $('.datetimepicker').datepicker({
+            format:'{{=getby}}',
+            viewMode: parseInt('{{=viewMod}}'),
+            minViewMode: parseInt('{{=viewMod}}'),
+            autoclose: true,
+            language: 'vi'
+        });
+        $("#select_time").change(function(){
+            $('.datetimepicker').datepicker('remove');
+            if($("#select_time").val() == 1){
+                $('.datetimepicker').val("");
+                $('.datetimepicker').datepicker({
+                    format:'yyyy',
+                    viewMode: 2,
+                    minViewMode: 2,
+                    autoclose: true,
+                    language: 'vi'
+                });
+            }
+            if($("#select_time").val() == 2){
+                $('.datetimepicker').val("");
+                $('.datetimepicker').datepicker({
+                    format:'mm-yyyy',
+                    viewMode: 1,
+                    minViewMode: 1,
+                    autoclose: true,
+                    language: 'vi'
+                })
+            }
+            if($("#select_time").val() == 3){
+                $('.datetimepicker').val("");
+                $('.datetimepicker').datepicker({
+                    format:'dd-mm-yyyy',
+                    viewMode: 0,
+                    minViewMode: 0,
+                    autoclose: true,
+                    language: 'vi'
+                })
+            }
+
+        });
+
+        try{
+            $("#tablelist").tablesorter();
+            $("#payment_table").tablesorter();
+        }
+        catch(e){
+
+        }
+        {{if request.vars.total == "1":}}
+            $("#payment_table").append('{{=TR(TD(B("Tổng số"), _colspan=3, _style="background: #FCF49C;"),TD(B(scripts.style_money(total_price))+" ₫", _style="background: #FCF49C; text-align: right;"), TD(B(scripts.style_money(total_discount))+" ₫", _style="background: #FCF49C; text-align: right;"), TD(B(scripts.style_money(total_payment))+" ₫", _style="background: #FCF49C; text-align: right;"), TD(_style="background: #FCF49C; text-align: right;"),_style="background: #FCF49C;"),}}')
+        {{elif request.vars.total == "2":}}
+            $("#payment_table_province").append('{{=TR(TD(B("Tổng số"), _colspan=2, _style="background: #FCF49C;"),TD(B(scripts.style_money(total_price))+" ₫", _style="background: #FCF49C;"), TD(B(scripts.style_money(total_discount))+" ₫", _style="background: #FCF49C; text-align: right;"), TD(B(scripts.style_money(total_payment))+" ₫", _style="background: #FCF49C; text-align: right;"),_style="background: #FCF49C;"),}}')
+        {{else:}}
+            $("#payment_table").append('{{=TR(TD(B("Tổng số"), _colspan=1, _style="background: #FCF49C;"),TD(B(scripts.style_money(total_price))+" ₫", _style="background: #FCF49C; text-align: right;"),TD(B(scripts.style_money(total_phi))+" ₫", _style="background: #FCF49C; text-align: right;"), TD(B(scripts.style_money(total_discount))+" ₫", _style="background: #FCF49C; text-align: right;"),TD(B(scripts.style_money(total_payment))+" ₫", _style="background: #FCF49C; text-align: right;"),_style="background: #FCF49C;"),}}')
+        {{pass}}
+        $("#tablelist").append('{{=TR(TD(B("Tổng số"), _colspan=3, _style="background: #FCF49C;"),TD(B(scripts.style_money(total_price))+" ₫", _style="background: #FCF49C; text-align: right;"), TD(B(scripts.style_money(total_discount))+" ₫", _style="background: #FCF49C; text-align: right;"), TD(B(scripts.style_money(total_payment))+" ₫", _style="background: #FCF49C; text-align: right;"), TD(_style="background: #FCF49C;"),_style="background: #FCF49C;"),}}')
+    })
+</script>
+
+<script type="text/html" id="domForZoom">
+    <div id='div_chart_zoom_border' style='position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background: rgba(0,0,0,0.5);'>
+        <div id="div_chart_zoom" style="width: 80%; height: 90%; margin: 20px auto;"></div>
+        <div style="width: 80%; position: relative; margin: 0px auto;">
+            <div id='closeDomForZom' class="btn"  style="position: absolute; right: 0px; bottom: 10%;">Đóng</div>
+            <div class="btn" style="position: absolute; left: 0px; bottom: 10%;" onclick="saveAsImg(document.getElementById('div_chart_zoom'),'ChartDownload.png')">Xuất ra PNG</div>
+        </div>
+    </div>
+</script>
+<script src="{{=URL('static','js/bootstrap-select.min.js')}}" type="text/javascript"></script>
+<script>
+    $(".selectpicker").selectpicker();
+</script>

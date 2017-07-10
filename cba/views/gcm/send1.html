@@ -1,0 +1,154 @@
+{{extend 'layout.html'}}
+
+<h1>Push Notification</h1>
+
+<form method="POST">
+    <span style="margin-right: 10px;">Notification</span>
+    <textarea cols="8" rows="10" name="message" maxlength="256" size="256"></textarea>
+    <!--<input value="Enter message here" name="message" type="textbox" style="margin-right: 10px;" maxlength="256" size="256" />-->
+    <br><input type="submit" value="Send"/> <input type="button" id="btnClearProduct" value="Clear product list"> <input
+        type="button" id="btnClearDevice" value="Clear device list"><br><br>
+
+    <p> Danh sách sản phẩm cập nhật :
+
+    <div id="product_area">
+        <table border="2">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Mã sản phẩm</th>
+                <th>Tên sản phẩm</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{if not result:}}
+            {{=error}}
+            {{elif list_product:}}
+            {{for product in list_product:}}
+            <tr>
+                <td>
+                    {{=product['id']}}
+                </td>
+                <td>
+                    {{=product['product_code']}}
+                </td>
+                <td>
+                    {{=product['product_title']}}
+                </td>
+            </tr>
+            {{pass}}
+            {{pass}}
+            </tbody>
+        </table>
+    </div>
+
+     <p> Danh sách sản phẩm cập nhật :
+
+    <div id="device_area">
+        <table border="2">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Mã thiết bị</th>
+
+            </tr>
+            </thead>
+            <tbody id="body_device_list">
+            </tbody>
+        </table>
+    </div>
+    <p>Chọn tất cả: <input type="checkbox" name="ckSelectAll" value="select" id="ckSelectAll"></p>
+    {{if result:}}
+    {{=form}}
+    {{pass}}
+</form>
+
+<script>
+    jQuery(document).ready(function () {
+
+        $('input[name=records]').change(function () {
+
+            var a = $(this).attr('value');
+
+            $.ajax({
+                type: "POST",
+                url: '{{=URL("cba", "gcm", "execute_device_id", host=True)}}',
+                data: {device_id: a  },
+                success: function (msg) {
+
+                }
+
+            });
+            if(this.checked)
+            {
+                $('#body_device_list').append("<tr>" + ($("#" + a ).html()) + '</tr>');
+            }else
+            {
+                var currenthtml = $("#body_device_list").html();
+                currenthtml = currenthtml.replace($("#" + a ).html(), "");
+                $("#body_device_list").html(currenthtml);
+
+            }
+
+        });
+
+        $('#ckSelectAll').change(function () {
+            var records = [];
+            var inputs = document.getElementsByTagName("input");
+            for(var i = 0; i < inputs.length; i++) {
+                if(inputs[i].name.indexOf('records') == 0) {
+                    records.push(inputs[i]);
+                }
+            }
+            if (this.checked) {
+                $('input[name=records]').attr('checked', 'checked');
+                for (var i = 0; i < records.length; i++){
+                    var record = records[i];
+                    var a = record.getAttribute("value");
+                    a.checked = true;
+
+                    $.ajax({
+                        type: "POST",
+                        url: '{{=URL("cba", "gcm", "execute_device_id", host=True)}}',
+                        data: {device_id: a  },
+                        success: function (msg) {
+
+                        }
+                    });
+                    $('#body_device_list').append("<tr>" + ($("#" + a ).html()) + '</tr>');
+                }
+            } else {
+                $('input[name=records]').removeAttr('checked');
+            }
+
+        });
+    });
+
+    $("#btnClearProduct").click(function () {
+        if (confirm("Bạn có muốn xóa hết danh sách sản phẩm không?")) {
+            $.ajax({
+                type: "POST",
+                url: '{{=URL("cba", "gcm", "clear_session_product", host=True)}}',
+                success: function (msg) {
+                    $("#product_area").html("");
+                }
+
+            });
+        }
+    });
+
+
+    $("#btnClearDevice").click(function () {
+        if (confirm("Bạn có muốn xóa hết danh sách thiết bị đã chọn không?")) {
+            $.ajax({
+                type: "POST",
+                url: '{{=URL("cba", "gcm", "clear_session_device", host=True)}}',
+                success: function (msg) {
+                    $('input[name=records]').removeAttr('checked');
+//                    $("#product_area").html("");
+                }
+
+            });
+        }
+    });
+</script>

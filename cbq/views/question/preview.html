@@ -1,0 +1,43 @@
+{{extend 'layout.html'}}
+<div id="question_info">
+    <form id="myForm" action="#">
+        <fieldset class="basic_field_set">
+            <legend class="basic_legend">
+                Chi tiết câu trắc nghiệm
+            </legend>
+            <table class="basic_table">
+                <tr>
+                    <td class="label_td">Mã câu hỏi :</td>
+                    <td>{{=question['id']}}</td>
+                </tr>
+                <tr>
+                    <td class="label_td">Yêu cầu câu hỏi :</td>
+                    <td class="content_format">{{=question['question_guide']}}</td>
+                </tr>
+                <tr>
+                    <td class="label_td">
+                        Nội dung câu hỏi:
+                    </td>
+                    <td class="content_format">
+                    {{=TAG(question['question_content'])}}
+                    {{pass}}
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label_td">
+                        Danh sách đáp án :
+                    </td>
+                    <td id="question_answer" class="label_td">
+                    {{ html=question['question_answer']
+
+                    q = TAG(html)}}
+                    {{=q}}
+                    {{pass}}
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </form>
+
+</div>

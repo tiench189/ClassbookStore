@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Login Facebook</title>
+</head>
+
+<body>
+<div style="width:100%; text-align:center">
+<h3>Bấm vào phía dưới để đăng nhập ...</h3>
+<a href="javascript:loginFB()" class="btn-facebook"></a>
+</div>
+</body>
+</html>
+
+<style>
+.btn-facebook{
+	display:inline-block;
+	width:300px;
+	height:50px;
+	background-size:100% 100%;
+	background-image:url({{=URL('static','images/btn_facebook.png')}});
+}
+</style>
+
+<script type="text/javascript" src="{{=URL('static','store2.2/js/jquery-1.9.1.min.js')}}"></script>
+
+<script>
+    var site_callback = "{{=request.vars.site_callback}}"
+//    alert(site_callback);
+    function getUserData() {
+	FB.api('/me', function(response) {
+		document.getElementById('response').innerHTML = 'Hello ' + response.name;
+	});
+}
+
+window.fbAsyncInit = function() {
+	//SDK loaded, initialize it
+	FB.init({
+		appId      : '880795605285397',
+		xfbml      : true,
+        version    : 'v2.2'
+	});
+
+	//check user session and refresh it
+	FB.getLoginStatus(function(response) {
+		if (response.status === 'connected') {
+			//user is authorized
+			document.getElementById('loginBtn').style.display = 'none';
+			getUserData();
+		} else {
+			//user is not authorized
+		}
+	});
+};
+
+//load the JavaScript SDK
+(function(d, s, id){
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) {return;}
+	js = d.createElement(s); js.id = id;
+	js.src = "//connect.facebook.net/en_US/sdk.js";
+	fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+//add event listener to login button
+function loginFB(){
+	//do the logi
+	FB.login(function(response) {
+		if (response.authResponse) {
+            var access_token =   FB.getAuthResponse()['accessToken'];
+            console.log('Access Token = '+ access_token);
+            $.ajax({
+                url: "/cbs20/users/authentication_fb.json/" + access_token,
+                success: function(data){
+                    var redirect = site_callback + "?k=" + data.token + "&u=" + data.username
+                    if (site_callback.indexOf("?") > -1){
+                        redirect = site_callback + "&k=" + data.token + "&u=" + data.username
+                    }
+					 console.log(redirect)
+                    window.location = redirect;
+//
+                },
+                error: function(data){
+                    alert("Có lỗi xảy ra")
+                }
+            });
+		}
+	}, {scope: 'email,public_profile', return_scopes: true});
+}
+//    $( document ).ready(function() {
+//        console.log("aaaaaaaaaa");
+//        setTimeout(loginFB, 500);
+////        loginFB();
+//    });
+</script>

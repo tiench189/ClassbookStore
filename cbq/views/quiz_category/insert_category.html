@@ -1,0 +1,153 @@
+{{extend 'layout.html'}}
+
+<!--<div>
+    <form action="#">
+        <table>
+            <tr>
+                <td>Chọn lớp :</td>
+                <td><select id="sclParent" name="sclParent"></select></td>
+            </tr>
+            <tr>
+                <td>Chọn môn :</td>
+                <td><select id="sclChild" name="sclChild"></select></td>
+            </tr>
+            <tr>
+                <td>Mã giá :</td>
+                <td><input type="text" value="" id="category_code" name="category_code"></td>
+            </tr>
+            <tr>
+                <td>Tên giá :</td>
+                <td><input type="text" value="" id="category_name" name="category_name"></td>
+            </tr>
+            <tr>
+                <td>Mô tả</td>
+                <td><input type="text" value="" id="des" name="des"></td>
+            </tr>
+            <tr>
+                <td><input type="button" value="Lưu lại" id="btnSave"></td>
+                <td></td>
+            </tr>
+        </table>
+    </form>
+</div>-->
+
+
+<form action="#">
+    <input type='hidden' name="category_level" id="category_level" value="0"/>
+    <table>
+
+        <tr id="tr_level_0">
+            <td>Chọn :</td>
+            <td><select id="sclParent0" name="sclParent0" onChange="load_child_list(this, 0);"></select></td>
+        </tr>
+
+        <tr>
+            <td>Mã giá :</td>
+            <td><input type="text" value="" id="category_code" name="category_code"></td>
+        </tr>
+        <tr>
+            <td>Tên giá :</td>
+            <td><input type="text" value="" id="category_name" name="category_name"></td>
+        </tr>
+        <tr>
+            <td>Mô tả</td>
+            <td><input type="text" value="" id="des" name="des"></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="Lưu lại" id="btnSave"></td>
+            <td></td>
+        </tr>
+    </table>
+</form>
+
+
+<script>
+    $(document).ready(function () {
+        load_parent_list();
+
+        $("#btnSave").click(function () {
+
+            $.ajax({
+                url: "{{=URL('cbq', 'quiz_category', 'insert_category.json')}}",
+                type: "POST",
+                data: $("form").serialize(),
+                success: function (data) {
+                    alert(data);
+                }
+            });
+        });
+
+    });
+
+
+    function load_parent_list() {
+        $.ajax({
+            url: "{{=URL("cbq", "quiz_category", "get_list_category_has_null_parent.json", host=True)}}",
+            type: "POST",
+            success: function (data) {
+                var content = '';
+                content += '<option value=-1>Chọn lớp</option>';
+                $.each(data, function (key, value) {
+                    if (key == 'class_list') {
+                        $.each(value, function (k, v) {
+                            content += '<option  value=' + v.id + '>' + v.category_name + '</option>';
+                        });
+                    }
+                });
+                $('#sclParent0').html(content);
+            }
+        });
+    }
+
+    function load_child_list(obj, tr_category_level) {
+        var parent_id = obj.value;
+        if (parent_id == null) {
+            return;
+        }
+        $.ajax({
+            url: "{{=URL("cbq", "quiz_category", "get_list_quiz_category_by_parent_id.json", host=True)}}",
+            type: "POST",
+            data: {parent_id: parent_id},
+            success: function (data) {
+                if (data.category_list.length < 1) {
+//                    alert("ehehehe");
+                    return;
+                }
+                else {
+                    var subject_id = null;
+                    var content = '';
+                    if (!$('#tr_level_' + (parseInt(tr_category_level) +1)).length) {
+                        $("#category_level").val(parseInt(tr_category_level) +1);
+                        content += '<tr id="tr_level_' + (parseInt(tr_category_level) +1) + '"><td>Cấp ...</td>';
+                        content += '<td><select id="sclParent' + (parseInt(tr_category_level) +1) +'" name="sclParent' + (parseInt(tr_category_level) +1) + '" onChange="load_child_list(this,' + (parseInt(tr_category_level) +1) + ' );">';
+                    }
+                    content += '<option value="-1" selected="selected">Chọn môn</option>';
+                    $.each(data, function (key, value) {
+                        if (key == 'category_list') {
+                            $.each(value, function (k, v) {
+                                if (subject_id == null) {
+                                    subject_id = v.id;
+                                    content += '<option value="' + v.id + '">' + v.category_name + '</option>';
+                                } else {
+                                    content += '<option value="' + v.id + '" >' + v.category_name + '</option>';
+                                }
+                            });
+                        }
+                    });
+                    if (!$('#tr_level_' + (parseInt(tr_category_level) +1)).length) {
+                        content += '</select></td>';
+                    }
+                }
+
+                if (!$('#tr_level_' + (parseInt(tr_category_level) +1)).length) {
+                    $('#tr_level_' + tr_category_level).after(content);
+                }
+                else
+                {
+                    $('#sclParent' + (parseInt(tr_category_level) +1)).html(content);
+                }
+            }
+        });
+    }
+
+</script>

@@ -1,0 +1,20 @@
+{{extend 'layout.html'}}
+<label style="font-weight: bold; color: #0000cc;">{{=db(db.clsb20_product_cp.id == request.vars.product_id).select().first()['product_title']}}</label>
+<table class="tablesorter web2py_grid">
+    <thead>
+    <tr style="height: 50px;">
+        <th>Hình thức trả tiền</th>
+        <th style="text-align: right;">Giá tiền</th>
+        <th style="text-align: center;">Ngày giờ đổi</th>
+        <th>Thay đổi bởi</th>
+    </tr>
+    </thead>
+{{for item in form:}}
+    <tr>
+        <td>{{=item['clsb20_purchase_item']['description']}}</td>
+        <td style="text-align: right;">{{=item['clsb20_product_price_history']['price']}} ₫</td>
+        <td style="text-align: center;">{{=item['clsb20_product_price_history']['created_on'].strftime("%d-%m-%Y %H:%M:%S")}}</td>
+        <td>{{=item['auth_user']['username']}}</td>
+    </tr>
+{{pass}}
+</table>

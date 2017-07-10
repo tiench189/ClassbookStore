@@ -1,0 +1,67 @@
+{{extend 'layout.html'}}
+
+<form id="frmAddDevice" method="POST" action="#">
+    <div>
+        <table>
+            <tr>
+                <td> Mã thiết bị (*)</td>
+                <td><input type="text" value="" name="txtSerial" id="txtSerial"></td>
+                <td><label id="err"></label></td>
+            </tr>
+            <tr>
+                <td>Tài khoản chuyển đến</td>
+                <td><input type="text" value="" name="txtUserMoveTo" id="txtUserMoveTo"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="button" value="Lưu lại" name="btnAdd" id="btnAdd">
+                    <a href="{{=URL('index')}}" class="btn">Quay lại</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#btnAdd").click(function () {
+            if (validateForm()) {
+                $("#frmAddDevice").submit();
+            }
+        })
+
+
+    })
+    function validateForm() {
+        var success = false;
+        var device_serial = $("#txtSerial").val();
+        if (device_serial == null || device_serial == "") {
+            $("#err").text("Mã thiết bị không hợp lệ");
+            return false
+        }
+        $.ajax({
+            url: "{{=URL("cba", "device_exception", "check_device_ownership.json", host=True)}}",
+            type: "POST",
+            async: false,
+            data: {device_serial: device_serial},
+            success: function (data) {
+                $.each(data, function (key, value) {
+                    if (key == 'result') {
+                        if (value != null && value != "") {
+                            var msg = "Thiết bị đang thuộc quyền sở hữu của " + value + ". Bạn có chắc chắc muốn thực hiện không?";
+                            if (confirm(msg)) {
+                                success =  true;
+                            } else {
+                                success = false;
+                            }
+                        }
+                    }
+                });
+
+            }
+        });
+        return success;
+    }
+</script>

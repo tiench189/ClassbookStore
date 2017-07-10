@@ -1,0 +1,104 @@
+{{extend "layout.html"}}
+{{import math}}
+{{import scripts}}
+{{if 'product_list' in globals():}}
+    {{import products}}
+    <a class="btn" href="{{=URL(a='cpa', c='apps', f='multi_media', args=['new', 'clsb20_product_cp'], user_signature=True)}}"><span class="icon plus icon-plus"></span> Thêm ứng dụng</a>
+    <form method="get" style="display: inline-block; float: right;">
+        Trạng thái: <select name="product_status" class="input-control">
+            <option value="0">Tất cả</option>
+            <option value="pending" {{="selected" if request.vars.product_status == "pending" else ""}}>Đang được duyệt</option>
+            <option value="published" {{="selected" if request.vars.product_status == "published" else ""}}>Đang bán</option>
+            <option value="reject" {{="selected" if request.vars.product_status == "reject" else ""}}>Bị phản hồi</option>
+            <option value="submit" {{="selected" if request.vars.product_status == "submit" else ""}}>Chờ duyệt</option>
+            <option value="init" {{="selected" if request.vars.product_status == "init" else ""}}>Khởi tạo mới</option>
+            <option value="cancel" {{="selected" if request.vars.product_status == "cancel" else ""}}>Ngừng bán</option>
+        </select>
+        <input name="keyword" class="input-control" value="{{=request.vars.keyword if request.vars.keyword else ''}}" placeholder="Từ khóa"/>
+        <input type="submit" value="Tìm kiếm"/>
+    </form>
+    {{if len(product_list) > 0:}}
+        <table class="tablesorter web2py_grid">
+            <thead>
+                <tr style="height: 50px;">
+                    <th>ID</th>
+                    <th style="text-align: center;">Ảnh cover</th>
+                    <th>Tên ứng dụng</th>
+                    <th>Ngày giờ tạo</th>
+                    <th style="text-align: right;">Giá tiền</th>
+                    <th style="text-align: right;">Trạng thái</th>
+                    <!--<th style="text-align: right;">Trạng thái trên Store</th>-->
+                    <th style="text-align: right;">Lượt tải</th>
+                    <th style="text-align: center;">Tùy chọn</th>
+                    <th>Quản lý</th>
+                </tr>
+            </thead>
+
+        {{total_page = int(math.ceil(len(product_list)/float(settings.item_per_page)))}}
+        {{page = 1}}
+        {{
+            if request.vars.page:
+                page = int(request.vars.page)
+            pass
+        }}
+        {{
+            for i in range((page-1)*settings.item_per_page, page*settings.item_per_page):
+                if i >= len(product_list):
+                    break
+        }}
+            <tr class="{{='odd' if i%2 ==0 else 'even'}}">
+                <td>{{=product_list[i]['clsb20_product_cp']['id']}}</td>
+                <td style="text-align: center;">{{=IMG(_src=URL(a='cpa', c='download', f='cover', args=[user_cp_path, "upload", product_list[i]['clsb20_product_cp']['product_code'], "cover.clsbi"]), _style="width: 55px; height: 55px;")}}</td>
+                <td>{{=product_list[i]['clsb20_product_cp']['product_title']}}</td>
+                <td>{{=product_list[i]['clsb20_product_cp']['created_on'].strftime("%d-%m-%Y %H:%M:%S")}}</td>
+                <td style="text-align: right;">{{=scripts.style_money(product_list[i]['clsb20_product_cp']['product_price'])+" ₫"}}</td>
+                {{store_status = products.get_store_status(product_list[i]['clsb20_product_cp']['product_code'], db)}}
+                {{str_update = ""}}
+                {{if store_status.upper() == "APPROVED":}}
+                {{str_update = " bản cập nhật"}}
+                {{pass}}
+                {{status = product_list[i]['clsb20_product_cp']['product_status']}}
+                <td style="text-align: right;">{{="Đang phát triển" if status.upper()=="DEVELOPER" else "Đang bán" if status.upper() == "PUBLISHED" else "Đã ngừng bán" if (status.upper() == "CANCEL" and store_status.upper() != "APPROVED") \
+                else "Chờ duyệt"+str_update if status.upper()=="SUBMIT" else "Đang được duyệt"+str_update if status.upper() == "PENDING" else "Có phản hồi"+str_update if status.upper() == "REJECT" else "Mới tải lên"+str_update if (status.upper() == "INIT" or store_status.upper() == "APPROVED")else status}}</td>
+
+                <!--<td style="text-align: right;">{{="Đang bán" if store_status.upper() == "APPROVED" else "Đã ngừng bán" if store_status.upper() == "PENDING" else store_status}}</td>-->
+                <td style="text-align: right;">{{=products.get_total_download(product_list[i]['clsb20_product_cp']['product_code'], db)}}</td>
+                <td style="text-align: center;">
+                {{if (product_list[i]['clsb20_product_cp']['product_status'].upper() == "SUBMIT") | (product_list[i]['clsb20_product_cp']['product_status'].upper() == "PENDING"):}}
+                    <span style="min-width: 90px;" class="btn"  onclick="javascript:submit_c('Bạn có muốn hủy chờ duyệt?', '{{=URL('tocancel',args=[str(product_list[i]['clsb20_product_cp']['id'])], user_signature=True)}}','none')">Hủy chờ duyệt</span>
+                {{elif product_list[i]['clsb20_product_cp']['product_status'].upper() == "PUBLISHED":}}
+                    <span style="min-width: 90px;" class="btn" onclick="javascript:submit_c('Bạn có muốn ngừng bán?', '{{=URL('disablepending',args=[str(product_list[i]['clsb20_product_cp']['id'])], user_signature=True)}}','none')">Ngừng bán</span>
+                {{else:}}
+                    <a href="{{=URL('topending',args=[str(product_list[i]['clsb20_product_cp']['id'])], user_signature=True)}}"><span
+                            style="min-width: 90px;" class="btn">Đề nghị duyệt</span></a>
+                {{pass}}
+                {{if status.upper() != "PUBLISHED" and store_status.upper() == "APPROVED":}}
+                    <span style="min-width: 90px;" class="btn" onclick="javascript:submit_c('Bạn có muốn ngừng bán?', '{{=URL('disablepending',args=[str(product_list[i]['clsb20_product_cp']['id'])], user_signature=True)}}','none')">Ngừng bán</span>
+                {{pass}}
+                </td>
+                <td>
+                    <a href="{{=URL(a='cpa', c='apps', f='multi_media', args=['view', 'clsb20_product_cp', str(product_list[i]['clsb20_product_cp']['id'])], user_signature=True)}}"><span class="icon magnifier icon-zoom-in" style="margin-right: 10px;"></span></a>
+                    <a href="{{=URL(a='cpa', c='apps', f='multi_media', args=['edit', 'clsb20_product_cp', str(product_list[i]['clsb20_product_cp']['id'])], user_signature=True)}}"><span class="icon pen icon-pencil" style="margin-right: 10px;"></span></a>
+                    <span class="icon trash icon-trash" style="margin-right: 10px;" onclick="confirm_delete('{{=URL(a='cpa', c='apps', f='multi_media', args=['delete', 'clsb20_product_cp', str(product_list[i]['clsb20_product_cp']['id'])], user_signature=True)}}')"></span>
+                </td>
+            </tr>
+        {{pass}}
+        </table>
+        Trang: <span class="page_bar">
+            {{for i in range(1,total_page+1):}}
+            <a class="page_number" href="?page={{=i}}">{{=i}}</a>
+            {{pass}}
+        </span>
+    {{else:}}
+        <h5 style="color: red;">Không có dữ liệu</h5>
+    {{pass}}
+{{else:}}
+{{=form}}
+{{pass}}
+<script>
+    function confirm_delete(url){
+        if(confirm("Bạn có muốn xóa ứng dụng này?")){
+            window.location.href = url;
+        }
+    }
+</script>

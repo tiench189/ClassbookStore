@@ -1,0 +1,244 @@
+{{my_cate = get_menu()}}
+
+<div id="header">
+    <!--<div style="text-align: center"><h2>Website đang thử nghiệm</h2></div>-->
+
+	<div class="container">
+    	<div id="logo"><a href="{{='#' if URL() == URL('index') else '/'}}" class="logo-img"><img src="{{=URL('static','store2.2/images/logo.png')}}" title="Classbook.vn" alt="Classbook.vn"></a></div>
+        <div id="search">
+        	<div class="search-container">
+            	<form action="/search">
+                    <input autocomplete="off" class="search-input" type="text" id="input_search" name="keyword" placeholder="Tìm kiếm sách, tác giả, nhà xuất bản...">
+                    <button class="search-btn"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+            <div class="search-suggest">
+
+            </div>
+        </div>
+        <div id="header-app"><a target="_blank" href="https://play.google.com/store/apps/details?id=com.edc.classbook.app" class="app-link"><img src="{{=URL('static','store2.2/images/classbook-app.png')}}" title="Ứng dụng Classbook" alt="Ứng dụng Classbook">Tải ứng dụng <br>Classbook</a></div>
+        <div>
+            <a href="/nganluong" id="nap-tien" class="btn btn-classbook"><i class="fa fa-dollar"></i> Nạp tiền&nbsp;</a>
+            <a href="/paycode" id="gift-card" class="btn btn-classbook"><i class="fa fa-gift"></i> Gift Card</a>
+        </div>
+        <div id="cart">
+        	<div class="cart-container">
+        		<a class="cart-icon" href="/cart" title="Xem giỏ hàng"><span class="cart-badge">{{= len(session.shopping_cart) if session.shopping_cart else '0'}}</span></a>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div id="menu">
+        	<div id="menu-dropdown">
+            	<div onclick="javascript:window.location.href = '/'" class="md-link"><i class="fa fa-reorder mr10"></i>Kho nội dung</div>
+                <div id="md-list" class="mdl-{{='home' if URL() == URL('index')  else 'page'}}">
+                	<ul class="mdl-ul">
+                        {{if my_cate:}}
+                        {{for index in range(len(my_cate)):}}
+                        <li>
+                            <a class="parent-link" p_id="{{=my_cate[index]['category_id']}}" title="{{=my_cate[index]['category_name']}}">{{=my_cate[index]['category_name']}}</a>
+                            <ul class="sub-menu" style="width: 450px">
+                            	<li class="title">{{=my_cate[index]['category_name']}}</li>
+                                {{children = my_cate[index]['children']}}
+	                            {{for cindex in range(len(children)):}}
+                                <li><a class="{{='category' if len(children[cindex]['children']) == 0 else 'parent'}}-link" p_id="{{=children[cindex]['category_id']}}" title="{{=children[cindex]['category_name']}}">{{=children[cindex]['category_name']}}</a></li>
+                                {{pass}}
+                            </ul>
+                        </li>
+                        {{pass}}
+                        {{pass}}
+                    </ul>
+                    <div class="clearfix"></div>
+                    {{if URL() == URL('index'):}}
+                    <a class="mdl-expand"><span>Mục khác</span><i class="fa fa-angle-down ml10"></i></a>
+                    {{pass}}
+                </div>
+            </div>
+            <div class="menu-right">
+            	<ul class="menu-right-ul">
+                    <!--<li><a href="/device" class="{{='header-active' if URL() == URL('device') else ''}}" title="">Thiết bị Classbook</a></li>-->
+                    <li><a href="/manager" class="{{='header-active' if URL() == URL('manager') else ''}}" title="">Phòng học tương tác</a></li>
+                    <li><a href="/new" title="">Tin tức</a></li>
+                    <li><a href="/support" class="{{='header-active' if URL() == URL('support') else ''}}" title="">Hỗ trợ</a></li>
+                    <li><a href="/teacher" title=""><i class="fa fa-briefcase mr10"></i>Dành cho giáo viên</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<script>
+    "{{if URL() != URL('index'):}}"
+    $("#menu-dropdown").hover(function (e) {
+		$("#main").toggleClass("overlay");
+	});
+    "{{pass}}"
+
+    getMobileOperatingSystem();
+
+    function getMobileOperatingSystem() {
+        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+        if (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i) || userAgent.match(/iPod/i)) {
+            $('.app-link').attr('href', 'https://itunes.apple.com/us/app/classbook/id942940905?mt=8');
+            return 'iOS';
+        }
+        else if (userAgent.match(/Android/i)) {
+            return 'Android';
+        }
+        else {
+            $('.app-link').attr('href', 'http://classbook.vn/static/cbwindow/free/Classbook.exe');
+            return 'unknown';
+        }
+    }
+</script>
+<script>
+    var pos_search = -1;
+    var result_search = []
+     $("#input_search").keydown(function(e) {
+        switch(e.which) {
+            case 13: // left
+            event_enter()
+            break;
+            case 38: // up
+                    event_up()
+            break;
+            case 40: // down
+                    event_down()
+            break;
+            default: return; // exit this handler for other keys
+        }
+        e.preventDefault(); // prevent the default action (scroll / move caret)
+    });
+    var searching = false;
+    $('#input_search').on('input', function() {
+        var keyword =$(this).val().trim();
+        keyword = friendly_search(keyword).toLowerCase();
+//        console.log(keyword)
+        pos_search = -1;
+        setTimeout(function(){
+            new_key = friendly_search($("#input_search").val().trim()).toLowerCase();
+            if (keyword == new_key && !searching){
+                searching = true
+                console.log("Search: " + keyword);
+                $.ajax({
+                    url: "/cbs20/solr/search_from_app_mini.json?key=" + keyword,
+                    async: false,
+                    success: function (data) {
+                        searching = false;
+                        addResultSearch(data.docs, keyword)
+                    },
+                    error: function (err) {
+                        searching = false;
+                    }
+                });
+            }
+        }, 600)
+    });
+
+function friendly_search(aa){
+       as = aa.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a");
+       as = as.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e");
+       as = as.replace(/ì|í|ị|ỉ|ĩ/g,"i");
+       as = as.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o");
+       as = as.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u");
+       as = as.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y");
+       as = as.replace(/đ|Đ/g,"d");
+       as = as.replace(/[^a-z0-9]/gi, ' ')
+       as = as.replace(/ + /g," ");
+       return as;
+    }
+
+function addResultSearch(docs, keyword){
+    var html = '<div class="ss-content">'
+    $.each(docs, function(index, doc)
+	{
+        var display_name = doc.product_title;
+//        console.log(display_name + ":" + display_name.length)
+        if (display_name.length > 70){
+            display_name = display_name.substring(0, 70) + " ..."
+        }
+        html += '<div class="ssc-line" url="/store_detail/' + doc.id + '" p_id="' + doc.id + '" title="' + doc.product_title + '">'
+        html += '<a href="javascript:link2detail(' + doc.id + ',\'' + doc.product_title + '\')" title="' + doc.product_title + '">' + display_name +'</a>'
+        html += '<div class="clearfix"></div>'
+        html += '</div>'
+	});
+    if (docs.length > 0){
+        html += '<div class="ssc-line">' +
+                            '<a href="/search?keyword=' + keyword + '" class="more">Xem tất cả</a>' +
+                        '</div>'
+    }
+    html += "</div>"
+    if (docs.length == 0){
+        html = ""
+    }
+    $(".search-suggest").html(html);
+}
+
+    function event_up(){
+        console.log("UP");
+        result_search = document.getElementsByClassName("ssc-line");
+        if (pos_search == 0){
+            pos_search = result_search.length - 1;
+        }else{
+            pos_search --;
+        }
+        remove_selected_search();
+        result_search[pos_search].className = result_search[pos_search].className + " search_selected"
+    }
+
+    function event_down(){
+        console.log("DOWN");
+        result_search = document.getElementsByClassName("ssc-line");
+        if (pos_search == result_search.length - 1){
+            pos_search = 0;
+        }else{
+            pos_search ++;
+        }
+        remove_selected_search();
+        result_search[pos_search].className = result_search[pos_search].className + " search_selected"
+    }
+
+    function event_enter(){
+        console.log("ENTER");
+        result_search = document.getElementsByClassName("ssc-line");
+        if (result_search.length > 0){
+            if (pos_search >= 0 && pos_search < result_search.length){
+                link2detail(result_search[pos_search].getAttribute("p_id"), result_search[pos_search].getAttribute("title"))
+//                window.location = result_search[pos_search].getAttribute("url");
+            }else{
+                window.location = "/search?keyword=" + friendly_search($('#input_search').val.trim()).toLowerCase();
+            }
+        }
+    }
+
+    function remove_selected_search(){
+        for (var i = 0; i < result_search.length; i++){
+            result_search[i].className = result_search[i].className.replace( " search_selected", '' )
+        }
+    }
+</script>
+<style>
+    #search .search-suggest .ss-content .ssc-line a{
+        color: #8c8c8c;
+        display: block;
+        font-size: 13px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-style: italic;
+    }
+    #search .search-suggest .ss-content .search_selected a{
+        color: #f28013;
+    }
+    #search .search-suggest .ss-content .search_selected{
+        background: #f9f9f9;
+    }
+    #search .search-suggest .ss-content .ssc-line {
+        padding: 10px 20px;
+    }
+
+    .header-active{
+        color: #f28013;
+        text-decoration: underline;
+    }
+</style>

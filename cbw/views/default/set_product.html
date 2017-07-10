@@ -1,0 +1,36 @@
+{{extend 'cbw_layout.html'}}
+{{block main_banner}}{{end}}
+{{block title_content}}{{end}}
+
+        <div id="breadcrumb">
+            <ol class="breadcrumb">
+              <li><a href="/">Trang chủ</a></li>
+              <li class="active">Bộ sách "{{=set_title}}"</li>
+            </ol>
+        </div>
+        <div class="cate-content">
+            <h1 class="cate-name">Bộ sách "{{=set_title}}"
+                <span><a class="btn btn-order" href="/set_to_cart/{{=set_id}}" >
+                        <i id="icon-cart" class="cart-icon-white"></i></a></span>
+            </h1>
+            <div class="cate-list">
+                <div class="booklist booklist-cat">
+                    <div class="booklist-wrap">
+                        <ul class="clearfix">
+                        {{for product in products:}}
+                        <li>
+                                <a p_id="{{=product['id']}}" class="blw-thumb detail-link" title="{{=product['product_title']}}"><span class="thumb"><img src="/cbs/download/thumb/{{=product['product_code']}}" alt="{{=product['product_title']}}"></span></a>
+                                <h2 class="blw-title"><a p_id="{{=product['id']}}" class="thumb  detail-link" title="{{=product['product_title']}}">{{=product['product_title']}}</a></h2>
+                                <h3 class="blw-writer">{{=product['creator_name']}}</h3>
+                                <span class="old-price">{{=str2price(str(product['cover_price'])) if product['cover_price'] > 0 else '.'}}</span>
+                                <a href="javascript:action_cart('{{=product["id"]}}')" class="blw-cart">
+                                <i id="cart{{=product['id']}}" class="cart{{=product['id']}} blw-cart-icon mr10 {{=' in-cart' if str(product['id']) in session.shopping_cart else ''}}"></i>{{=product['product_price']}}</a>
+                                <div class="clearfix"></div>
+                        </li>
+                        {{pass}}
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>

@@ -1,0 +1,162 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script> function auto_width() {
+        var total_width = document.getElementById('page-title').offsetWidth;
+        var btn_tabs = document.getElementsByClassName("top_menu_item_active");
+        var btn_tab_actives = document.getElementsByClassName("top_menu_item");
+        if (btn_tabs.length + btn_tab_actives.length == 0) return;
+        var width = total_width / (btn_tabs.length + btn_tab_actives.length) - 8;
+        for (var i = 0; i < btn_tabs.length; i++) {
+            btn_tabs[i].style.width = width + "px";
+        }
+        for (var i = 0; i < btn_tab_actives.length; i++) {
+            btn_tab_actives[i].style.width = width + "px";
+        }
+    }
+    function change_tab(tab) {
+        var btn_tabs = document.getElementsByClassName("top_menu_item_active box_radius left");
+        for (var i = 0; i < btn_tabs.length; i++) {
+            btn_tabs[i].className = "top_menu_item box_radius left";
+        }
+        var tab_title = document.getElementById("tab-" + tab);
+        tab_title.className = "top_menu_item_active box_radius left";
+        var btn_contents = document.getElementsByClassName("tab_content active");
+        for (var i = 0; i < btn_contents.length; i++) {
+            btn_contents[i].className = "tab_content";
+        }
+        var tab_title = document.getElementById("content-" + tab);
+        tab_title.className = "tab_content active";
+    }
+    document.getElementsByClassName("tab_content")[0].click();
+    </script>
+    <style type="text/css"> * + html {
+        overflow: auto;
+    }
+
+    body {
+        background: #f3f3f3;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 16px;
+        line-height: 20px;
+        color: #555;
+        margin: 0px;
+        padding: 0px;
+        height: 100%;
+        font-weight: 500;
+    }
+
+    #main_wrap {
+        margin: 0px auto;
+        height: 100%;
+        width: 100%;
+    }
+
+    #main {
+        float: left;
+        width: 100%;
+        background: #f3f3f3;
+    }
+
+    a {
+        color: #8a8a8a;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: none;
+        cursor: pointer;
+        color: #ee9329;
+    }
+
+    .line_heading {
+        width: 100%;
+        height: 1px;
+        background-color: #c4c4c4;
+        margin: 0;
+        margin-top: 45px;
+        margin-bottom: -45px;
+    }
+
+    .left {
+        float: left;
+    }
+
+    .right {
+        float: right;
+    }
+
+    .top_menu {
+        width: 100%;
+        height: 45px;
+        background: url(bg_menu_top.png) repeat-x;
+    }
+
+    .box_radius {
+        -moz-border-top-left-radius: 4px;
+        -webkit-border-top-left-radius: 4px;
+        -khtml-border-top-left-radius: 4px;
+        border-top-left-radius: 4px;
+        -moz-border-top-right-radius: 4px;
+        -webkit-border-top-right-radius: 4px;
+        -khtml-border-top-right-radius: 4px;
+        border-top-right-radius: 4px;
+    }
+
+    .top_menu_item {
+        width: auto;
+        height: 27px;
+        background: #dfdfdf;
+        border: 1px solid #c4c4c4;
+        margin: 6px 0 0 5px;
+        text-align: center;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-weight: 800;
+    }
+
+    .top_menu_item:hover {
+        background: #f3f3f3;
+        border-bottom: 1px solid #f3f3f3;
+        color: #ee9329;
+        cursor: pointer;
+    }
+
+    .top_menu_item_active {
+        width: auto;
+        height: 27px;
+        background: #f3f3f3;
+        border: 1px solid #c4c4c4;
+        border-bottom: 1px solid #f3f3f3;
+        color: #ee9329;
+        margin: 6px 0 0 5px;
+        text-align: center;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-weight: 800;
+    }
+
+    .content_dict {
+        width: 100%;
+        background: #f3f3f3;
+        overflow-y: auto;
+        overflow-x: none;
+    }
+
+    .tab_content {
+        padding-top: 15px; /*can le tren o day*/
+        padding-left: 15px; /*can le trai o day*/
+        display: none;
+    }
+
+    #page-content .active {
+        display: block;
+    }
+
+    ul {
+        margin: 0;
+    } </style>
+</head>

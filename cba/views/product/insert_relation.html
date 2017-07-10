@@ -1,0 +1,25 @@
+{{extend 'layout.html'}}
+    <span>Nhập ID sách liên quan</span>
+    <span><input type="number" id="relation_id"></span>
+    <span><button class="btn" onclick="submitRelation()">Submit</button></span>
+<script>
+    function submitRelation(){
+        relation_id = document.getElementById("relation_id").value;
+        if (relation_id == ""){
+            alert("Chưa nhập ID");
+        }else{
+            var link = "{{=URL(f='insert_relation')}}.json/" + "{{=product_id}}/" + relation_id;
+            console.log(link)
+            $.ajax({
+                url: link,
+                async: false,
+                success: function (data) {
+                   alert(data.mess)
+                },
+                error: function (err) {
+                    alert("Lỗi kết nối " + err.message);
+                }
+            });
+        }
+    }
+</script>

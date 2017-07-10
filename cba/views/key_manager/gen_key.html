@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>{{extend "layout.html"}}
+{{from datetime import datetime, timedelta}}
+<link href="{{=URL('static','css/datepicker.css')}}" type="text/css"  rel="stylesheet"/>
+<script src="{{=URL('static','js/canvg/canvg.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/jsapi')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/rgbcolor.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/bootstrap-datepicker.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/locales/bootstrap-datepicker.vi.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/jquery.tablesorter.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/tableToExcel.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/chartToImage.js')}}" type="text/javascript"></script>
+
+<div class="clsb_container">
+{{if len(key_available) == 0:}}
+<form style="position: relative; text-align: center;">
+Nhập số lượng license <input type="number" name="limit">
+    <input type="text" name="des" placeholder="Chú thích">
+<input type="submit" value="Lấy"  style="margin-top: -10px">
+{{pass}}
+</form>
+<button class="btn" style="float: right;" onclick="tableToExcel('tablelistTotal', 'Danh sách License Key được lấy {{=datetime.now().strftime("%Y-%m-%d %H:%M")}}')">Xuất ra Excel</button>
+            {{=TABLE(
+                    THEAD(
+                            TR(
+                                TH("License Key", _class="header"),
+                            ),
+                    ),
+                    *[TR(
+                        TD(key_available[i])
+                     ) for i in range(len(key_available))],
+                    _id="tablelistTotal",
+                    _class="tablesorter"
+            )}}
+</div>
+<script src="{{=URL('static','js/bootstrap-select.min.js')}}" type="text/javascript"></script>
+</div>
+</head>
+<body>
+
+</body>
+</html>

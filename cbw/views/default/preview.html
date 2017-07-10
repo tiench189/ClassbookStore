@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Xem thử - {{=info['product_title']}} - Sách giáo khoa điện tử Classbook</title>
+    <script type="text/javascript" src="{{=URL('static','store2.2/js/jquery-1.9.1.min.js')}}"></script>
+    <script type="text/javascript" src="{{=URL('static','store2.2/js/jquery.gdocsviewer.min.js')}}"></script>
+</head>
+<body onresize="resizeView()">
+<a href="http://classbook.vn/cbs20/download_preview/product/WEB/{{=info['product_code']}}.pdf" class="embed"></a>
+</body>
+</html>
+<script>
+    resizeView();
+    function resizeView(){
+        var h = window.innerHeight - 20;
+        var w = window.innerWidth - 30;
+        $('a.embed').gdocsViewer({width: w, height: h});
+    }
+</script>

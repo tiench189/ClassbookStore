@@ -1,0 +1,77 @@
+{{extend 'layout.html'}}
+
+    <h1>Push Notification</h1>
+<form method="POST">
+    <span style="margin-right: 10px;">Message</span>
+    <textarea cols="8" rows="10" name="message" maxlength="256" size="256"></textarea>
+    <div>
+        <span><input type="checkbox" name="ckAndroid" id="ckAndroid">Android</span>
+        <span><input type="checkbox" name="ckIOS" id="ckIOS">IOS</span>
+    </div>
+    <br><input type="submit" value="Send"/><br><br>
+    <div>{{=mess}}</div>
+    <div id="device_area">
+        <table border="2">
+            <thead>
+            <tr style="text-align: center">
+                <th> </th>
+                <th>Id</th>
+                <th>Mã</th>
+                <th>Loại</th>
+                <th>Tên</th>
+                <th> </th>
+            </tr>
+            </thead>
+            <tbody id="body_device_list">
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div>
+        {{=form}}
+    </div>
+    <p>Chọn tất cả: <input type="checkbox" name="ckSelectAll" value="select" id="ckSelectAll"></p>
+</form>
+
+<script>
+    jQuery(document).ready(function () {
+
+        $('input[name=records]').change(function () {
+
+            var a = $(this).attr('value');
+
+            $.ajax({
+                type: "POST",
+                url: '{{=URL("cba", "gcm", "execute_device_id", host=True)}}',
+                data: {device_id: a  },
+                success: function (msg) {
+
+                }
+
+            });
+            if(this.checked)
+            {
+                $('#body_device_list').append("<tr>" + ($("#" + a ).html()) + '</tr>');
+            }else
+            {
+                var currenthtml = $("#body_device_list").html();
+                currenthtml = currenthtml.replace($("#" + a ).html(), "");
+                $("#body_device_list").html(currenthtml);
+
+            }
+
+        });
+
+        $('#ckSelectAll').change(function () {
+            if (this.checked) {
+                $('#body_device_list').html("")
+
+                $('input[name=records]').attr('checked', 'checked');
+            } else {
+                $('input[name=records]').removeAttr('checked');
+            }
+
+        });
+    });
+
+</script>

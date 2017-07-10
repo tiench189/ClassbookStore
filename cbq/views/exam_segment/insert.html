@@ -1,0 +1,65 @@
+{{extend 'layout.html'}}
+
+<div class="web2py_grid">
+    <div class="web2py_table">
+        <div class="web2py_htmltable">
+
+            <form action="">
+                <input type="hidden" value="{{=exam.item_id}}" id="exam_id" name="exam_id"/>
+
+                <p>Exam: {{=exam.name}}</p>
+                <table>
+                    <tr>
+                        <td>Tên segment :</td>
+                        <td><input type="text" id="segment_name" name="segment_name"/></td>
+                    </tr>
+                    <tr>
+                        <td>Mô tả :</td>
+                        <td><input type="text" id="segment_des" name="segment_des"/></td>
+                    </tr>
+                    <tr>
+                        <td>Thời lượng :</td>
+                        <td><input type="text" id="segment_duration" name="segment_duration"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="button" value="Quay lại" id="btnCancel"/> </td>
+                        <td><input type="button" value="Lưu" id="btnSubmit"/></td>
+                    </tr>
+                </table>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $("#btnCancel").click(function(){
+
+        });
+        $("#btnSubmit").click(function(){
+            var exam_id = $("#exam_id").val();
+            var segment_name = $("#segment_name").val();
+            var segment_des = $("#segment_des").val();
+            var segment_duration = $("#segment_duration").val();
+            $.ajax({
+                url : "{{=URL("cbq", "exam_segment", "insert.json", host=True)}}",
+                type : "POST",
+                data : {exam_id:exam_id, segment_name:segment_name, segment_des:segment_des, segment_duration:segment_duration},
+                success : function(data){
+                    $.each(data, function(key, value){
+                        if (key == 'result'){
+                            if (value == -1){
+                                alert("Thêm mới segment thất bại.");
+                            }else{
+                                alert("Thêm mới segment cho exam thành công.");
+                                window.location = "{{=URL("cbq", "exam", "exam_manager", vars=dict(exam_id=exam.item_id), host=True)}}";
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>

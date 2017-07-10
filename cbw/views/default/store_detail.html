@@ -1,0 +1,618 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+        <script type="text/javascript" src="{{=URL('static', 'js/jquery.raty.min.js')}}"></script>
+<!-- breadcrumb -->
+        <div id="breadcrumb">
+        	<ol class="breadcrumb">
+              <li><a href="/">Trang chủ</a></li>
+              <li><a class="category-link" p_id="{{=info['category_id']}}" title="{{=info['category_name']}}">{{=info['category_name']}}</a></li>
+              <li class="active">{{=info['product_title']}}</li>
+            </ol>
+        </div>
+        <!--/breadcrumb -->
+    	<!-- detail -->
+    	<div id="detail">
+        	<div class="detail-thumb">
+                {{if has_preview:}}
+                <div style="text-align: right; cursor: pointer; margin-top: -20px;">
+                    <a href="/cbs20/download_preview/product/WEB/{{=info['product_code']}}" target="_blank">
+                    <img style="width: 100px;height: 30px;border: none;" src="{{=URL('static', '/store2.2/images/preview.png')}}">
+                    </a>
+                </div>
+                {{pass}}
+            	<!--<span class="multimedia"><i class="fa fa-play"></i></span>-->
+                {{if has_preview:}}
+                 <a href="/cbs20/download_preview/product/WEB/{{=info['product_code']}}" target="_blank">
+                {{pass}}
+            	<img onclick="openPreview()" style="cursor: pointer" src="{{=info['product_cover']}}" alt="{{=info['product_title']}}" title="{{=info['product_title']}}">
+                {{if has_preview:}}
+                </a>
+                {{pass}}
+                <!--<a id="btn-gift" class="gift-icon btn" href="javascript:submit_promotion()" title="Quà tặng">
+                        </a> <span style="margin: 10px;font-weight: bold; ">Đăng ký nhận quà</span>-->
+            </div>
+            <div class="detail-main">
+            	<h1 class="detail-title">{{=info['product_title']}}</h1>
+                <div class="detail-writer">Tác giả:
+                    {{for creator in info['creator_name']:}}
+                    <a href="/by_creator?creator={{=creator}}" title="">{{=creator}}</a>{{=',' if info['creator_name'].index(creator) < len(info['creator_name']) - 1 else ''}}
+                    {{pass}}
+                </div>
+                <div class="detail-rating">
+                	<span class="left fcb" style="float: left">Đánh giá:&nbsp;</span>
+                    <div id="star" class="left fcb" style="float: left"></div>
+                    <span id="rating_count" class="left fcb" style="float: left">{{=rating_count}} người đánh giá&nbsp;</span>
+                    <span class="left fcb"
+                          style="font-style: italic">{{="(Bạn phải đăng nhập để đánh giá)" if not session.authorized else ""}}</span>
+                </div>
+                <div class="detail-action"style="border-top: none; margin-top: 20px">
+                	<div class="da-price">{{=str2price(str(info['product_price']))}}</div>
+                    {{if info['cover_price'] > 0:}}
+                    <div class="da-oldprice">Giá bìa: <span>{{=str2price(str(info['cover_price']))}}</span></div>
+                    {{pass}}
+                    <div class="da-btn">
+                        <a id="btn-buy" class="btn btn-order" href="javascript:submit_buy()" title="Mua hàng" style="padding: 10px 20px 10px 20px;">{{='Đã mua' if check_buy else 'Mua ngay'}}</a>
+                        {{if not check_buy:}}
+                        <a class="btn btn-order" href="javascript:submit_cart('{{=info["id"]}}')" style="padding: 10px 0px 10px 15px;">
+                        <i id="icon-cart" class="cart-icon-white mr10{{=' in-cart' if str(info['id']) in session.shopping_cart else ''}}"></i></a>
+                        {{pass}}
+                    </div>
+                    <div class="da-tips">
+                    	<span><a target="_blank" href="/guid_buy" title="Hướng dẫn mua ebook"><i class="fa fa-dollar mr5"></i>Hướng dẫn mua ebook</a></span>
+                        <span><a target="_blank"  href="/guid_check_out" title="Hình thức thanh toán"><i class="fa fa-info mr5"></i>Hình thức thanh toán</a></span>
+                    </div>
+
+                    <div class="clearfix"></div>
+                    {{if info['free']:}}
+                    <div>Miễn phí cho thiết bị Classbook</div>
+                    {{pass}}
+                    <div style="margin-top: 10px; font-size: 14px;border: solid 1px #999;padding: 5px;border-radius: 3px;">*Chú ý: Sách điện tử chỉ khai thác được trên <a style="color: #0088ee" href="/device">thiết bị Classbook</a> hoặc các thiết bị máy tính bảng, điện thoại thông minh có cài đặt <a style="color: #0088ee" href="https://play.google.com/store/apps/details?id=com.edc.classbook.app">ứng dụng Classbook</a>.</div>
+                    <div style="{{='' if (info['has_media'] or info['has_quiz']) else 'display:none'}}" class="da-extend">
+                    	<span class="dae-title">Bạn có thể mua kèm dữ liệu mở rộng cho sách</span>
+                    	<ul class="dae-content">
+                        	<li style="{{='' if info['has_media'] else 'display:none'}}" class="checkbox"><input {{='disabled' if (check_media or info['media_price'] == 0) else ''}} id="cb_media" class="styled" type="checkbox"><label for="cb_media">Dữ liệu mở rộng</label> <a class="detail-media" data-target="#pop-media" data-toggle="modal" title="">Chi tiết</a><span class="pull-right">{{=((check_media) and 'Đã mua' or str2price(str(payment['price_media'])))}}</span></li>
+                            <li style="{{='' if info['has_quiz'] else 'display:none'}}" class="checkbox"><input {{='disabled' if (check_quiz or info['quiz_price'] == 0) else ''}} id="cb_quiz" class="styled" type="checkbox"><label for="cb_quiz">Bài tập trắc nghiệm</label> <span class="pull-right">{{=((check_quiz) and 'Đã mua' or str2price(str(payment['price_quiz'])))}}</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="detail-info">
+                    <div class="di-li di-manu">Nhà cung cấp: <a href="/by_cp?product_id={{=info['id']}}&cp_name={{=info['seller']}} {{=info['category_name'] if info['seller'] == 'NXB Giáo Dục' else ''}}" title="">{{=info['seller']}}</a></div>
+                    <div class="di-li di-category">Danh mục: <a class="category-link" p_id="{{=info['category_id']}}" title="{{=info['category_name']}}">{{=info['category_name']}}</a></div>
+                    <div class="di-li di-publish">Nhà xuất bản: <a href="/by_publisher?product_id={{=info['id']}}&publisher={{=info['publisher_name']}}" title="">{{=info['publisher_name']}}</a></div>
+                    <div class="di-li di-publish">Số trang: {{=metadata['item']['page_number'] if 'page_number' in metadata['item'] else ''}}</div>
+                    <div class="di-li di-publish">Năm xuất bản: {{=metadata['item']['pub_year'] if 'pub_year' in metadata['item'] else ''}}</div>
+                    <div class="di-li di-publish">Khổ cỡ: {{=metadata['item']['format'] if 'format' in metadata['item'] else ''}}</div>
+
+                    <!--<div class="di-li di-release">Năm xuất bản: 2015</div> -->
+                    <div class="clearfix"></div>
+                </div>
+                <div class="product_detail_right mtop_medium left" style="margin-bottom: 10px">
+                   <span class="left fcb"><a id="link_comment"
+                                                      style="cursor:pointer; color:#0088EE; text-decoration:underline;" href="#"
+                                                      onClick="MyWindow=window.open('{{=URL( f='comment')}}?product_code={{=info['product_code']}}&product_title={{=info['product_title']}}','store_detail/comment', 'width=800,height=600,scrollbars=1'); return false;"
+                                    ><u>Bình luận</u></a></span>
+                    <span id="total_comment" class="left fcb" style="margin-left:5px"></span>
+                </div>
+                <div class="detail-social">
+                	<img src="{{=URL('static','store2.2/images/social.png')}}" title="" alt="">
+                </div>
+                <div class="detail-desc">{{=XML(info['product_description'])}}</div>
+                <!--<div class="detail-tags"><span>Từ khóa:</span> <a href="#" title="">Siêu nhân</a><a href="#" title="">Bi Bo</a><a href="#" title="">Kim Quy</a></div>-->
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <!--/ detail -->
+        <!-- related -->
+        <div id="related">
+
+        </div>
+        <!--/related-->
+<script>
+    getRelation();
+    function getRelation(){
+        var html = "";
+        $.ajax({
+            url: "/relation.json/{{=info['id']}}",
+            success: function (data) {
+                html += "<h1 class='title'><span>Ấn phẩm liên quan</span></h1>"
+                html += "<div class='booklist' id='relation_book'>"
+                html += "<div class='booklist-wrap'>"
+                html += "<ul class='clearfix'>"
+                for (var i = 0; i < data.products.length; i++){
+                    var item = data.products[i]
+                    html += "<li>"
+                    html += "<a p_id='" + item.id + "' class='blw-thumb detail-link' title='" + item.product_title + "'><span class='thumb'><img src='/static/covers/"
+                            + item.product_code + "/thumb.png' alt='" + item.product_title + "'></span></a>"
+                    html += "<h2 class='blw-title'><a p_id='" + item.id + "' class='thumb detail-link' title='" + item.product_title + "'>" + item.product_title + "</a></h2>"
+                    html += "<h3 class='blw-writer'>" + item.creator_name + "</h3>"
+
+                    html += "<span class='old-price' style='height: 15px'>" + item.cover_price + "</span>"
+                    html += "<a href='javascript:action_cart('" + item.product_id + "')' class='blw-cart'>"
+                    var in_cart = (item.in_cart)?"in_cart":"in";
+                    html += "<i id='cart" + item.product_id + "' class='cart" + item.product_id + " blw-cart-icon mr10 " + in_cart + "'></i>" + item.product_price
+                    html += "</a><div class='clearfix'></div>"
+                    html += "</li>"
+                }
+                html += "</ul>"
+                html += "</div>"
+                html += "<div class='controls'>"
+                html += "<button class='blw-btn blw-prev'><i class='fa fa-angle-left'></i></button>"
+                html += "<button class='blw-btn blw-next'><i class='fa fa-angle-right'></i></button>"
+                html += "</div>"
+                html += "</div>"
+                html += "<div class='clearfix'></div>"
+                if (data.products.length > 0){
+                    $("#related").append(html)
+                    slideHome();
+                }
+                getAutoRelation();
+            },
+            error: function (err) {
+                getAutoRelation();
+            }
+        });
+    }
+
+    function getAutoRelation(){
+        var html = "";
+        $.ajax({
+            url: "/relation_auto.json/{{=info['id']}}",
+            success: function (data) {
+                html += "<h1 class='title'><span>Có thể bạn quan tâm</span></h1>"
+                html += "<div class='booklist' id='relation_auto_book'>"
+                html += "<div class='booklist-wrap'>"
+                html += "<ul class='clearfix'>"
+                for (var i = 0; i < data.products.length; i++){
+                    var item = data.products[i]
+                    html += "<li>"
+                    html += "<a p_id='" + item.id + "' class='blw-thumb detail-link' title='" + item.product_title + "'><span class='thumb'><img src='/static/covers/"
+                            + item.product_code + "/thumb.png' alt='" + item.product_title + "'></span></a>"
+                    html += "<h2 class='blw-title'><a p_id='" + item.id + "' class='thumb detail-link' title='" + item.product_title + "'>" + item.product_title + "</a></h2>"
+                    html += "<h3 class='blw-writer'>" + item.creator_name + "</h3>"
+
+                    html += "<span class='old-price' style='height: 15px'>" + item.cover_price + "</span>"
+                    html += "<a href='javascript:action_cart('" + item.product_id + "')' class='blw-cart'>"
+                    var in_cart = (item.in_cart)?"in_cart":"in";
+                    html += "<i id='cart" + item.product_id + "' class='cart" + item.product_id + " blw-cart-icon mr10 " + in_cart + "'></i>" + item.product_price
+                    html += "</a><div class='clearfix'></div>"
+                    html += "</li>"
+                }
+                html += "</ul>"
+                html += "</div>"
+                html += "<div class='controls'>"
+                html += "<button class='blw-btn blw-prev'><i class='fa fa-angle-left'></i></button>"
+                html += "<button class='blw-btn blw-next'><i class='fa fa-angle-right'></i></button>"
+                html += "</div>"
+                html += "</div>"
+                html += "<div class='clearfix'></div>"
+                if (data.products.length > 0){
+                    $("#related").append(html)
+                    slideHome();
+                }
+            },
+            error: function (err) {
+            }
+        });
+    }
+
+    function slideHome(){
+        var slyFrame = [];
+        var options = {
+			horizontal: 1,
+			itemNav: 'basic',
+			smart: 1,
+			activateOn: false,
+			mouseDragging: 1,
+			touchDragging: 1,
+			releaseSwing: 1,
+			startAt: 0,
+			scrollBar: false,
+			scrollBy: 1,
+			pagesBar: false,
+			activatePageOn: 'click',
+			speed: 300,
+			elasticBounds: 1,
+			easing: 'easeOutExpo',
+			dragHandle: 1,
+			dynamicHandle: 1,
+			clickBar: 1,
+			scrollSource: 'mixed'
+		};
+        var frameArr = []
+        var wraps = document.getElementsByClassName("booklist")
+        console.log("wraps: " + wraps.length)
+        $.each(wraps, function(index, wrap){
+            frameArr[frameArr.length] = $("#" + wrap.id + " .booklist-wrap");
+            console.log(frameArr[frameArr.length - 1])
+        });
+	    $.each( frameArr, function( i, val ) {
+	       	var $frame = val;
+	       	slyFrame.push($frame);
+	      	var $slidee = $frame.children('ul').eq(0);
+	      	var $wrap   = $frame.parent();
+	      	var tmp = options;
+	      	tmp.prevPage = $wrap.find('.blw-prev');
+	      	tmp.nextPage = $wrap.find('.blw-next');
+	      	$frame.sly(tmp);
+	    });
+
+        $('.detail-link').each(function(i, obj) {
+            var id = $(this).attr("p_id");
+            var title = $(this).attr("title");
+            $(this).attr('href',"/store_detail/" + friendly(title.toLowerCase()).toLowerCase() + "/" + id);
+        });
+
+        $('.category-link').each(function(i, obj) {
+            var id = $(this).attr("p_id");
+            var title = $(this).attr("title");
+            $(this).attr('href',"/category/" + friendly(title.toLowerCase()).toLowerCase() + "/" + id);
+        });
+
+        $('.parent-link').each(function(i, obj) {
+            var id = $(this).attr("p_id");
+            var title = $(this).attr("title");
+            $(this).attr('href',"/pcategory/" + friendly(title.toLowerCase()).toLowerCase() + "/" + id);
+        });
+    }
+
+    $('#star').raty(
+                {
+                    score: '{{=rating_score}}',
+                    path: "{{=URL('static', 'images/raty')}}",
+                    hints: [1, 2, 3, 4, 5],
+                    noRatedMsg: "Chưa có đánh giá nào!",
+                    readOnly: {{="true" if is_rated else "false"}},
+                    click: function (score) {
+                        $.getJSON('{{=URL(f="rating", vars={"product_id":info["id"]})}}' + '&score=' + score, function (data) {
+                            if ("error" in data) {
+                                alert("Có lỗi trong quá trình gửi dữ liệu!");
+                            }
+                            else {
+                                $('#star').raty('set', {
+                                    starOn: "star-rated.png",
+                                    score: data["rating_score"],
+                                    readOnly: true
+                                });
+                                $('#rating_count').text(data["rating_count"] + " người đánh giá");
+                            }
+                        });
+                    },
+                    mouseout: function () {
+                        $('#star img[src$="star-on.png"]').attr('src', "{{=URL('static', 'images/raty/star-rated.png')}}");
+                    }
+                });
+        $('#star img[src$="star-on.png"]').attr('src', "{{=URL('static', 'images/raty/star-rated.png')}}");
+
+    $("#cb_media").change(function() {
+        if(calculate_price() > 0){
+            $("#btn-buy").html("Mua ngay");
+        }else{
+            "{{if not check_buy:}}"
+            $("#btn-buy").html("Miễn phí");
+            "{{else:}}"
+            $("#btn-buy").html("Đã mua");
+            "{{pass}}"
+        }
+    });
+
+    $("#cb_quiz").change(function() {
+        if(calculate_price() > 0){
+            $("#btn-buy").html("Mua ngay");
+        }else{
+            "{{if not check_buy:}}"
+            $("#btn-buy").html("Miễn phí");
+            "{{else:}}"
+            $("#btn-buy").html("Đã mua");
+            "{{pass}}"
+        }
+    });
+
+    function calculate_price(){
+        var price = 0;
+        "{{if not check_buy:}}"
+        price += parseInt("{{=info['product_price']}}");
+        "{{pass}}"
+        if (document.getElementById('cb_media').checked){
+            "{{if not check_media:}}"
+            price += parseInt("{{=info['media_price']}}");
+            "{{pass}}"
+        }
+        if (document.getElementById('cb_quiz').checked){
+            "{{if not check_quiz:}}"
+            price += parseInt("{{=info['quiz_price']}}");
+            "{{pass}}"
+        }
+        return price;
+    }
+
+    function submit_buy(){
+        "{{if not session.authorized or session.expired is True:}}"
+        openConfirm("Bạn cần đăng nhập để thực hiện thanh toán. Bạn có muốn đăng nhập ngay không?");
+        $("#done_popup").click(function(){
+            window.location.href = "/signin?location=store_detail/{{=info['id']}}";
+             $('#pop-demo').modal('hide');
+        });
+        "{{else:}}"
+        "{{if check_buy:}}"
+        if (calculate_price() == 0){
+            return;
+        }
+        "{{pass}}"
+        openConfirm("Bạn cần phải trả " + calculate_price() + "đ để mua ấn phẩm này. Bạn có muốn thanh toán không?");
+        $("#done_popup").click(function(){
+             $('#pop-demo').modal('hide');
+            var valid_fund = false;
+            var link = "{{=URL(f='service.json', args=['buy_product_divide', info['product_code'], False, info['product_price']])}}"
+            var linkMEdia = "{{=URL(f='service.json', args=['buy_product_divide', info['product_code'], True, payment['price_media']])}}"
+            var linkQuiz = "{{=URL(f='service.json', args=['buy_product_divide', "Exer"+info['product_code'], False, payment['price_quiz']])}}"
+            console.log("/cbs20/users/check_valid_fund.json/{{=session.token}}/" + calculate_price());
+            $.ajax({
+                        url: "/cbs20/users/check_valid_fund.json/{{=session.token}}/" + calculate_price(),
+                        async: false,
+                        success: function (data) {
+                            if (data.result) {
+                                valid_fund = true
+                            } else {
+                                openAlert(data.mess);
+                            }
+
+                        },
+                        error: function (err) {
+                            openAlert("Lỗi kết nối " + err.message);
+//                        window.location.reload();
+                        }
+            });
+
+            if (valid_fund) {
+                $.ajax({
+                        url: link,
+                        success: function (data) {
+                            console.log(data)
+                            if (data.error) {
+                                openAlert(data.error);
+
+                            } else {
+                                if (document.getElementById('cb_quiz').checked || document.getElementById('cb_media').checked) {
+
+                                } else {
+                                    openAlert("Giao dịch thành công, bạn có thể quay về ứng dụng Classbook để tải.");
+                                    refreshUser();
+                                }
+
+                            }
+                        },
+                        error: function () {
+                        }
+                });
+                if (document.getElementById('cb_quiz').checked) {
+                        console.log(linkQuiz)
+                        $.ajax({
+                            url: linkQuiz,
+                            success: function (data) {
+                                console.log(data)
+                                if (data.error) {
+                                    openAlert(data.error);
+                                } else {
+                                    if (document.getElementById('cb_media').checked) {
+
+                                    } else {
+                                        openAlert("Giao dịch thành công, bạn có thể quay về ứng dụng Classbook để tải.");
+                                        refreshUser();
+                                    }
+                                }
+                            },
+                            error: function () {
+//                            window.location.reload();
+                            }
+                    });
+                }
+                if (document.getElementById('cb_media').checked) {
+                        console.log(linkMEdia)
+                        $.ajax({
+                            url: linkMEdia,
+                            success: function (data) {
+                                console.log(data)
+                                if (data.error) {
+                                    openAlert(data.error);
+                                } else {
+                                    openAlert("Giao dịch thành công, bạn có thể quay về ứng dụng Classbook để tải.");
+                                    refreshUser();
+                                }
+                            },
+                            error: function () {
+                            }
+                        });
+                    }
+                }
+            });
+        "{{pass}}"
+    }
+</script>
+
+<script>
+    var cart_len = parseInt("{{=len(session.shopping_cart)}}");
+    function submit_cart(id){
+        var in_cart = false;
+        $.ajax({
+            url: "/check_in_cart.json/" + id,
+            async: false,
+            success: function (data) {
+                in_cart = data.result;
+            },
+            error: function (err) {
+                in_cart = false;
+            }
+        });
+        if (in_cart){
+            remove_cart(id)
+        }else{
+            add_cart(id)
+        }
+
+    }
+    function add_cart(id){
+//        openAlert("add " + id);
+        $.ajax({
+            url: "/add_to_cart.json/" + id,
+            async: false,
+            success: function (data) {
+                if (data.err){
+                    openAlert(data.err)
+                }else{
+                    cart_len ++;
+                    $(".cart-badge").html(cart_len);
+                    $("#icon-cart").attr("class", "cart-icon-white mr10 in-cart");
+                }
+            },
+            error: function (err) {
+                openAlert(err)
+            }
+        });
+    }
+
+    function remove_cart(id){
+//        openAlert("remove " + id);
+        $.ajax({
+            url: "/remove_from_cart.json/" + id,
+            async: false,
+            success: function (data) {
+                if (data.err){
+                }else{
+                    cart_len --;
+                    $(".cart-badge").html(cart_len);
+                    $("#icon-cart").attr("class", "cart-icon-white mr10");
+                }
+            },
+            error: function (err) {
+                openAlert(err)
+            }
+        });
+    }
+
+    function refreshUser(){
+        console.log("refresh");
+        $.ajax({
+            url: "/user_info.json",
+            success: function (data) {
+                console.log("refresh1");
+                window.location.reload();
+            },
+            error: function (err) {
+                console.log("refresh2");
+                window.location.reload();
+            }
+        });
+    }
+
+    function price2str(price_int){
+        var price = "" + price_int;
+        var index = 0;
+        var str_price = "";
+        for (var i = price.length - 1; i >= 0; i--){
+            index ++;
+            str_price = price[i] + str_price;
+            if (index == 3){
+                str_price = "." + str_price;
+                index = 0;
+            }
+        }
+        str_price += "đ"
+        return str_price;
+    }
+</script>
+<script>
+    var title = "{{=info['product_title']}}"
+    var h=window.innerHeight
+    var popupw = h * 3 / 4
+    var mtop = 20
+    var mleft  = (screen.width - popupw) / 2
+    function openPreview(){
+        "{{if has_preview:}}"
+//        window.open("https://docs.google.com/viewerng/viewer?url=http://classbook.vn/cbs20/download_preview/product/WEB/{{=info['product_code']}}.pdf", "Xem thử", "" +
+//                "width=" + popupw + ", height=" + h + ", top=" + mtop + ", left= " + mleft +
+//                ", menubar=no");
+//        window.open("/preview/" + friendly() + "", "Xem thử", "" +
+//                "width=" + popupw + ", height=" + h + ", top=" + mtop + ", left= " + mleft +
+//                ", menubar=no");
+        "{{pass}}"
+    }
+    function friendly(aa){
+       as = aa.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a");
+       as = as.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e");
+       as = as.replace(/ì|í|ị|ỉ|ĩ/g,"i");
+       as = as.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o");
+       as = as.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u");
+       as = as.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y");
+       as = as.replace(/đ|Đ/g,"d");
+       as = as.replace(/[^a-z0-9]/gi, ' ')
+       as = as.replace(/ + /g," ");
+       as = as.replace(" ", "-");
+       return as;
+    }
+</script>
+<script>
+    function submit_promotion(){
+        "{{if not session.authorized or session.expired is True:}}"
+        openConfirm("Bạn cần đăng nhập để thực hiện chức năng này. Bạn có muốn đăng nhập ngay không?");
+        $("#done_popup").click(function(){
+            window.location.href = "/signin?location=store_detail/{{=info['id']}}";
+             $('#pop-demo').modal('hide');
+        });
+        "{{else:}}"
+        showLoading();
+        $.ajax({
+            url: "/cbs20/event/register.json",
+            type: "POST",
+            data: {"user_token":"{{=session.token}}", product_id:"{{=info['id']}}"},
+            success: function(data){
+                hideLoading();
+                if (data.result){
+                    openAlert("Bạn đã đăng kí nhận <strong>{{=info['product_title']}}</strong>. Mã số tham dự của bạn là <strong>" + format_code(data.id) + "</strong>");
+                }else{
+                    openAlert(data.error)
+                }
+            },
+            error: function(data){
+                hideLoading();
+                openAlert("Có lỗi xảy ra")
+
+            }
+        })
+        "{{pass}}"
+    }
+
+    function format_code(id){
+        var code = parseInt(id) + 100
+        var result = code;
+        if (code >= 1000){
+            result = code
+        }else if (code >=100){
+            result = "0" + code
+        }else if (code >=10){
+            result = "00" + code
+        }else{
+            result = "000" + code
+        }
+        return result;
+    }
+</script>
+<style>
+    .gift-icon{
+        margin-top: 10px;
+        width: 47px;
+        height: 52px;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-image: url("{{=URL('static','store2.2/images/giftbox4.png')}}");
+    }
+    .in-cart{
+        background-image: url("{{=URL('static','store2.2/images/sprites1.png')}}");
+    }
+    .detail-media{
+        text-decoration: underline !important;
+        color: #32c0d1 !important;
+    }
+</style>

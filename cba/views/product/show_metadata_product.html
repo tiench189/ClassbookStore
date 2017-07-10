@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+<link href="{{=URL('static','css/datepicker.css')}}" type="text/css"  rel="stylesheet"/>
+<script src="{{=URL('static','js/canvg/canvg.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/jsapi')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/rgbcolor.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/bootstrap-datepicker.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/locales/bootstrap-datepicker.vi.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/jquery.tablesorter.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/tableToExcel.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/chartToImage.js')}}" type="text/javascript"></script>
+
+<div class="clsb_container">
+<form style="position: relative; text-align: center;">
+<button class="btn" style="float: right;" onclick="tableToExcel('tablelistTotal', 'Thông tin tài khoản Samsung')">Xuất ra Excel</button>
+</form>
+            {{=TABLE(
+                    THEAD(
+                            TR(
+                                TH("id", _class="header"),
+                                TH("product_code", _class="header"),
+                                TH("product_title", _class="header"),
+                                TH("device_shelf_code", _class="header"),
+                                TH("category", _class="header"),
+                                TH("subject", _class="header"),
+                                TH("class", _class="header"),
+                                TH("product_price", _class="header"),
+                                TH("product_publisher", _class="header"),
+                                TH("product_creator", _class="header"),
+                                TH("product_collection", _class="header"),
+                            ),
+                    ),
+                    *[TR(
+                        TD(data[i]['id']),
+                        TD(data[i]['product_code']),
+                        TD(data[i]['product_title']),
+                        TD(data[i]['device_shelf_code']),
+                        TD(data[i]['category']),
+                        TD(data[i]['subject']),
+                        TD(data[i]['class']),
+                        TD(data[i]['product_price']),
+                        TD(data[i]['product_publisher']),
+                        TD(data[i]['product_creator']),
+                        TD(data[i]['product_collection']),
+                     ) if int(data[i]['id']) > 0 else TR() for i in range(len(data))],
+                    _id="tablelistTotal",
+                    _class="tablesorter"
+            )}}
+</div>
+</head>
+<body>
+
+</body>
+</html>

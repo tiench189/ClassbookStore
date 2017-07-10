@@ -1,0 +1,72 @@
+<div class="container">
+    	<div class="bi-block bi-newsletter">
+        	<div class="bi-title">Đăng ký nhận email</div>
+            <div class="bi-desc">Đăng ký nhận bản tin về các ebook hay, các chương trình khuyến mãi từ Classbook.vn</div>
+            <div class="bi-content">
+            	<form >
+                	<div class="bin-form">
+                    	<input id="support_email" type="email" class="form-control" placeholder="Nhập email của bạn">
+                        <a href="javascript:submit_email()" class="bin-submit"><i style="margin-top: 10px" class="fa fa-arrow-right"></i></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="bi-block bi-app">
+        	<div class="bi-title">Ứng dụng Classbook</div>
+            <div class="bi-desc"><img src="{{=URL('static','store2.2/images/classbook-app.png')}}" class="pull-left mr10">Tải ứng dụng Classbook - khai thác mọi nội dung của Classbook trên thiết bị của bạn.</div>
+            <div class="bi-content">
+            	<div class="bia-list">
+                	<!--<a href="#" class="bia-item"><i class="fa fa-apple"></i>Tải cho iOs <strong>Appstore</strong></a>-->
+                    <a target="_blank" href="https://play.google.com/store/apps/details?id=com.edc.classbook.app" class="bia-item"><i class="fa fa-android"></i>Tải cho android <strong>Google Play</strong></a>
+                </div>
+            </div>
+        </div>
+        <div class="bi-block bi-support">
+        	<div class="bi-title">Hỗ trợ trực tuyến</div>
+            <div class="bi-desc">Quý khách cần được hỗ trợ vui lòng chọn 1 trong các kênh của Classbook bên dưới.</div>
+            <div class="bi-content">
+            	<div class="bis-info">
+                	<div class="bisi-row"><a href="skype:nqtho-bluephone?chat" style="width: 170px" class="bis-skype" title=""><i class="fa fa-skype mr5"></i>Hỗ trợ kĩ thuật</a><i class="fa fa-phone mr5"></i>043-512-4007</div>
+                    <div class="bisi-row"><a href="skype:classbook.cskh?chat" style="width: 170px" class="bis-skype" title=""><i class="fa fa-skype mr5"></i>Chăm sóc khách hàng</a><i class="fa fa-phone mr5"></i>047-302-0888</div>
+                    <div class="bisi-row"><a href="ymsgr:sendim?cskhclassbook" style="width: 170px" class="bis-skype" title=""><i class="fa ico-yahoo mr5"></i>Chăm sóc khách hàng</a>
+                </div>
+                <div class="bis-social">
+                	<div class="block">Mạng xã hội</div><a href="https://www.facebook.com/classbook.vn?fref=ts" title=""><i class="fa fa-facebook"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+<script>
+    function submit_email(){
+        var sup_email = $("#support_email").val().trim()
+        if (sup_email == ""){
+            return;
+        }
+        $.ajax({
+            url: "/cbs20/users/add_support_email.json",
+            data: {"email":sup_email},
+            async: false,
+            success: function (data) {
+                if (data.result){
+                    openAlert("Đăng kí nhận Email thành công!");
+                }else{
+                    openAlert(data.error)
+                }
+            },
+            error: function (err) {
+                openAlert(err)
+            }
+        });
+    }
+</script>
+
+<style>
+    .ico-yahoo{
+        background-image: url("{{=URL('static', '/images/yahoo.png')}}");
+        width: 14px;
+        height: 14px;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+</style>

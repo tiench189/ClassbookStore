@@ -1,0 +1,51 @@
+{{extend 'layout.html'}}
+
+<div>
+    <form action="#">
+        <table>
+            <tr>
+                <td>Category code</td>
+                <td><input type="text" value="" id="category_code" name="category_code"></td>
+            </tr>
+            <tr>
+                <td>Category name</td>
+                <td><input type="text" value="" id="category_name" name="category_name"></td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td><input type="text" value="" id="description" name="description"></td>
+            </tr>
+
+            <tr>
+                <td><input type="button" value="Lưu" id="btnSave"></td>
+                <td><input type="button" value="Quay lại" id="btnBack"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnSave").click(function () {
+            $.ajax({
+                url: "{{=URL('cbq', 'quiz_category', 'insert_class.json')}}",
+                type: "POST",
+                data: $('form').serialize(),
+                success: function (data) {
+                    $.each(data, function (key, value) {
+                        if (key == 'result') {
+                            if (value == 0) {
+                                alert("Có lỗi xảy ra trong quá trình tạo mới lớp.");
+                            }
+                            else {
+                                alert("Thêm mới bản ghi thành công.");
+                            }
+                        }
+                    });
+                }
+
+            });
+
+        });
+    });
+</script>

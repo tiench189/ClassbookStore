@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Ngân Lượng Report - Checkout</title>
+    <script src="{{=URL('static', 'js/jquery.js')}}"></script>
+    <style>
+        table {
+            border-spacing:10px;
+            border-collapse:collapse;
+            border: 1px solid;
+        }
+        table td, table th
+        {
+            padding: 5px;
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+<h1>Ngân Lượng Report - Checkout</h1>
+<div style="position: absolute; top: 30px; left: 600px;">
+    <a href="{{=URL('report_card')}}"><input type="button" value="Card Report"></a>
+</div>
+<form method="post">
+    <label>
+        Xem report trong tháng:
+        <select autofocus="1" name="month" onchange="$('form').submit()">
+            {{for i in range(12):}}
+            <option{{if month == dates[i]:}} selected="selected"{{pass}}>
+                {{=dates[i]}}
+            </option>
+            {{pass}}
+        </select>
+    </label>
+    <a href="{{=URL('export', args=month.split('-'))}}"><input type="button" value="Export"></a>
+</form>
+<table>
+    <tr>
+        <th>STT</th>
+        <th>Mã HĐ</th>
+        <th>Mã GD</th>
+        <th>Loại GD</th>
+        <th>Mã NH</th>
+        <th>Số Tiền</th>
+        <th>Phí GD</th>
+        <th>Doanh Thu</th>
+        <th>% Phí</th>
+        <th>Ngày GD</th>
+        <th>Thời Gian</th>
+    </tr>
+    {{from transaction import money}}
+    {{count = 1}}
+    {{for t in data['trans']:}}
+    <tr>
+        <td style="text-align: center;">{{=count}}</td>
+        <td style="text-align: center;">{{=t.order_code}}</td>
+        <td style="text-align: center;">{{=t.merchant_id}}</td>
+        <td style="text-align: center;">{{=t.payment_type}}</td>
+        <td style="text-align: center;">{{=t.bank_code}}</td>
+        <td style="text-align: right;">{{=money(t.amount)}}</td>
+        <td style="text-align: right;">{{=money(t.fee)}}</td>
+        <td style="text-align: right;">{{=money(t.profit)}}</td>
+        <td style="text-align: right;">{{=t.fee_ratio}}</td>
+        <td style="text-align: center;">{{=t.created_on.date()}}</td>
+        <td style="text-align: center;">{{=t.created_on.time()}}</td>
+    </tr>
+    {{count += 1}}
+    {{pass}}
+    {{if count == 1:}}
+    <tr><td style="text-align: center;" colspan="11">Không có giao dịch nào trong tháng này!</td></tr>
+    {{pass}}
+    <tr>
+        <th colspan="5">TỔNG</th>
+        <td style="text-align: right;">{{=money(data['total'].amount)}}</td>
+        <td style="text-align: right;">{{=money(data['total'].fee)}}</td>
+        <td style="text-align: right;">{{=money(data['total'].profit)}}</td>
+    </tr>
+</table>
+</body>
+</html>

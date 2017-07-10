@@ -1,0 +1,134 @@
+{{extend 'layout.html'}}
+
+<div class="web2py_grid">
+    <div class="web2py_table">
+        <div class="web2py_htmltable">
+
+            <form id="frmInsertExam" action="#">
+                <input type="hidden" name="count" id="count" value="0"/>
+
+                <p>Thông tin đề thi: </p>
+                <table>
+                    <tr>
+                        <td>Tên đề thi:</td>
+                        <td><input type="textbox" name="examName"/></td>
+                    </tr>
+                    <tr>
+                        <td>Mô tả:</td>
+                        <td><textarea name="des" cols="=8" rows="10"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>Thời lượng :</td>
+                        <td><input type="textbox" name="duration"/></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Điểm:
+                        </td>
+                        <td>
+                            <input type="textbox" name="total_mark"/>
+                        </td>
+                    </tr>
+                    <tr>
+
+                    </tr>
+                </table>
+
+
+                <div id="segmentContainer" name="segmentContainer">
+
+                    <!--<table>
+                        <tr>
+                            <td>Tên segment :</td>
+                            <td><input type="text" id="segment_name0" name="segment_name0"/></td>
+                        </tr>
+                        <tr>
+                            <td>Mô tả :</td>
+                            <td><input type="text" id="segment_des0" name="segment_des0"/></td>
+                        </tr>
+                        <tr>
+                            <td>Thời lượng :</td>
+                            <td><input type="text" id="segment_duration0" name="segment_duration0"/></td>
+                        </tr>
+                    </table>-->
+                </div>
+                <input type="button" name="btnAddSegment" id="btnAddSegment" value="Thêm segment"/>
+                <td><input type="button" id="btnSubmit" value="Lưu exam & tiếp tục"></td>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        function validateForm() {
+            var validator = $("#frmInsertExam").validate({
+                rule: {
+                    examName: "required",
+                    des: "required",
+                    duration: "required",
+                    total_mark: "required"
+                },
+                messages: {
+                    examName: "Hãy nhập tên đề thi.",
+                    des: {
+                        required: "Hãy mô tả.",
+                        minlength: "Mô tả phải có ít nhất 50 ký tự."
+                    },
+                    duration: "Hãy nhập thời lượng của đề thi.",
+
+                    total_mark: "Hãy nhập tổng số điểm của đề thi."
+                }
+            });
+        }
+
+
+        $("#btnAddSegment").click(function () {
+            var count = parseInt($("#count").val());
+
+            var table_html = '<table>' +
+                    '<tr>' +
+                    '<td>Tên segment :</td>' +
+                    '<td><input type="text" id="segment_name' + count + '" name="segment_name' + count + '"/></td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td>Mô tả :</td>' +
+                    '<td><input type="text" id="segment_des' + count + '" name="segment_des' + count + '"/></td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td>Thời lượng :</td>' +
+                    '<td><input type="text" id="segment_duration' + count + '" name="segment_duration' + count + '"/></td>' +
+                    '</tr>' +
+                    '</table>'
+            count = parseInt(count + 1);
+            $("#count").val(count)
+            $("#segmentContainer").append(table_html)
+        });
+
+        $("#btnSubmit").click(function () {
+            var exam_id, segment_list;
+            var dic = $('#frmInsertExam').serialize();
+            $.ajax({
+                type: "POST",
+                url: "{{=URL('cbq','exam','insert.json')}}",
+                data: $('#frmInsertExam').serialize(),
+                success: function (result) {
+                    if (confirm('Thêm mới exam và segment thành công, bạn có muốn thêm câu hỏi cho segment không?')) {
+                        $.each(result, function(key, value){
+                            if (key == 'exam_id')
+                            {
+                                exam_id = value;
+                                window.location = "http://192.168.50.75:8003/cbq/question/index?exam_id=" + value;
+                            }
+                        });
+
+                    }else{
+
+
+                    }
+                }
+            });
+
+        });
+
+    });
+</script>

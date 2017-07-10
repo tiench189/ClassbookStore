@@ -1,0 +1,43 @@
+{{extend "layout.html"}}
+<script src="{{=URL('static','js/canvg/canvg.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/jsapi')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/rgbcolor.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/jquery.tablesorter.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/tableToExcel.js')}}" type="text/javascript"></script>
+{{import scripts}}
+{{
+getby = "yyyy-mm-dd"
+getbyTmp = "%Y-%m-%d"
+}}
+<div class="clsb_container">
+<form style="text-align: left" action="send_noti">
+    <button class="btn" style="float: right;" onclick="tableToExcel('tablelistTotal', 'Danh sách trúng thưởng {{=request.vars.time}}')">Xuất ra Excel</button>
+                {{=TABLE(
+                    THEAD(
+                            TR(
+                                TH("Mã", _class="header"),
+                                TH("Khách hàng", _class="header"),
+                                TH("Loại TK", _class="header"),
+                                TH("Sản phẩm", _class="header"),
+                            ),
+                    ),
+                    *[TR(
+                        TD(promotions[i]['id']),
+                        TD(promotions[i]['user']),
+                        TD(promotions[i]['type_user']),
+                        TD(promotions[i]['product']),
+                     ) for i in range(len(promotions))],
+                    _id="tablelistTotal",
+                    _class="tablesorter"
+                )}}
+    <div style="display: none">
+        {{for pr in promotions:}}
+        <input type="checkbox" name="user_id" value="{{=pr['user_id']}}" checked> {{=pr['user_id']}} <br>
+        {{pass}}
+    </div>
+    <textarea cols="8" rows="10" name="message" maxlength="256" size="256"></textarea>
+    <span style="margin-right: 10px;">Link</span>
+    <br><input type="text" name="link"/>
+<input type="submit" value="Gửi thông báo">
+</form>
+</div>

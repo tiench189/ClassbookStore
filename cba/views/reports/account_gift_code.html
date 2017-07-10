@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>{{extend "layout.html"}}
+{{import scripts}}
+{{
+viewMod = 1
+getby = "yyyy-mm-dd"
+getbyTmp = "%Y-%m-%d"
+}}
+<link href="{{=URL('static','css/datepicker.css')}}" type="text/css"  rel="stylesheet"/>
+<script src="{{=URL('static','js/canvg/canvg.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/jsapi')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/rgbcolor.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/bootstrap-datepicker.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/locales/bootstrap-datepicker.vi.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/jquery.tablesorter.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/tableToExcel.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/chartToImage.js')}}" type="text/javascript"></script>
+
+<div class="clsb_container">
+<form style="position: relative; text-align: center;">
+<input type="text" class="datetimepicker" style="max-width: 88px;" value="{{=request.vars.start if request.vars.start else datetime.strptime('2015-03-03', '%Y-%m-%d').strftime(getbyTmp)}}" name="start"/><span style="vertical-align: super;">:</span> <input type="text" class="datetimepicker" style="max-width: 88px;" value="{{=request.vars.end if request.vars.end else datetime.now().strftime(getbyTmp)}}" name="end"/>
+<input type="submit" value="Xem kết quả" style="margin-top: -10px"/>
+<button class="btn" style="float: right;" onclick="tableToExcel('tablelistTotal', 'Thông tin tài khoản Samsung')">Xuất ra Excel</button>
+</form>{{if users:}}
+            {{=TABLE(
+                    THEAD(
+                            TR(
+                                TH("User ID", _class="header"),
+                                TH("Email", _class="header"),
+                                TH("Họ", _class="header"),
+                                TH("Tên", _class="header"),
+                                TH("Phone", _class="header"),
+                                TH("Ngày nạp", _class="header"),
+                            ),
+                    ),
+                    *[TR(
+                        TD(users[i]['user_id']),
+                        TD(users[i]['email']),
+                        TD(users[i]['last_name']),
+                        TD(users[i]['first_name']),
+                        TD(users[i]['phone']),
+                        TD(users[i]['created_on']),
+                     ) if int(users[i]['user_id']) > 0 else TR() for i in range(len(users))],
+                    _id="tablelistTotal",
+                    _class="tablesorter"
+            )}}
+            {{pass}}
+</div>
+<script type="text/javascript">
+    var data;
+
+
+
+         $('.datetimepicker').datepicker({
+            format:'{{=getby}}',
+            viewMode: 0,
+            minViewMode: 0,
+            autoclose: true,
+            language: 'vi'
+        });
+</script>
+<script src="{{=URL('static','js/bootstrap-select.min.js')}}" type="text/javascript"></script>
+<script>
+    $(".selectpicker").selectpicker();
+</script>
+</head>
+<body>
+
+</body>
+</html>

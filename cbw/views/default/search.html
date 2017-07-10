@@ -1,0 +1,161 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+        <!-- breadcrumb -->
+        <div id="breadcrumb">
+            <ol class="breadcrumb">
+              <li><a href="/">Trang chủ</a></li>
+              <li class="active">Tìm kiếm</li>
+            </ol>
+        </div>
+        <!--/breadcrumb -->
+        <!-- cate content -->
+        <div class="cate-content">
+            <h1 class="cate-name">Tìm kiếm nâng cao</h1>
+            <div class="search-advance box">
+            	<div class="sa-icon"><i class="fa fa-search"></i></div>
+            	<div class="box-content">
+                	<div class="block block-1">
+                    <label>Từ khóa</label>
+                    <input onkeydown="keydown(event)" id="keyword" class="form-control" type="text" name="" placeholder="Nhập từ khóa" value="{{=keyword}}"></div>
+                    <div class="block block-2">
+                    	<label>Danh mục</label>
+                        <select id="categories" class="selectpicker">
+                            {{for cate in category:}}
+                            <option  value="{{=cate['category_id']}}" {{='selected' if str(cate['category_id'])==category_id else ''}}>{{=cate['category_name']}}</option>
+                            {{pass}}
+                        </select>
+                    </div>
+                    <div class="block block-4">
+                    	<label>Lớp</label>
+                        <select id="classes" class="selectpicker">
+                            {{for cl in classes:}}
+                            <option value="{{=cl['id']}}" {{='selected' if str(cl['id'])==class_id else ''}}>{{=cl['class_name']}}</option>
+                            {{pass}}
+                        </select>
+                    </div>
+                    <div class="block block-3">
+                    	<label>Môn học</label>
+                        <select id="subjects" class="selectpicker">
+                            {{for subject in subjects:}}
+                            <option value="{{=subject['id']}}" {{='selected' if str(subject['id'])==subject_id else ''}}>{{=subject['subject_name']}}</option>
+                            {{pass}}
+                        </select>
+                    </div>
+                    <div class="clearfix"></div>
+                    <button class="btn btn-classbook" type="button" onclick="submitSearch()"><i class="fa fa-search mr5"></i>Tìm kiếm</button>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            {{if is_search:}}
+            <div class="cate-list">
+            	<div class="cl-title">
+                	<span class="clt">{{=total_item}} kết quả</span>
+                    <div style="display: none" class="pull-right">
+                    	Sắp xếp theo
+                    	<select class="selectpicker">
+                            <option>Mới nhất</option>
+                            <option>Bán chạy</option>
+                            <option>Giảm giá</option>
+                        </select>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="booklist booklist-cat">
+                    <div class="booklist-wrap">
+                        <ul class="clearfix">
+                        {{for product in products:}}
+                        <li>
+                                <a p_id="{{=product['id']}}" class="blw-thumb detail-link" title="{{=product['product_title']}}"><span class="thumb"><img src="{{=product['product_cover']}}" alt="{{=product['product_title']}}"></span></a>
+                                <h2 class="blw-title"><a p_id="{{=product['id']}}" class="thumb detail-link" title="{{=product['product_title']}}">{{=product['product_title']}}</a></h2>
+                                <h3 class="blw-writer">{{=product['creator_name']}}</h3>
+                                <span class="old-price">{{=str2price(str(product['cover_price'])) if product['cover_price'] > 0 else '.'}}</span>
+                                <a href="javascript:action_cart('{{=product["id"]}}')" class="blw-cart">
+                            <i id="cart{{=product['id']}}" class="cart{{=product['id']}} blw-cart-icon mr10 {{=' in-cart' if str(product['id']) in session.shopping_cart else ''}}"></i>{{=str2price(str(product['product_price']))}}</a>
+                                <div class="clearfix"></div>
+                        </li>
+                        {{pass}}
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="pagination">
+                    	<nav>
+                          <ul class="pagination">
+                              {{for i in range(0, int(total_page)):}}
+                                {{vars=request.vars}}
+                                {{vars['page'] = i}}
+                              <li {{='class=active' if i == int(page) else ''}}><a href="{{=URL(args=request.args, vars=vars, host=True)}}">{{=i+1}}</a></li>
+                              {{pass}}
+                          </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{pass}}
+        <!--/cate content -->
+        <div class="clearfix"></div>
+        </div>
+<script>
+    $("#classes").on('change', function() {
+//        set_subject(this.value);
+    });
+
+    function set_subject(class_id){
+        var html = "<option  value='0' > - Tất cả - </option>";
+        console.log("/cbs/classes/subjects.json/" + class_id)
+        $.ajax({
+            url: "/cbs/classes/subjects.json/" + class_id,
+            success: function (data) {
+                alert(data.items.length)
+                $.each(data.items, function(index, item){
+                   html += "<option  value='" + item.subject_id +"' >" + item.subject_name + "</option>";
+                });
+            },
+            error: function (err) {
+                alert(err)
+            }
+        });
+        console.log(html);
+        $("#subjects").html(html);
+    }
+    function submitSearch(){
+        var category_id = $("#categories").val();
+        var subject_id = $("#subjects").val();
+        var class_id = $("#classes").val();
+        var keyword = $("#keyword").val();
+        keyword = friendly_search(keyword).toLowerCase();
+
+        var link = "{{=URL('search')}}?"
+        if (keyword != "")
+            link += "keyword=" + keyword + "&"
+        if (category_id != "0")
+            link += "category_id=" + category_id + "&"
+        if (subject_id != "0")
+            link += "subject_id=" + subject_id + "&"
+        if (class_id != "0")
+            link += "class_id=" + class_id
+        window.location.href = link;
+    }
+
+    function friendly_search(aa){
+       as = aa.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a");
+       as = as.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e");
+       as = as.replace(/ì|í|ị|ỉ|ĩ/g,"i");
+       as = as.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o");
+       as = as.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u");
+       as = as.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y");
+       as = as.replace(/đ|Đ/g,"d");
+       as = as.replace(/[^a-z0-9]/gi, ' ')
+       as = as.replace(/ + /g," ");
+       return as;
+    }
+
+    function keydown(event){
+        if (event.which == 13){
+            submitSearch();
+        }
+    }
+</script>

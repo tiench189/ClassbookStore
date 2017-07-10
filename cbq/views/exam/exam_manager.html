@@ -1,0 +1,104 @@
+{{extend 'layout.html'}}
+
+<div id="container">
+
+    <p><strong>Thông tin exam :</strong></p>
+    <input type="hidden" value="{{=exam.item_id}}" id="examId"/>
+
+    <div id='exam_info'>
+        <table class="small_question">
+            <tr>
+                <td class="label_td"> Tên đề thi :</td>
+                <td>{{=exam.name}}</td>
+            </tr>
+            <tr>
+                <td class="label_td"> Thời lượng :</td>
+                <td>{{=exam.duration}}</td>
+            </tr>
+            <tr>
+                <td class="label_td"> Số câu hỏi :</td>
+                <td>{{=exam.number_question}}</td>
+            </tr>
+            <tr>
+                <td class="label_td"> Mô tả :</td>
+                <td>{{=exam.des}}</td>
+            </tr>
+            <tr>
+                <td>Xuất đề thi</td>
+                <td><a href="#" id="btnExportQuiz"> Xuất đề thi</a></td>
+            </tr>
+            <tr>
+                <td>Thêm segment</td>
+                <td><a href="#" id="btnAddSegment">Tạo thêm segment</a></td>
+            </tr>
+
+
+        </table>
+    </div>
+
+    <p><strong>Danh sách segment :</strong></p>
+
+    <div class="web2py_grid">
+        <div class="web2py_table">
+            <div class="web2py_htmltable">
+                <div class="segment_info">
+                    <table>
+                        <thead>
+                        <th>Tên segment</th>
+                        <th>Thời lượng</th>
+                        <th>Thêm câu hỏi</th>
+                        <th>Chi tiết</th>
+                        </thead>
+                        <tbody>
+                        {{for seg in exam_segment_list:}}
+                        <tr>
+                            <td>{{=seg.segment_name}}</td>
+                            <td>{{=seg.duration}}</td>
+                            <td>
+                                <a href="{{=URL("cbq", "question", "index", vars={'exam_id': seg.exam_id ,'segment_id':seg.item_id })}}">
+                                    Thêm câu hỏi
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{=URL("cbq", "exam", "preview_question_by_segment", vars = {'segment_id' : seg.item_id})}}">Xem
+                                    Chi
+                                    tiết </a>
+                            </td>
+                        </tr>
+
+                        {{pass}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnExportQuiz").click(function () {
+            var examId = $("#examId").val();
+            $.ajax({
+                url: "{{=URL("cbq", "exam", "export_quiz.json")}}",
+                data: {exam_id: examId, exam_package: 'com.tvb.qexam2'},
+                type: "POST",
+                success: function (data) {
+                    $.each(data, function (key, value) {
+                        window.open(value);
+                    });
+                },
+                error: function (data) {
+                    $.each(data, function (key, value) {
+                        alert(value);
+                    });
+                }
+            });
+        });
+
+        $("#btnAddSegment").click(function () {
+            window.location = "{{=URL("cbq", "exam_segment", "insert", vars=dict(exam_id=exam.item_id), host=True)}}";
+        });
+    });
+
+</script>

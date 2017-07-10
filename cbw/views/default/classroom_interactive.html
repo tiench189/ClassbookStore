@@ -1,0 +1,130 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}
+	<div class="banner_sub banner_manager"></div>
+	<!--div style="margin:0 auto; width:650px;height:70px;margin-top:-70px;"><a class="btn_download_large right" href="{{=URL('download')}}"></a></div-->
+{{end}}
+
+{{block title_content}}{{end}}
+
+
+<script>
+	jQuery(document).ready(function(){
+   		jQuery('#guild_1_xp').click(function(){jQuery('#xp_content').slideToggle("fast")});
+   		jQuery('#guild_w8').click(function(){jQuery('#w8_content').slideToggle("fast")});
+   		jQuery('#guild_w8_0').click(function(){jQuery('#w8_content_0').slideToggle("fast")});
+   		
+});
+</script>
+<style type="text/css">
+    #tech_specs { width:95%; border:1px solid #D9D5BE; margin: 25px; background:white; border-collapse:collapse; }
+    #tech_specs td { border:1px solid #D9D5BE; }
+    #tech_specs .col1 {
+        vertical-align: top;
+        font-size: medium;
+        width:30%;
+    }
+    .mw-list-spot li{
+        margin-left: 40px;
+        list-style-type: square;
+    }
+    h2 {
+        color: #004488;
+        margin-top: 80px;
+        margin-left: 25px;
+
+    }
+    h3{
+        font-weight: normal;
+        color: #004488;
+    }
+</style>
+<div class="box_store_product box_radius mtop_normal left">
+
+    <div class="product_related left">
+		<div class="box_content_right_main left">
+			<div class="box_right_title_product left">
+				<a class="box_right_tab_item fs18 left" href="{{=URL('manager')}}">
+					Các tính năng chính
+				</a>
+				<a class="box_right_tab_item  fs18 mleft_huge left" href="{{=URL('classroom_technical_specs')}}">
+					Thông số kĩ thuật
+				</a>
+                <a class="box_right_tab_item box_right_tab_item_active fs18 mleft_huge left" href="{{=URL('classroom_interactive')}}">Nội dung tương tác</a>
+                <a class="box_right_tab_item fs18 mleft_huge left" href="{{=URL('classroom_support')}}">Hỗ trợ</a>
+			</div>
+
+            <div>
+
+            <div class="box_right_product left mtop_normal mbot_normal">
+                <!-- tab mac dinh dau tien -->
+				<div class="slide_product left">
+                    <div class="line_seperate_product mtop_mini left"></div>
+                    <div> <!-- class="box_store_product box_radius mtop_normal left" -->
+
+                        <div class="box_detail_full left">
+
+                            <div class="left">
+                                <img src="{{=URL('static','images/classroom/1.jpg')}}" />
+                            </div>
+                            <div class="content_text_right mright_normal right">
+                                <div class="line_row_sub_withimg fs20 fcb left">
+                                    Tư liệu giảng dạy phong phú
+                                </div>
+                                <span class="left mtop_normal fs14">
+                                    Tư liệu Sách giáo khoa đầy đủ, phong phú đi kèm nội dung tương tác đa phương tiện
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="line_seperate_product mtop_mini left"></div>
+
+                    <div> <!-- class="box_store_product box_radius mtop_normal left" -->
+                        <div class="box_detail_full left">
+                            <div class="right">
+                                <img src="{{=URL('static','images/classroom/2.jpg')}}"/>
+                            </div>
+                            <div class="content_text_right mleft_normal left">
+                                <div class="line_row_sub_withimg fs20 fcb left lh25">
+                                    Kho bài giảng mẫu
+                                </div>
+                                <span class="left mtop_normal fs14">
+                                    Toàn bộ các bài giảng chọn lọc đã được tinh chỉnh lại từ Violet, được sắp xếp khoa học cho từng khối lớp, môn học. Người dùng có thể tải về, biên tập lại theo yêu cầu hoặc sử dụng ngay.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="line_seperate_product mtop_mini left"></div>
+
+                    <div> <!--  class="box_store_product box_radius mtop_normal left" -->
+                        <div class="box_detail_full left">
+                            <div class="left">
+                                <img src="{{=URL('static','images/classroom/3.jpg')}}" />
+                            </div>
+                            <div class="content_text_right mright_normal right">
+                                <div class="line_row_sub_withimg fs20 fcb left">
+                                   Hệ thống ứng dụng bổ trợ học tập
+                                </div>
+                                <span class="left mtop_normal fs14">
+                                   Hệ thống ứng dụng bổ trợ học tập luôn được cập nhật và cung cấp miễn phí cho các lớp học Classbook:<br>
+                                    - Tiếng Anh: English test, Luyện thi, …<br>
+                                    - Hóa học: Thí nghiệm ảo, Bảng tuần hoàn hóa học,…<br>
+                                    - Sinh học: Mô phỏng cơ thể người<br>
+                                    - Toán: Bé làm toán, Công thức toán, máy tính đa năng,…<br>
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="line_seperate_product mtop_mini left"></div>
+
+                    <!-- !content default tab -->
+				</div>
+			</div>
+            </div>
+		</div>
+	</div>
+</div>

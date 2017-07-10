@@ -1,0 +1,24 @@
+{{extend 'layout.html'}}
+{{=form}}
+<script>
+function delete_interactive(id){
+        if (confirm("Bạn chắc chắn muốn xóa?")){
+            $.ajax({
+                url : "/cbs20/template/delete.json/" + id,
+                success: function(data, textStatus, jqXHR)
+                {
+                    if (data.result){
+                        window.location.reload();
+                    }else{
+                        alert("Xóa thất bại");
+                    }
+                },
+                error: function(xhr, status, error) {
+                  var err = eval("(" + xhr.responseText + ")");
+                  alert(err.Message);
+                }
+            });
+        }
+    }
+
+</script>

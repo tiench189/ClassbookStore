@@ -1,0 +1,18 @@
+{{extend 'layout.html'}}
+
+<h1>Push Notification {{='Samsung' if 'samsung' in request.vars else ''}}</h1>
+{{if 'samsung' not in request.vars:}}
+<a href="{{=URL('cba', 'gcm', 'send2samsung')}}">Push to Samsung device</a> <br>
+<a href="{{=URL('cba', 'gcm', 'send_cb_device')}}">Push to CB device</a>
+{{pass}}
+<form method="POST">
+<span style="margin-right: 10px;">Notification</span>
+<textarea cols="8" rows="10" name="message" maxlength="256" size="256"></textarea>
+    <span style="margin-right: 10px;">Link</span>
+    <br><input type="text" name="link"/>
+ <br><input type="submit" value="Send" />
+ <p> Danh sách mã thiết bị gửi thông báo :
+ <ul>
+    {{for serial in session.list_device_serial:}}<li>{{=serial}}</li>{{pass}}
+   <ul>
+</form>

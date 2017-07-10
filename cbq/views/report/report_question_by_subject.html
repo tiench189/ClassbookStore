@@ -1,0 +1,47 @@
+{{extend 'layout.html'}}
+<div class="web2py_grid">
+    <div class="web2py_table">
+        <div class="web2py_htmltable">
+
+            <div id="report_area" style="width: 60%;">
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        load_data();
+        $('.page-header').html('<h3> Báo cáo số lượng question theo môn học</h3>');
+    });
+
+    function load_data() {
+
+        $.ajax({
+            url: "{{=URL('cbq', 'report', 'report_question_by_subject.json')}}",
+            type: "POST",
+            success: function (data) {
+                var content = '<table>'
+                content += '<thead>';
+                content += '    <th> Tên lớp </th>';
+                content += '    <th> Số lượng </th>';
+                content += '</thead>';
+                $.each(data, function (k, v) {
+                    if (k == 'result') {
+                        $.each(v, function (key, value) {
+                            content += '<tr>';
+                            content += '    <td>' + value.name + '</td>';
+                            content += '    <td>' + value.value + '</td>';
+                            content += '</tr>';
+                        });
+                    }
+                });
+                $('#report_area').html(content);
+            }
+
+        });
+
+    }
+</script>

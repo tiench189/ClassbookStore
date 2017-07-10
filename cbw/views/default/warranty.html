@@ -1,0 +1,81 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+
+<div class="box_store_product box_radius mtop_normal left">
+	<div class="product_related left">
+		<div class="box_content_right_main left">
+			<div class="box_right_title_product left">
+				<div class="box_right_tab_item box_right_tab_item_active fs18 left">
+					Thông tin bảo hành
+				</div>
+			</div>
+			
+			<div class="box_right_product left mtop_normal mbot_normal">				
+				<div class="slide_product left">		
+					{{for row in warranty:}}			
+						<div class="line_row_FAQs left">		
+							<table class="table_width">		
+								<tr class="table_head">
+									<td class="fw fcb fs14">Họ</th>
+									<td class="fcb fs13">{{=row['first_name']}}</th>
+								</tr>
+								<tr class="table_head">
+									<td class="fw fcb fs14">Tên</th>
+									<td class="fcb fs13">{{=row['last_name']}}</th>
+								</tr>
+								<tr class="table_head">
+									<td class="fw fcb fs14">Email</th>
+									<td class="fcb fs13">{{=row['email']}}</th>
+								</tr>		
+								<tr class="table_head">
+									<td class="fw fcb fs14">Mã vỏ thiết bị</th>
+									<td class="fcb fs13">{{=row['cover_serial']}}</th>
+								</tr>	
+								<tr class="table_head">
+									<td class="fw fcb fs14">Mã số thiết bị</th>
+									<td class="fcb fs13">{{=row['device_serial']}}</th>
+								</tr>
+								<tr class="table_head">
+									<td class="fw fcb fs14">Trạng thái</th>
+									<td class="fcb fs13">{{=row['status']}}</th>
+								</tr>	
+								<tr class="table_head">
+									<td class="fw fcb fs14">Hạn bảo hành</th>
+									<td class="fcb fs13">{{=row['warranty_date']}}</th>
+								</tr>
+								<tr class="table_head">
+									<td class="fw fcb fs14">Ngày tiếp nhận</th>
+									<td class="fcb fs13">{{=row['receive_date']}}</th>
+								<tr class="table_head">
+									<td class="fw fcb fs14">Ngày kết thúc bảo hành</th>
+									<td class="fcb fs13">{{=row['return_date']}}</th>
+								</tr>	
+								<tr class="table_head">
+									<td class="fw fcb fs14">Thông tin về lỗi</th>
+									<td class="fcb fs13">{{=row['error_description']}}</th>
+								</tr>	
+								<tr class="table_head">
+									<td class="fw fcb fs14">Giải pháp</th>
+									<td class="fcb fs13">{{=row['solution']}}</th>
+								<!--<tr class="table_head">
+									<td class="fw fcb fs14">Trạng thái</th>
+									<td class="fcb fs13">{{=row['warranty_date']}}</th>
+								</tr>	
+								<tr class="table_head">
+									<td class="fw fcb fs14">Trạng thái</th>
+									<td class="fcb fs13">{{=row['warranty_date']}}</th>
+								</tr>	
+								<tr class="table_head">
+									<td class="fw fcb fs14">Trạng thái</th>
+									<td class="fcb fs13">{{=row['warranty_date']}}</th>
+								</tr>	-->
+							</table>
+						</div>
+					{{pass}}
+				</div>		
+		</div>
+	</div>
+</div>

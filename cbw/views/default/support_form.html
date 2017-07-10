@@ -1,0 +1,231 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+<script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script> 
+<script type="text/javascript">
+<!--
+$(document).ready(function() 
+{
+	var editor = new nicEditor({fullPanel : true});
+	editor.setPanel('myNicPanel');
+	editor.addInstance('noi_dung');
+	
+	$('#support_form').find('input:first').focus();
+	//$('#support_form').bind(
+	//{
+	//	regis
+	//})
+});
+
+function IsEmail(email) {
+	var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  	return regex.test(email);
+}
+
+function submitform() {
+	var nicE = nicEditors.findEditor('noi_dung');
+	$('#noi_dung').val(nicE.getContent());
+	var isFormOK = validateForm();
+	
+	if(isFormOK) {
+		document.support_form.submit();
+	}else {
+		return false;
+	}
+}
+
+function trim(str) {
+    str = str.toString();
+    var begin = 0;
+    var end = str.length - 1;
+    while (begin <= end && str.charCodeAt(begin) < 33) { ++begin; }
+    while (end > begin && str.charCodeAt(end) < 33) { --end; }
+    return str.substr(begin, end - begin + 1);
+}
+
+function validateForm()
+{
+	var isOK = true;
+	var error = "";
+	var notify_place = document.getElementById('notify_place');
+	
+	var email=document.forms["support_form"]["email"].value;
+	email = trim(email);
+	var title=document.forms["support_form"]["tieu_de"].value;
+	title = trim(title);
+	var types=document.forms["support_form"]["question_types"].value;
+	var nicE = nicEditors.findEditor('noi_dung');
+	var content = nicE.getContent();
+	content = trim(content);
+
+	if (email == null || email == "" || email.length == 0 || !IsEmail(email))
+	{
+		error = "Email không hợp lệ!";
+	  	isOK = false;
+	}	
+	else if (types == 0)
+	{
+		error = "Hãy chọn loại câu hỏi!";
+	  	isOK = false;
+	}
+	else if (title == null || title == "" || title.length == 0)
+	{
+		error = "Tiêu đề không được trống!";
+	  	isOK = false;
+	}
+	else if (content == null || content == "<br>" || content == "" || content.length == 0)
+	{
+		error = "Nội dung không được trống!";
+	  	isOK = false;
+	}
+	  
+	if(!isOK) {
+	 	notify_place.innerHTML = error;
+	 	return false;
+	}else{
+	 	notify_place.innerHTML = "";
+	}
+	return true;
+}
+-->
+</script>
+
+<!-- breadcrumb -->
+        <div id="breadcrumb">
+            <ol class="breadcrumb">
+              <li><a href="/">Trang chủ</a></li>
+              <li class="active">Hỗ trợ</li>
+            </ol>
+        </div>
+        <!--/breadcrumb -->
+        <!-- cate content -->
+        <div class="cate-content">
+            <div class="support-list">
+            	<div class="sl-tabs">
+                	<ul>
+                    	<li><a href="/support" title="">FAQs</a></li>
+                        <li class="active"><a href="#" title="">Phản hồi</a></li>
+                        <li><a href="/warranty_adddevice" title="">Đăng ký bảo hành</a></li>
+                        <li><a href="/support_manager" title="">Phần mềm quản lý</a></li>
+                        <li><a href="/download" title="">Download</a></li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+                <div class="sl-content">
+                <form class="box_right_product left mtop_normal mbot_normal" id="support_form" name="support_form" method="POST">
+				<div class="slide_product left mleft_normal" style="color: red">Bạn có thể gọi tới số điện thoại +84-4-73020888 hoặc điền vào form dưới để gửi câu hỏi về cho bộ phận CSKH của chúng tôi!</div>
+                <div class="slide_product left">
+					<div class="form left mleft_normal mtop_normal">
+						<div class="line_row_FAQs left">
+							<div id="notify_place" style="color:red"></div>
+							<div class="faqs_title_item left">
+								Họ và Tên
+							</div>
+							<input class="form_line box_radius left" name="ho_ten" />
+						</div>
+						<div class="line_row_FAQs mtop_medium left">
+							<div class="faqs_title_item left">
+								Số điện thoại
+							</div>
+							<input class="form_line box_radius left" name="dien_thoai" />
+						</div>
+						<div class="line_row_FAQs mtop_medium left">
+							<div class="faqs_title_item left">
+								Email<font color="red"> (*)</font>
+							</div>
+							<input class="form_line box_radius left" name = "email" id = "form_email"/>
+						</div>
+						<div class="line_row_FAQs mtop_medium left">
+							<div class="faqs_title_item left">
+								Loại câu hỏi<font color="red"> (*)</font>
+							</div>
+							<select id = "question_types" name="question_types">
+								<option value="0">Chọn loại câu hỏi</option>
+								<option value="1">Câu hỏi về thiết bị</option>
+								<option value="2">Câu hỏi bảo hành</option>
+								<option value="3">Liên hệ mua sản phẩm</option>
+							</select>
+						</div>
+						<div class="line_row_FAQs mtop_medium left">
+							<div class="faqs_title_item left">
+								Tiêu đề<font color="red"> (*)</font>
+							</div>
+							<input class="form_line box_radius left" name = "tieu_de"/>
+						</div>
+						<div class="line_row_FAQs mtop_medium left">
+							<div class="faqs_title_item left">
+								Nội dung<font color="red"> (*)</font>
+							</div>
+							<div class="left">
+								<div id="myNicPanel" style="width: 510px;"></div>
+								<textarea class="area box_radius left" style="width: 510px;" id="noi_dung" name="noi_dung"></textarea>
+							</div>
+						</div>
+						<div class="line_row_FAQs mtop_medium left">
+							<input type="hidden" name="captchas_random" value="{{=captchas_random}}"/>
+							<div class="faqs_title_item left">
+								Mã xác nhận<font color="red"> (*)</font>
+							</div>
+							<div class="left">
+								<div>
+									<input style="width:100px;" class="form_line box_radius left" name="captchas_value"/>
+									<span>&nbsp;</span>
+								</div>
+								<br>
+								<div style="color:red">
+								<!-- {{if captchas_result > 0:}} -->
+									Mã không hợp lệ
+								<!-- {{pass}} -->
+								</div>
+							</div>
+							<div style="overflow:hidden;width:80px;height:40px;">
+							<img style="margin-top: -20px;margin-bottom: -15px; margin-left:-10px; border: none; vertical-align: bottom" id="captchas.net"
+							src="{{=captchas_image}}" width="100" height="80" alt="The CAPTCHA image" />
+							</div>
+						</div>
+							<div class="line_row_FAQs mtop_medium left">
+							<div class="faqs_title_item left">
+							</div>
+							<div class="btn_send left" id="send" onclick="javascript: submitform();">
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+                </div>
+            </div>
+        </div>
+
+
+<script type="text/javascript"> 
+<!-- 
+    function captchas_image_error (image) 
+	{ 
+		if (!image.timeout) return true; 
+		image.src = image.src.replace (/^http:\/\/image\.captchas\.net/, 'http://image.backup.captchas.net'); 
+		return captchas_image_loaded (image); 
+	} 
+    
+	function captchas_image_loaded (image) 
+	{ 
+		if (!image.timeout) return true; 
+		window.clearTimeout (image.timeout); 
+		image.timeout = false; 
+		return true; 
+	} 
+	
+	var image = document.getElementById ('captchas.net'); 
+	image.onerror = function() 
+	{
+		return captchas_image_error (image);
+	}; 
+	image.onload = function() 
+	{
+		return captchas_image_loaded (image);
+	}; 
+	image.timeout = window.setTimeout( "captchas_image_error (document.getElementById ('captchas.net'))", 10000); 
+	image.src = image.src; 
+//--> 
+</script>

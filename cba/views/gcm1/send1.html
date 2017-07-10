@@ -1,0 +1,14 @@
+{{extend 'layout.html'}}
+
+<h1>Push Notification</h1>
+
+<form method="POST">
+<span style="margin-right: 10px;">Notification</span>
+<textarea cols="8" rows="10" name="message" maxlength="256" size="256"></textarea>
+ <!--<input value="Enter message here" name="message" type="textbox" style="margin-right: 10px;" maxlength="256" size="256" />-->
+ <br><input type="submit" value="Send" />
+ <p> Danh sách mã thiết bị gửi thông báo :
+ <ul>
+    {{for serial in session.list_device_serial:}}<li>{{=serial}}</li>{{pass}}
+   <ul>
+</form>

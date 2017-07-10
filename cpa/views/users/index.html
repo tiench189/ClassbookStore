@@ -1,0 +1,35 @@
+<!-- # coding=utf-8 -->
+{{extend 'layout.html'}}
+{{if request.args(0)=='login':}}
+<h2>{{=T('Đăng nhập')}}</h2>
+{{elif request.args(0)=='profile':}}
+<h2>{{=T('Thông tin cá nhân')}}</h2>
+{{elif request.args(0)=='register':}}
+<h2>{{=T('Đăng ký tài khoản')}}</h2>
+{{elif request.args(0)=='retrieve_username':}}
+<h2>{{=T('Yêu cầu tên đăng nhập')}}</h2>
+{{elif request.args(0)=='request_reset_password':}}
+<h2>{{=T('Yêu cầu mật khẩu')}}</h2>
+{{pass}}
+<div id="web2py_user_form">
+{{
+if request.args(0)=='login':
+    if not 'register' in auth.settings.actions_disabled:
+        form.add_button(T('Đăng ký'),URL(args='register', vars={'_next': request.vars.next} if request.vars.next else None),_class='btn')
+    pass
+    if not 'request_reset_password' in auth.settings.actions_disabled:
+        form.add_button(T('Mất mật khẩu'),URL(args='request_reset_password'),_class='btn')
+    pass
+pass
+=form
+}}
+</div>
+<script language="javascript"><!--
+jQuery("#web2py_user_form").find("input:visible:enabled:first").focus();
+{{if request.args(0)=='register':}}
+    web2py_validate_entropy(jQuery('#auth_user_password'),100);
+{{elif request.args(0)=='change_password':}}
+    web2py_validate_entropy(jQuery('#no_table_new_password'),100);
+{{pass}}
+//--></script>
+

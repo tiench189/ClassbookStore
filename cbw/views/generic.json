@@ -1,0 +1,1 @@
+{{import gluon.contrib.simplejson as json}}{{response.headers['Access-Control-Allow-Origin']="*"}}{{=XML(json.dumps(response._vars, ensure_ascii = False))}}

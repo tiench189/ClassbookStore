@@ -1,0 +1,35 @@
+{{extend "layout.html"}}
+{{import scripts}}
+        {{import usercp}}
+        {{discount_value=usercp.get_discount_value(auth.user.id,db)}}
+        <a href="{{=URL(a='cpa', c='histories', f=request.vars['more_from'], vars=request.vars) if request.vars['more_from'] else "#"}}"><button class="btn btn-default">Quay lại</button></a>
+        <label style="color: #888; font-weight: bold;">Chi tiết tải sản phẩm: <span style="color: #0000ff;">{{=product['product_title']}} [{{=product['product_code']}}]</span></label>
+            {{=TABLE(
+                    THEAD(
+                            TR(
+                                TH("STT", _class="header", _style=" background-image: none;"),
+                                TH("Thời gian", _class="header", _style=" background-image: none;"),
+                                TH("Hình thức thanh toán", _class="header", _style=" background-image: none;"),
+                                TH("Thành tiền", _class="header",  _style="text-align: right; background-image: none;"),
+                                TH("Chiết khấu", _class="header",  _style="text-align: right; background-image: none;"),
+                                TH("Thực lĩnh", _class="header",  _style="text-align: right; background-image: none;"),
+                            ),
+                    ),
+                    *[TR(
+                        TD(i+1),
+                        TD(list[i]['clsb_download_archieve']['download_time']),
+                        TD(list[i]['clsb_download_archieve']['purchase_type']),
+                        TD(scripts.style_money(list[i]['clsb_download_archieve']['price'])+" ₫", _style="text-align: right"),
+                        TD(scripts.style_money(list[i]['clsb_download_archieve']['price']*discount_value/100)+" ₫", _style="text-align: right"),
+                        TD(scripts.style_money(list[i]['clsb_download_archieve']['price'] - list[i]['clsb_download_archieve']['price']*discount_value/100)+" ₫", _style="text-align: right"),
+                        _class= "odd" if i%2 == 0 else "even"
+                     ) for i in range(len(list))],
+                    _id="payment_table",
+                    _class="tablesorter"
+            )}}
+        {{=DIV(XML("<b>Chú ý:</b> Mỗi phương thức thu tiền sẽ có hình thức thu phí khi tải về là khác nhau. <br/> <i>Hình thức miễn phí</i>: mặc định giá cho sản phẩm sẽ là 0 VNĐ, khách hàng sẽ không phải trả tiền cho sản phẩm khi chọn hình thức này.<br/> <i>Hình thức thanh toán cho lần tải đầu tiên</i>: Khác hàng sẽ chỉ phải trả phí cho lần đầu tiên tải sản phẩm, các lần sau sẽ không bị thu phí. <br/> <i>Hình thức thanh toán cho mỗi lượt tải</i>: Khách hàng sẽ phải trả phí cho mỗi lần tải sản phẩm về"), _style="color: #999;")}}
+<script>
+    $(document).ready(function(){
+        $("#payment_table").append('{{=TR(TD(B("Tổng số"), _colspan=3, _style="background: #FCF49C;"),TD(B(scripts.style_money(total_price))+" ₫", _style="background: #FCF49C; text-align: right;"), TD(B(scripts.style_money(total_price*discount_value/100))+" ₫", _style="background: #FCF49C; text-align: right;"), TD(B(scripts.style_money(total_price - total_price*discount_value/100))+" ₫", _style="background: #FCF49C; text-align: right;"),_style="background: #FCF49C;"),}}')
+    })
+</script>

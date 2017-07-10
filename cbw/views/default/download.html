@@ -1,0 +1,230 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+
+<script>
+	jQuery(document).ready(function(){
+   		jQuery('#guild_1_xp').click(function(){jQuery('#xp_content').slideToggle("fast")});
+   		jQuery('#guild_w8').click(function(){jQuery('#w8_content').slideToggle("fast")});
+   		jQuery('#guild_w8_0').click(function(){jQuery('#w8_content_0').slideToggle("fast")});
+   		
+});
+</script>
+<!-- breadcrumb -->
+        <div id="breadcrumb">
+            <ol class="breadcrumb">
+              <li><a href="/">Trang chủ</a></li>
+              <li class="active">Hỗ trợ</li>
+            </ol>
+        </div>
+        <!--/breadcrumb -->
+        <!-- cate content -->
+        <div class="cate-content">
+            <div class="support-list">
+            	<div class="sl-tabs">
+                	<ul>
+                    	<li><a href="/support" title="">FAQs</a></li>
+                        <li><a href="/support_form" title="">Phản hồi</a></li>
+                        <li><a href="/warranty_adddevice" title="">Đăng ký bảo hành</a></li>
+                        <li><a href="/support_manager" title="">Phần mềm quản lý</a></li>
+                        <li class="active"><a href="#" title="">Download</a></li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+                <div class="sl-content">
+<div class="box_store_product box_radius mtop_normal left">
+	<div class="product_related left">
+		<div class="box_content_right_main left">
+
+			<div class="box_right_product left mtop_normal mbot_normal" id="warranty_adddevice_form">
+				<div class="slide_product left">					
+					<div class="form left mleft_normal">
+						<h3>Yêu cầu tối thiểu của hệ thống:</h3>
+						<div style="margin:10px 0 20px 20px;">
+							<div style="margin:15px 15px 20px 20px;" >
+								<li>
+									<b>CPU:</b> Pentium 4, 1.8 Mhz hoặc cao hơn
+								</li>
+								<li>
+									<b>RAM:</b> tối thiểu 512 MB, đề nghị: 1 GB 
+								</li>
+								<li>
+									<b>Hệ điều hành:</b> Windows XP, Windows Vista, Windows 7, Windows 8
+								</li>
+								<li> <i><b>Ghi chú:</b> Nếu cài đặt không thành công, bạn hãy thử giảm độ bảo mật hoặc tắt hẳn chương trình diệt virus, rồi thực hiện lại từ đầu quá trình cài đặt.</i></li>
+							</div>
+						</div>
+						<h3>Hướng Dẫn Cài Đặt:</h3>
+						<div style="margin:10px 0 20px 20px;">
+							<h4>Cài đặt lên hệ điều hành Windows XP:</h4>
+							<div id="guild_1_title" class="guild_1_title" >
+							<ul style="margin:15px 15px 20px 20px;">
+								<li>
+								<i>Bước 1:</i> Tải <a style="color:#0000FF; text-decoration:underline;" href="{{=URL('cbs', 'download', 'driver')}}">trình kết nối</a> ở dưới và cài đặt theo hướng dẫn: (<b id="guild_1_xp" style="color:#FF4500; cursor:pointer; text-decoration:underline;">ấn vào đây để xem chi tiết</b>)
+								  	<div id="xp_content"  class="guild_1_content hidden" style="display:none; margin:15px 15px 20px 20px;">
+										{{image_size = "70%"}}
+										<div>Kết nối thiết bị ClassBook vào máy tính đang chạy hệ điều hành Windows XP, chọn Start, rồi di chuyển con chuột đến My Computer và chọn Manage:</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_xp/install_driver_xp_-2.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+										<div>Khi cửa sổ Computer Management hiện ra, chọn Device Manager:</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_xp/install_driver_xp_-1.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+										<div>Sau đó ấn chuột phải vào danh mục đầu tiên (tương ứng với vị trí của MT238DIEPCT trong hình minh họa), rồi chọn Scan for hardware changes:</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_xp/install_driver_xp_0.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+										
+											<div>Máy tính sẽ tự bật lên cửa sổ sau:</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_xp/install_driver_xp_1.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Ấn chuột trái vào lựa chọn "Install from a list or specific location (Advanced)", cửa sổ tiếp theo sẽ hiện ra:</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_xp/install_driver_xp_2.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div> Hãy chọn "Don\'t search. I will choose the driver to install" rồi ấn vào nút "Next".</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_xp/install_driver_xp_3.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>và chọn "Show All Devices" trong cửa sổ trên và tiếp tục ấn nút "Next" (tiếp theo).</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_xp/install_driver_xp_4.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Trong cửa sổ trên ấn vào nút "Have Disk..."</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_xp/install_driver_xp_5.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Ấn vào nút "Browse..."</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_xp/install_driver_xp_6.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Tìm thư mục 32Bit_Windows_7_Vista_XP, chọn tập tin (file) "android_usb" rồi ấn vào nút "Open":</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_xp/install_driver_xp_7.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Tiếp tục ấn vào nút "Ok"</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_xp/install_driver_xp_8.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Tiếp tục ấn vào nút "Next", Windows sẽ cài trình kết nối của ClassBook và báo kết quả như bạn thấy trên 2 cửa sổ cuối cùng:</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_xp/install_driver_xp_9.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_xp/install_driver_xp_10.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+									</div>
+								</li>
+								<li>
+									<i>Bước 2</i>: Tải <a href="{{=URL('cbs', 'download', 'manager')}}" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Classbook Manager</a> (Version 1.0.0.4, Build 20131016) và cài đặt<br>
+								</li>
+								<!--<li>
+									<i>Bước 3</i>: Đọc kĩ hướng dẫn sử dụng trong "Hướng dẫn sử dụng" tải ở dưới<br>
+								</li> -->
+							</ul>
+							</div>
+							
+							<h4>Cài đặt lên hệ điều hành Windows 7:</h4>
+							<ul style="margin:15px 15px 20px 20px;">
+								<li>
+									Tải chương trình <a href="{{=URL('cbs', 'download', 'manager')}}" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Classbook Manager</a> (Bản 20131016) và chạy file ClassbookManagerSetup.exe
+								</li>
+							</ul>
+							<h4>Cài đặt lên hệ điều hành Windows 8, Windows Vista:</h4>
+							<div id="guild_2_title" class="guild_2_title" >
+							<ul style="margin:15px 15px 20px 20px;">
+								<li>
+								<i>Bước 1:</i> Thiết lập trước khi cài đặt đối với Windows 8: (<b id="guild_w8_0" style="color:#FF4500; cursor:pointer; text-decoration:underline;">ấn vào đây để xem chi tiết</b>)</br>
+								  	<div id="w8_content_0"  class="guild_1_content hidden" style="display:none; margin:15px 15px 20px 20px;">
+										{{image_size = "70%"}}
+											<div>Di chuột vào góc dưới bên phải màn hình để hiện Charm bar của Window 8 rồi chọn Settings. Sau đó chọn Change PC setting. Chọn vào General, trong khu vực Advanced Startup ấn nút Restart Now.</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_w8/install_driver_w8_-4.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Đợi 1 lúc windows 8 sẽ khởi động vào màn hình lựa chọn. Bạn chọn lần lượt vào các nút: Troubleshoot –> Advanced Option –> Start-up Settings –> Restart. Sau đó máy tính sẽ khởi động lại.PC sẽ khởi động vào màn hình giống như hình ảnh. Bạn chỉ cần ấn phím 7 hoặc F7 để chọn vào Disable Driver Signature Enforcement. PC sẽ khởi động vào chế độ này ngay lập tức.</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_w8/install_driver_w8_-3.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+									</div>
+								
+								<i>Bước 2:</i> Tải <a style="color:#0000FF; text-decoration:underline;" href="{{=URL('cbs', 'download', 'driver')}}">trình kết nối</a> ở dưới và cài đặt theo hướng dẫn: (<b id="guild_w8" style="color:#FF4500; cursor:pointer; text-decoration:underline;">ấn vào đây để xem chi tiết</b>)
+								  	<div id="w8_content"  class="guild_1_content hidden" style="display:none; margin:15px 15px 20px 20px;">
+										{{image_size = "70%"}}
+											<div>Kết nối thiết bị ClassBook vào máy tính, tìm Computer và chọn Manage:</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_w8/install_driver_w8_-2.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Khi cửa sổ Computer Management hiện ra, chọn Device Manager. Sau đó ấn chuột phải vào danh mục đầu tiên (tương ứng với vị trí của MrPhuongDeE trong hình minh họa), rồi chọn Add legacy hardware:</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_w8/install_driver_w8_-1.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Máy tính sẽ tự bật lên cửa sổ sau, chọn Next:</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_w8/install_driver_w8_1.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Ấn chuột trái vào lựa chọn "Install the hardware that I manually select from a list (Advanced)":</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_w8/install_driver_w8_2.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div> Hãy chọn "Show All Devices" rồi ấn vào nút "Next".</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_w8/install_driver_w8_3.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Trong cửa sổ trên ấn vào nút "Have Disk..."</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_w8/install_driver_w8_4.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Ấn vào nút "Browse..."</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_w8/install_driver_w8_5.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Tìm thư mục 32Bit_Windows_7_Vista_XP, chọn tập tin (file) "android_usb" rồi ấn vào nút "Open":</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_w8/install_driver_w8_6.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Tiếp tục ấn vào nút "Ok":</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_w8/install_driver_w8_7.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Tiếp tục ấn vào nút "Next"</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_w8/install_driver_w8_8.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+											<div>Chọn "Install this driver software anyway" trong cửa sổ cuối cùng:</div>
+										<img style="margin:15px 15px 15px 5px;" src="{{=URL('static','images/install_driver_w8/install_driver_w8_9.png')}}" width="{{=image_size}}" height="{{=image_size}}"/>
+									</div>
+								</li>
+								<li>
+									<i>Bước 3</i>: Tải <a href="{{=URL('cbs', 'download', 'manager')}}" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Classbook Manager</a> (Version 1.0.0.4, Build 20131016) và cài đặt<br>
+								</li>
+								<!--<li>
+									<i>Bước 4</i>: Đọc kĩ hướng dẫn sử dụng trong "Hướng dẫn sử dụng" tải ở dưới<br>
+								</li> -->
+							</ul>
+							</div>
+						</div>
+						<table class="table_width">	
+							<tr class="table_head">
+								<th class="fw fcb fs14" style="width:450px;">Tên file</th>
+								<th class="fw fcb fs14">Version</th>
+								<th class="fw fcb fs14">Build</th>
+								<th class="fw fcb fs14">Link tải</th>
+							</tr>
+							<tr>
+								<td>Trình kết nối Classbook CB01</td>
+								<td>1.0.0.4</td>
+								<td></td>
+								<td><a href="{{=URL('cbs', 'download', 'driver')}}" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Download</a></td>
+							</tr>
+							<tr>
+								<td>Trình kết nối Classbook CB02</td>
+								<td>1.0.0.0</td>
+								<td></td>
+								<td><a href="{{=URL('cbs', 'download', 'driver_intel')}}" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Download</a></td>
+							</tr>
+							<tr>
+								<td>Classbook Manager</td>
+								<td>1.0.0.4</td>
+								<td>20131016</td>
+								<td><a href="{{=URL('cbs', 'download', 'manager')}}" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Download</a></td>
+							</tr>
+							<tr>
+								<td>CBEditor</td>
+								<td>1.0.0.0</td>
+								<td>20140116</td>
+								<td><a href="{{=URL('cbw', 'download', 'demo', args='SetupCBEditor.msi')}}" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Download</a></td>
+							</tr>
+							<tr>
+								<td>Store Apk (dành cho thiết bị Classbook)</td>
+								<td>2.0.0.0</td>
+								<td>20140116</td>
+								<td><a href="{{=URL('cbw', 'download', 'demo', args='store.apk')}}" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Download</a></td>
+							</tr>
+							<!--<tr>
+								<td>Classbook App (iOS)</td>
+								<td>1.0</td>
+								<td>1.0.20150108.005</td>
+								<td><a href="https://itunes.apple.com/us/app/classbook/id942940905?l=vi&ls=1&mt=8" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Tải về từ iTunes</a></td>
+							</tr>-->
+                            <tr>
+								<td>Tài liệu hướng dẫn khai thác SGK điện tử Classbook</td>
+								<td>1.0</td>
+								<td>20140312</td>
+								<td><a href="{{=URL('cbs', 'download20', 'pdf_guide')}}" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Download</a></td>
+							</tr>
+							<!-- <tr>
+								<td>Video hướng dẫn cài đặt Classbook Manager</td>
+								<td>1.0</td>
+								<td></td>
+								<td><a href="{{=URL('cbs', 'download', 'video')}}" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Download</a></td>
+							</tr>
+							<tr>
+								<td>Hướng dẫn sử dụng</td>
+								<td>1.0</td>
+								<td></td>
+								<td><a href="{{=URL('cbs', 'download', 'helpdoc')}}" style="cursor:pointer; color:#0000FF; text-decoration:underline;">Download</a></td>
+							</tr> -->
+						</table>
+					</div>  				
+				</div>		
+			</div>  	
+		</div>
+	</div>
+</div>
+                    </div>
+                </div>
+            </div>

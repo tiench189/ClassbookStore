@@ -1,0 +1,50 @@
+{{my_cate = get_menu()}}
+
+<div class="container">
+    	<div class="footer-info">
+        	<a href="/" class="footer-logo"><img src="{{=URL('static','store2.2/images/logo-footer.png')}}" alt="" title=""></a>
+            <!--Công ty Cổ phần Sách điện tử Giáo dục EDC là đơn vị thành viên của Nhà xuất bản Giáo Dục Việt Nam, có chức năng và nhiệm vụ chính nghiên cứu xây dựng giải pháp cung cấp sách giáo khoa điện tử, các tài liệu, học liệu điện tử, tư liệu giảng dạy, ứng dụng và sản phẩm nội dung số, thiết bị đọc sách phục vụ cho mục đích giáo dục trên phạm vi toàn quốc.-->
+        </div>
+        <div class="clearfix"></div>
+        <div class="footer-menu" style="margin-top: -40px">
+        	<div class="fm-block fm-block-1">
+            	<div class="fm-title">Về Classbook</div>
+                <ul class="fmb-list">
+                	<li><a href="/about" title="">Giới thiệu</a></li>
+                    <li><a href="/author" title="">Tác giả / NXB</a></li>
+                    <li><a href="/support" title="">Hỗ trợ</a></li>
+                </ul>
+            </div>
+            <div class="fm-block fm-block-2">
+            	<div class="fm-title">Kho nội dung</div>
+                <ul class="fmb-list fmb-list-2col">
+                    {{for index in range(len(my_cate)):}}
+                    <li><a class="parent-link" p_id="{{=my_cate[index]['category_id']}}" title="{{=my_cate[index]['category_name']}}">{{=my_cate[index]['category_name']}}</a></li>
+                    {{pass}}
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <!--<div class="fm-block fm-block-3">
+            	<div class="fm-title">Thiết bị Classbook</div>
+                <ul class="fmb-list">
+                	<li><a href="/device" title="">Giới thiệu</a></li>
+                    li><a href="/device" title="">Đặt mua thiết bị Classbook</a></li>
+                    <li><a href="http://dathang.classbook.vn/simulator/" title="">Hướng dẫn khai thác</a></li>
+                </ul>
+            </div>-->
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+
+<script>
+    function openDialog(){
+		$('#pop-demo').modal('show');
+	}
+    function openAlert(title, message){
+        $("#done_popup").hide();
+        $("#myModalLabel").html(title);
+        $("#modal-body").html(message);
+        $('#pop-demo').modal('show');
+    }
+</script>

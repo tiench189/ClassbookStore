@@ -1,0 +1,134 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+
+{{if session.authorized == False:}}
+
+<div class="box_store_product box_radius mtop_normal left">
+    <div class="product_related left">
+        <div class="box_content_right_main left">
+            <div class="box_right_title_product left">
+                <div class="box_right_tab_item box_right_tab_item_active fs18 left">
+                    Thông tin tài khoản
+                </div>
+            </div>
+            <div class="box_right_product left mtop_normal mbot_normal" style="height:300px">
+                <div class="slide_product left">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{else:}}
+        <div id="breadcrumb">
+            <ol class="breadcrumb">
+              <li><a href="/">Trang chủ</a></li>
+              <li class="active">Quản lý tài khoản</li>
+            </ol>
+        </div>
+        <!--/breadcrumb -->
+        <!-- profile container -->
+        <div class="profiles-page-container cp-pull-left">
+        	<div class="cpc-left">
+            	<div class="box" id="mine">
+                	<div class="box-mine">
+                    	<span class="name">{{=user['firstName']}} {{=user['lastName']}}</span>
+                        <span class="email">{{=user['username']}}</span>
+                        <div class="balance"><span>{{=str2price(str(user['fund']))}} vnđ<a href="/nganluong" title=""><i class="fa fa-plus-square"></i></a></span></div>
+                        <div class="clearfix"></div>
+                    </div>
+                	<div class="box-content">
+                    	<ul class="box-list">
+                            <li><a href="/profile" title="">Quản lý tài khoản</a></li>
+                            <li><a href="/all_user_device" title="">Danh sách thiết bị sở hữu</a></li>
+                            <li class="active"><a href="#" title="">Lịch sử tải</a></li>
+                            <li><a href="/buy_history" title="">Lịch sử mua</a></li>
+                            <li><a href="/paycode" title="">Sử dụng mã thẻ</a></li>
+                            <li><a href="/changepass" title="">Đổi mật khẩu</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="cpc-right">
+            	<div class="box">
+                    <div class="history">
+                        <table class="table table-striped itemlist">
+                            <tr class="cpc-head">
+                                <td class="book">Ấn phẩm</td>
+                                <td class="text-center">Mã thiết bị</td>
+                                <td class="text-right">Ngày tải</td>
+                            </tr>
+                            {{for down in download:}}
+                            <tr>
+                                <td class="book">
+                                    <a class="thumb" href="/store_detail/{{=down['product_id']}}" title=""><img src="http://classbook.vn{{=URL('cbs', 'download', 'thumb',
+                                                        args=down['product_code'])}}" title="" alt=""></a>
+                                    <div class="book-info">
+                                        <h2><a href="/store_detail/{{=down['product_id']}}" title="">{{=down['product_title']}}</a></h2>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </td>
+                                <td class="text-center"><span>{{=down['device_serial']}}</span></td>
+                                <td class="text-right"><span class="date">{{=down['download_time']}}</span></td>
+                            </tr>
+                            {{pass}}
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+{{pass}}
+        <script>
+            function renameDevice(device_serial, device_name){
+                $("#edit_name").val(device_name)
+                $('#pop-rename-device').modal('show');
+                $("#done_rename").click(function(){
+                     $('#pop-rename-device').modal('hide');
+                    var new_name = $("#edit_name").val().trim()
+                    if (new_name != device_name){
+                    $.ajax({
+                        url: "/cbs/devices/change_device_name.json",
+                            data: {"device_serial":device_serial, "new_device_name":encodeURIComponent(new_name)},
+                        success: function (data) {
+                            console.log(data)
+                            if (data.error){
+                                openAlert(data.error);
+                            }else{
+                                openAlert("Thành công");
+                                window.location.reload();
+                            }
+                        },
+                        error: function (err) {
+                            window.location.reload();
+                        }
+                    });
+                    }
+                });
+            }
+
+            function deleteDevice(device_serial){
+                openConfirm("Bạn có chắc chắn muốn xóa thiết bị này?");
+                $("#done_popup").click(function(){
+                    $('#pop-demo').modal('hide');
+                    $.ajax({
+                        url: "/cbs/users/delete_device.json",
+                        data: {"username":"{{=session.username}}", "user_token":"{{=session.token}}", "device_serial":device_serial},
+                        success: function (data) {
+                            console.log(data)
+                            if (data.error){
+                                openAlert(data.error);
+                            }else{
+                                openAlert("Xóa thành công");
+                                window.location.reload();
+                            }
+                        },
+                        error: function (err) {
+                            window.location.reload();
+                        }
+                    });
+                });
+            }
+        </script>

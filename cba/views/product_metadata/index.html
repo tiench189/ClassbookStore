@@ -1,0 +1,41 @@
+{{extend 'layout.html'}}
+
+{{=grid}}
+
+<script>
+jQuery(document).ready(function(){
+	
+});
+	
+	// To control select box metadata_id in the form /cba/product/index/clsb_product/clsb_product_metadata.product_id  
+	function metadata_id_onchange(id) {
+		var selectBox = document.getElementById("clsb_product_metadata_metadata_id");
+		if(selectBox != null){
+			var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+			//alert(selectedValue);
+			
+			var metadata_value_row = document.getElementById("clsb_product_metadata_metadata_value__row");
+			var new_metadata_value_row = document.getElementById("new_clsb_product_metadata_metadata_value__row");
+			
+				request_args = "";
+				var page = "{{=URL("index", host=True)}}";
+				if(selectedValue == id){
+					//alert("haha OK");
+					if (metadata_value_row != null){
+						metadata_value_row.style.display = "none"
+					}
+					if (new_metadata_value_row != null){
+						new_metadata_value_row.style.display = "table-row"
+					}
+				}
+				else{
+					if (metadata_value_row != null){
+						metadata_value_row.style.display = "table-row"
+					}
+					if (new_metadata_value_row != null){
+						new_metadata_value_row.style.display = "none"
+					}
+				}
+		}
+	}
+</script>

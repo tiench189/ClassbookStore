@@ -1,0 +1,70 @@
+{{extend 'layout.html'}}
+<!--<div class="web2py_grid">
+    <div class="web2py_table">
+        <div class="web2py_htmltable">-->
+<form id="myForm" action="">
+
+    <input type="hidden" value="{{=segment_id}}" id="segment_id"/>
+
+    <div id="question_preview_area">
+
+    </div>
+</form>
+<!--        </div>
+    </div>
+</div>-->
+<script>
+    $(document).ready(function () {
+        load_data();
+
+    });
+    function load_data() {
+        var segment_id = $("#segment_id").val();
+        var i = 0;
+        var bg_color;
+        $.ajax({
+            url: "{{=URL("cbq", "exam", "preview_question_by_segment.json", host=True)}}",
+            type: "POST",
+            data: {segment_id: segment_id},
+            success: function (data) {
+                var content = ""
+                content += '<div id="question_info">';
+                $.each(data, function (key, value) {
+                    if (key == 'question_list') {
+                        if (value == null || value == '') {
+                            content += "<p>Đã hết nội dung để hiển thị</p>";
+                        } else {
+                            $.each(value, function (k, v) {
+                                content += '<table class="question_table">';
+
+                                content += '<tr>';
+                                content += '    <td class="label_td">Mã câu hỏi :</td>';
+                                content += '    <td>' + v.id + '</td>';
+                                content += '</tr>';
+                                content += '<tr>';
+                                content += '    <td class="label_td">Yêu cầu câu hỏi :</td>';
+                                content += '    <td>' + v.question_guide + '</td>';
+                                content += '</tr>';
+                                content += '<tr>';
+                                content += '    <td  class="label_td"> Loại câu hỏi </td>';
+                                content += '    <td>' + v.question_type + '</td>';
+                                content += '</tr>';
+                                content += '<tr>';
+                                content += '    <td  class="label_td">Nội dung câu hỏi</td>';
+                                content += '    <td>' + v.question_content + '</td>';
+                                content += '</tr>';
+                                content += '<tr>';
+                                content += '    <td  class="label_td"> Danh sách câu trả lời</td>';
+                                content += '    <td class="answer_list">' + v.question_answer + '</td>';
+                                content += '</tr>'
+                                content += '</table>'
+                                content += "<p>";
+                            });
+                        }
+                    }
+                });
+                $("#question_preview_area").append(content);
+            }
+        });
+    }
+</script>

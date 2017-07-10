@@ -1,0 +1,191 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+
+<!-- breadcrumb -->
+        <div id="breadcrumb">
+            <ol class="breadcrumb">
+              <li><a href="index.html">Trang chủ</a></li>
+              <li class="active">Đăng ký</li>
+            </ol>
+        </div>
+        <!--/breadcrumb -->
+        <!-- cate content -->
+        <div class="cate-content">
+            <h1 class="cate-name">Chưa có tài khoản? Đăng ký ngay</h1>
+            <div class="cate-list">
+            	<div class="cl-title cl-title-line">
+                	<span class="clt"></span>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-page-container">
+                	<div class="f-left">
+                        <div id="notify_place" style="color:red">{{=result}}</div>
+                    	<div class="f-title">Vui lòng nhập các thông tin vào form bên dưới:</div>
+                        <div class="f-form">
+                            <form method="post" class="form-horizontal" id="signup">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Email<span>*</span></label>
+                                    <div class="col-sm-8">
+                                        <input name="email" type="email" class="form-control" id="signup_email">
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-sm-4 control-label">Mật khẩu <span>*</span></label>
+                                    <div class="col-sm-8">
+                                        <input name="password" type="password" class="form-control" id="signup_password">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Xác nhận mật khẩu <span>*</span></label>
+                                    <div class="col-sm-8">
+                                        <input type="password" class="form-control" id="confirm_password">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Mã xác nhận <span>*</span></label>
+                                    <div class="col-sm-4">
+                                        <input name="captchas_value" type="password" class="form-control">
+                                        <input type="hidden" name="captchas_random" value="{{=captchas_random}}"/>
+                                    </div>
+                                    <div style="overflow:hidden;width:80px;height:40px;">
+                                        <img src="{{=captchas_image}}"
+                                             style="margin-top: -20px;margin-bottom: -15px;margin-left: -10px;border: none;vertical-align: bottom;"
+                                                width="100" height="80" id="captchas.net">
+                                        <a href="#" title=""><i class="fa fa-rotate-left ml10"></i></a>
+                                    </div>
+                                </div>
+                                <!--<div class="form-group mt20">
+                                    <label class="col-sm-4 control-label"></label>
+                                    <div class="col-sm-8">
+                                        <input type="checkbox" name="checkbox" id="checkbox"> Tôi đã đọc và đồng ý các <a href="#" title="" style="color: #F28013; text-decoration: underline;">điều khoản</a> tại Classbook.vn
+                                    </div>
+                                </div>-->
+                                <div class="form-group mt20">
+                                	<div class="row mt10"></div>
+                                    <label class="col-sm-4 control-label"></label>
+                                    <div class="col-sm-8">
+                                        <a onclick="submitSignup()" href="#" class="btn btn-classbook btn-lg">Đăng ký tài khoản</a>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="f-right">
+                    	<div class="f-title">Hoặc đăng ký nhanh qua</div>
+                        <a href="javascript:loginFB()" class="btn btn-social btn-facebook btn-block"><i class="fa fa-facebook"></i> Đăng ký nhanh qua Facebook</a>
+                        <!--<a href="#" class="btn btn-social btn-twitter btn-block"><i class="fa fa-twitter"></i> Đăng ký nhanh qua Twitter</a>-->
+                        <a href="javascript:loginGG()" class="btn btn-social btn-google-plus btn-block"><i class="fa fa-google-plus"></i> Đăng ký nhanh qua Google+</a>
+                        <div class="row mt20"></div>
+                        <div class="fr-title mb10 mt20">Bạn đã có tài khoản?</div>
+                        <a href="/signin" class="btn btn-default btn-block" title="">Đăng nhập ngay</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!--/cate content -->
+        <div class="clearfix"></div>
+
+        <script>
+            $( document ).ready(function() {
+                "{{if 'thành công' in result:}}"
+                openAlert("{{=result}}");
+                window.location.href = "/signin";
+                "{{pass}}"
+            });
+
+            function submitSignup(){
+                var email = $("#signup_email").val().trim();
+                var password = $("#signup_password").val().trim();
+                var confirm_password = $("#confirm_password").val().trim();
+                console.log(email + "/" + password + "/" + confirm_password);
+                if (email == ""){
+                    openAlert("Vui lòng nhập email");
+                }else if (password.length < 6){
+                    openAlert("Mật khẩu cần ít nhất 6 kí tự");
+                }else if (password != confirm_password){
+                    openAlert("Mật khẩu nhập lại không đúng");
+                }else{
+                    $("#signup").submit();
+                }
+            }
+        </script>
+
+<script>
+  function getUserData() {
+	FB.api('/me', function(response) {
+		document.getElementById('response').innerHTML = 'Hello ' + response.name;
+	});
+}
+
+window.fbAsyncInit = function() {
+	//SDK loaded, initialize it
+	FB.init({
+		appId      : '880795605285397',
+		xfbml      : true,
+		version    : 'v2.2'
+	});
+
+	//check user session and refresh it
+	FB.getLoginStatus(function(response) {
+		if (response.status === 'connected') {
+			//user is authorized
+			document.getElementById('loginBtn').style.display = 'none';
+			getUserData();
+		} else {
+			//user is not authorized
+		}
+	});
+};
+
+//load the JavaScript SDK
+(function(d, s, id){
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) {return;}
+	js = d.createElement(s); js.id = id;
+	js.src = "//connect.facebook.net/en_US/sdk.js";
+	fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+//add event listener to login button
+function loginFB(){
+	//do the logi
+	FB.login(function(response) {
+		if (response.authResponse) {
+            var access_token =   FB.getAuthResponse()['accessToken'];
+            console.log('Access Token = '+ access_token);
+            window.location.href = "/login?type=fb&access_token=" + access_token + "&location={{=URL()}}";
+		}
+	}, {scope: 'email,public_profile', return_scopes: true});
+}
+</script>
+
+<script>
+    function onLoadCallback()
+    {
+        gapi.client.setApiKey('AIzaSyDxWAgzZH9wB0MCVlJ7DXTHE1l0a-g-7Ks'); //set your API KEY
+        gapi.client.load('plus', 'v1',function(){});//Load Google + API
+    }
+    function loginGG()
+    {
+      var myParams = {
+        'clientid' : '211735881359-kkkmk84phqgglqgq1o578s0i89ngd5ur.apps.googleusercontent.com', //You need to set client id
+        'cookiepolicy' : 'single_host_origin',
+        'callback' : 'loginCallback', //callback function
+        'approvalprompt':'force',
+        'scope' : 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email'
+      };
+      gapi.auth.signIn(myParams);
+    }
+    function loginCallback(result)
+    {
+        if(result['status']['signed_in'])
+        {
+            window.location.href = "/login?type=gg&access_token=" + result['access_token'] + "&location={{=URL()}}";
+        }
+    }
+</script>

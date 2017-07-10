@@ -1,0 +1,345 @@
+{{extend 'layout.html'}}
+<a href="/cba/category/index/clsb_category/new/clsb_category"><input type="button" value="Add"></a>
+{{try:}}
+{{if mcategories:}}
+<div id="pick_category" class="css-treeview">
+<ul>
+
+    {{for cate1 in mcategories:}}
+    <li class="cate1" order="{{=cate1['order']}}" id="cate1-{{=cate1['category_id']}}">
+        <input {{="checked" if cate1['category_id'] in expands else ""}} id="pick{{=cate1['category_id']}}" type="checkbox"/><label for="pick{{=cate1['category_id']}}"><span class="cate-name">{{=cate1['category_name']}}</span>
+        <a style="margin-left: 300px" href="javascript:orderUp('cate1', '{{=cate1['category_id']}}')"><i class="move up"></i></a>
+        <a style="margin-left: 20px" href="javascript:orderDown('cate1', '{{=cate1['category_id']}}')"><i class="move down"></i></a>
+        <a style="margin-left: 20px">|</a>
+        <a href="/cba/category/index/clsb_category/edit/clsb_category/{{=cate1['category_id']}}">Edit</a><a>|</a>
+        <a href="javascript:onDelete({{=cate1['category_id']}}, '{{=cate1['category_name']}}')">Delete</a><a>|</a>
+        <a href="/cba/category/index/clsb_category/new/clsb_category/{{=cate1['category_id']}}">Add Child</a></label>
+
+        <ul>
+            {{for cate2 in cate1['children']:}}
+            <li class="cate2-{{=cate1['category_id']}}" order="{{=cate2['order']}}" id="cate2-{{=cate1['category_id']}}-{{=cate2['category_id']}}"><input name="{{='pick-cate' if len(cate2['children']) == 0 else ''}}"
+                       value="{{=cate2['category_id']}}"
+                       type="{{='checkbox' if len(cate2['children']) > 0 else 'radio'}}"
+                       id="pick{{=cate2['category_id']}}" /><label class="{{='pick' if len(cate2['children']) == 0 else ''}}" for="pick{{=cate2['category_id']}}"><span class="cate-name">{{=cate2['category_name']}}</span>
+                        <a style="margin-left: 300px" href="javascript:orderUp('cate2-{{=cate1['category_id']}}', '{{=cate2['category_id']}}')"><i class="move up"></i></a>
+                        <a style="margin-left: 20px" href="javascript:orderDown('cate2-{{=cate1['category_id']}}', '{{=cate2['category_id']}}')"><i class="move down"></i></a>
+                        <a style="margin-left: 20px">|</a>
+                        <a href="/cba/category/index/clsb_category/edit/clsb_category/{{=cate2['category_id']}}">Edit</a><a>|</a>
+                        <a href="javascript:onDelete({{=cate2['category_id']}}, '{{=cate2['category_name']}}')">Delete</a><a>|</a>
+                        <a href="/cba/category/index/clsb_category/new/clsb_category/{{=cate2['category_id']}}">Add Child</a></label>
+                <ul>
+                    {{for cate3 in cate2['children']:}}
+                    <li class="cate3-{{=cate2['category_id']}}" order="{{=cate3['order']}}" id="cate3-{{=cate2['category_id']}}-{{=cate3['category_id']}}"><input name="{{='pick-cate' if len(cate3['children']) == 0 else ''}}"
+                               value="{{=cate3['category_id']}}"
+                               type="{{='checkbox' if len(cate3['children']) > 0 else 'radio'}}"
+                               id="pick{{=cate3['category_id']}}" /><label class="{{='pick' if len(cate3['children']) == 0 else ''}}" for="pick{{=cate3['category_id']}}"><span class="cate-name">{{=cate3['category_name']}}</span>
+                        <a style="margin-left: 300px" href="javascript:orderUp('cate3-{{=cate2['category_id']}}', '{{=cate3['category_id']}}')"><i class="move up"></i></a>
+                        <a style="margin-left: 20px" href="javascript:orderDown('cate3-{{=cate2['category_id']}}', '{{=cate3['category_id']}}')"><i class="move down"></i></a>
+                        <a style="margin-left: 20px">|</a>
+                        <a href="/cba/category/index/clsb_category/edit/clsb_category/{{=cate3['category_id']}}">Edit</a><a>|</a>
+                        <a href="javascript:onDelete({{=cate3['category_id']}}, '{{=cate3['category_name']}}')">Delete</a><a>|</a>
+                        <a href="/cba/category/index/clsb_category/new/clsb_category/{{=cate3['category_id']}}">Add Child</a></label>
+                        <ul>
+
+                        </ul>
+                    </li>
+                    {{pass}}
+                </ul>
+            </li>
+            {{pass}}
+        </ul>
+    </li>
+    {{pass}}
+
+</ul>
+</div>
+<script>
+//    document.getElementById("category").disabled = true;
+    $("input[name=pick-cate]:radio").change(function () {
+        console.log($("input:radio[name='pick-cate']:checked").val());
+        $('#clsb_product_product_category').val($("input:radio[name='pick-cate']:checked").val());
+    });
+</script>
+<style>
+    #pick_category{
+        top: 50px;
+        right: 10px;
+        width: 220px;
+    }
+    .css-treeview ul,
+.css-treeview li
+{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+        line-height: 35px;
+}
+
+.css-treeview input
+{
+    position: absolute;
+    opacity: 0;
+}
+
+.css-treeview
+{
+    font: normal 11px "Segoe UI", Arial, Sans-serif;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.css-treeview a
+{
+    margin-top: -3px;
+    color: #00f;
+    vertical-align: middle;
+    text-decoration: none;
+    font-size: 14px;
+    margin-left: 2px;
+}
+
+.css-treeview a:hover
+{
+    text-decoration: underline;
+}
+
+.css-treeview input + label + ul
+{
+    margin: 0 0 0 22px;
+}
+
+.css-treeview input ~ ul
+{
+    display: none;
+}
+
+.css-treeview label,
+.css-treeview label::before
+{
+    cursor: pointer;
+}
+
+.css-treeview input:disabled + label
+{
+    cursor: default;
+    opacity: .6;
+}
+
+.css-treeview input:checked:not(:disabled) ~ ul
+{
+    display: block;
+}
+
+.css-treeview label,
+.css-treeview label::before
+{
+    background: url("{{=URL('static', 'images/icons.png')}}") no-repeat;
+}
+
+.css-treeview label,
+.css-treeview a,
+.css-treeview label::before
+{
+    display: inline-block;
+    height: 16px;
+    line-height: 16px;
+    vertical-align: middle;
+}
+
+.css-treeview label
+{
+    /*border-left: 1px solid;*/
+    /*border-bottom: 1px solid;*/
+    background-position: 18px 0;
+     font-size: 16px;
+}
+
+.css-treeview label::before
+{
+    content: "";
+    width: 16px;
+    margin: 0 22px 0 0;
+    vertical-align: middle;
+    background-position: 0 -32px;
+}
+
+.css-treeview .pick::before{
+    background-position: 0 -64px;
+}
+
+.css-treeview input:checked + .pick::before
+{
+    background-position: 0 -64px;
+}
+
+.css-treeview input:checked + label::before
+{
+    background-position: 0 -16px;
+}
+
+/* webkit adjacent element selector bugfix */
+@media screen and (-webkit-min-device-pixel-ratio:0)
+{
+    .css-treeview
+    {
+        -webkit-animation: webkit-adjacent-element-selector-bugfix infinite 1s;
+    }
+
+    @-webkit-keyframes webkit-adjacent-element-selector-bugfix
+    {
+        from
+        {
+            padding: 0;
+        }
+        to
+        {
+            padding: 0;
+        }
+    }
+}
+    .cate-name{
+        position: absolute;
+    }
+
+    .move{
+        width: 20px;
+        height: 20px;
+        background: url("{{=URL('static', 'images/arrow.png')}}") no-repeat;
+        background-size: 100%;
+        position: absolute;
+    }
+
+    .up{
+        background-position: 0 0;
+    }
+
+    .down{
+        background-position: 0 -20px;
+    }
+</style>
+{{pass}}
+{{except Exception as e:}}
+{{pass}}
+
+<script>
+    function onDelete(id, name){
+        if (confirm("Bạn có chắc chắn muốn xóa danh mục: " + name)){
+            $.ajax({
+                url: "/cba/category/delete_category_by_id.json/" + id,
+                async: false,
+                success: function (data) {
+                    if (data.result) {
+                        window.location.reload();
+                    } else {
+                        alert(data.mess)
+                    }
+                },
+                error: function (err) {
+                    alert("Lỗi kết nối " + err.message);
+                }
+            });
+        }
+    }
+    order_li("cate1");
+    function order_li(li){
+        var temp_arr = document.getElementsByClassName(li)
+        var parent = temp_arr[0].parentElement
+        var arr = []
+        for (var i = 0; i < temp_arr.length; i++){
+            arr[i] = temp_arr[i]
+        }
+        for (var i = 0; i < arr.length - 1; i++){
+            for (var j = arr.length - 1; j > i; j --){
+                var order_i = parseInt(arr[i].getAttribute("order"));
+                var order_j = parseInt(arr[j].getAttribute("order"));
+                if (order_i < order_j){
+                    var temp = arr[i]
+                    arr[i] = arr[j]
+                    arr[j] = temp
+                }
+            }
+        }
+        parent.innerHTML = "";
+//        alert(arr.length);
+        for (var i = 0; i < arr.length; i++){
+//            console.log(arr[i].getAttribute("order"))
+            parent.appendChild(arr[i])
+        }
+    }
+
+    function actionUp(class_name, id){
+
+        var arr = document.getElementsByClassName(class_name)
+        var current_pos = 0;
+        for (var i = 0; i < arr.length; i++){
+            if (arr[i].id == class_name + "-" + id){
+                current_pos = i;
+                break;
+            }
+        }
+        if (current_pos == 0){
+//            var current_order = arr[current_pos].getAttribute("order");
+//            arr[current_pos].setAttribute("order", arr[arr.length - 1].getAttribute("order"));
+//            arr[arr.length - 1].setAttribute("order", current_order);
+        }else{
+            var current_order = arr[current_pos].getAttribute("order");
+            arr[current_pos].setAttribute("order", arr[current_pos - 1].getAttribute("order"));
+            arr[current_pos - 1].setAttribute("order", current_order);
+        }
+        order_li(class_name)
+    }
+
+
+    function orderUp(class_name, id){
+        $.ajax({
+                url: "/cba/category/up_order.json/" + id,
+                async: false,
+                success: function (data) {
+                    if (data.result) {
+                        actionUp(class_name, id)
+                    } else {
+                    }
+                },
+                error: function (err) {
+                }
+            });
+
+    }
+
+    function actionDown(class_name, id){
+        var arr = document.getElementsByClassName(class_name)
+        console.log(class_name + ":" + id);
+        var current_pos = arr.length - 1;
+        for (var i = 0; i < arr.length; i++){
+            console.log(arr[i].id + ": " + class_name + "-" + id);
+            if (arr[i].id == class_name + "-" + id){
+                current_pos = i;
+                break;
+            }
+        }
+        console.log("current_post: " + current_pos)
+        if (current_pos == arr.length - 1){
+        }else{
+            var current_order = arr[current_pos].getAttribute("order");
+            arr[current_pos].setAttribute("order", arr[current_pos + 1].getAttribute("order"));
+            arr[current_pos + 1].setAttribute("order", current_order);
+        }
+        order_li(class_name)
+    }
+
+    function orderDown(class_name, id){
+        $.ajax({
+                url: "/cba/category/down_order.json/" + id,
+                async: false,
+                success: function (data) {
+                    if (data.result) {
+                        actionDown(class_name, id)
+                    } else {
+                    }
+                },
+                error: function (err) {
+                }
+            });
+    }
+</script>

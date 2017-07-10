@@ -1,0 +1,124 @@
+<html>
+	<!--hant 27-02-2013 (23 line)-->
+	
+	<head>
+ 	<script type="text/javascript">
+        
+        function fctSearch (fct) {
+  			var myForm = document.forms["listuser"];
+  			myForm.method="get" ;
+  			//myForm.action = fct ;
+    		var myInput = document.getElementById("search") ;
+    		myInput.setAttribute("name", "search") ;
+  			myForm.submit() ;
+		}
+		  
+		function fctDelete(){
+			var myForm = document.forms["listuser"];
+			myForm.method="get" ;
+			
+			//send req's name: delete
+			var myInput = document.getElementById("reqDelete") ;
+			myInput.setAttribute("name", 'delete') ;
+			myInput.setAttribute("value", "req") ;
+
+			//get selectedRow to delete			
+			checkboxNb = {{=len(users)}}
+			for (var i=0; i < checkboxNb; i++){
+				var myInput = document.getElementById("row"+i) ;
+				myInput.setAttribute("name", "selectedR"+i)
+			}
+			
+			myForm.submit() ;
+		}
+    </script>
+	</head>
+	<body>
+		<!--User management page-->
+		<table border="1">
+			<tr>
+				<th><h2>Users List</h2>
+				</th>
+				<!-- <th><h2>Update user</h2>
+				</th> -->
+			</tr>
+			<tr>
+				<td>
+					<form name="listuser" id="listuser">
+						<table>
+							<tr>
+								<td width=100>
+									<input type="button" onclick="fctDelete()" value="Delete">
+									<input id="reqDelete" type="hidden">
+								</td>
+								<td width=100>
+								</td>
+								<td width=500>
+									Search: <input id="search" type="search" placeholder="search" onsearch="fctSearch('{{=URL("index")}}')">
+								</td>
+							</tr>
+						</table>
+						</br>
+						</br>
+						</br>
+						</br>
+						<table border="1">
+							<tr>
+								<th>
+								</th>
+								<th><h3>Id</h3>
+								</th>
+								<th><h3>User name</h3>
+								</th>
+								<th><h3>Password</h3>
+								</th>
+								<td><h3>First name</h3>    
+								</td>
+								<td><h3>Last name</h3>    
+								</td>
+								<td><h3>Email</h3>    
+								</td>
+								<td><h3>Phone number</h3>    
+								</td>
+								<td><h3>Address</h3>    
+								</td>
+								<td><h3>Status</h3>    
+								</td>
+								<td><h3>Last login time</h3>    
+								</td>
+							</tr>
+							{{	i=0
+								for user in users:}}
+							<tr>
+								<td><input type="checkbox" name="checkbox" id="row{{=i}}" value={{=user.username}}>
+								</td>
+								<td>{{=user.id}}  
+								</td>
+								<td>{{=user.username}}
+								</td>
+								<td>{{=user.password}}
+								</td>
+								<td>{{=user.firstName}}    
+								</td>
+								<td>{{=user.lastName}}    
+								</td>
+								<td>{{=user.email}}    
+								</td>
+								<td>{{=user.phoneNumber}}    
+								</td>
+								<td>{{=user.address}}    
+								</td>
+								<td>{{=user.status}}    
+								</td>
+								<td>{{=user.lastLoginTime}}    
+								</td>
+							</tr>
+							{{	i +=1
+								pass}}
+						</table>
+					</form>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

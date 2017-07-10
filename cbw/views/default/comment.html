@@ -1,0 +1,242 @@
+<link rel="stylesheet" type="text/css" href="{{=URL('static','css/css.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{=URL('static','store2.2/css/bootstrap.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{=URL('static','store2.2/css/media.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{=URL('static','store2.2/css/slide.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{=URL('static','store2.2/css/main.css')}}" />
+
+<script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script> 
+<script type="text/javascript">
+$(document).ready(function() 
+{
+	var editor2 = new nicEditor({fullPanel : true});
+	editor2.setPanel('myNicPanel2');
+	editor2.addInstance('binh_luan');
+	
+	{{if binh_luan:}}
+		var nicE2 = nicEditors.findEditor('binh_luan');
+		nicE2.setContent('{{=XML(binh_luan)}}');
+	{{pass}}
+		
+	$('#comment_form').find('input:first').focus();
+});
+
+function IsEmail(email) {
+	var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  	return regex.test(email);
+}
+
+function submitform() {
+	var nicE2 = nicEditors.findEditor('binh_luan');
+	$('#binh_luan').val(nicE2.getContent());
+		
+	var isFormOK = validateForm();
+	
+	if(isFormOK) {
+		//document.getElementById('captcha').value='issubmis';
+		//$('#captcha').val('issubmit');
+		document.comment_form.submit();
+	}else {
+		return false;
+	}
+	
+	// slight update to account for browsers not supporting e.which
+function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
+// To disable f5
+$(document).bind("keydown", disableF5);
+}
+
+function trim(str) {
+    str = str.toString();
+    var begin = 0;
+    var end = str.length - 1;
+    while (begin <= end && str.charCodeAt(begin) < 33) { ++begin; }
+    while (end > begin && str.charCodeAt(end) < 33) { --end; }
+    return str.substr(begin, end - begin + 1);
+}
+   
+function validateForm()
+{
+	var isOK = true;
+	var error = "";
+	var notify_place = document.getElementById('notify_place');
+	
+	var email=document.forms["comment_form"]["email"];
+	if (email != null){
+		email = email.value;
+		email = trim(email);
+	}
+	
+	var binh_luan=document.forms["comment_form"]["binh_luan"];
+	if (binh_luan != null){
+		binh_luan = binh_luan.value;
+		binh_luan = trim(binh_luan);
+	} 
+	
+	if (email == null || email == "" || email.length == 0 || !IsEmail(email))
+	{
+		error = "Email không hợp lệ!";
+	  	isOK = false;
+	}	
+	else if (binh_luan == null || binh_luan == "" || binh_luan.length == 0 || binh_luan == "<br>"){
+	  	error = "Nội dung không được để trống!";
+	  	isOK = false;
+	}
+	  	
+	if(!isOK) {
+	 	notify_place.innerHTML = error;
+	 	return false;
+	}else{
+	 	notify_place.innerHTML = "";
+	}
+	return true;
+}
+
+function add_comments(array_item){
+	var data = '';
+		$.each(array_item, function(index, value)
+		{
+			data += ""+
+				"<div class=\"left line_row_FAQs mtop_normal\" style=\"padding-left:20px;\">"+
+					"<i id=date>Ngày "+ value['comment_date'] +"</i> <b class=\"fcblue\">"+ value['email'] +"</b> <i>đã viết:</i>"+
+				"</div>"+
+				"<span class=\"left mtop_mini fcb\"  style=\"padding-left:30px;\">"+
+					value['comment_content']+
+				"</span>"+
+				"<div class=\"line_seperate_product mtop_mini left\"></div>"
+		});
+			
+	$('#comments').html(data);
+}
+
+function get_comments(product_code, value)
+{
+	var page = parseInt(value, 10);
+	value = isNaN(page) ? '' : '/' + page;
+	$.getJSON("{{=URL(f='get_comments')}}/" + product_code + value, function(msg){
+		add_comments(msg['items']);
+		paging(product_code, msg['page'], msg['items_per_page'], msg['total_pages']);
+	});
+}
+
+{{if product_code is not None:}}
+get_comments("{{=product_code}}", '')
+{{pass}}
+
+function paging(product_code, page, items_per_page, total_pages)
+{
+	var div_data = '';
+	if(page > 0)
+	{
+		div_data += '<a class="fw fco" style="border:1px solid #bbb;padding:4px 10px;cursor:pointer;margin-left:2px;" href="javascript:;" onclick="get_comments(\'' + product_code + '\',\'0\')" >|<</a>'		
+		div_data += '<a class="fw fco" style="border:1px solid #bbb;padding:4px 10px;cursor:pointer;margin-left:2px;" href="javascript:;" onclick="get_comments(\'' + product_code + '\',\'' + (page - 1) + '\')" ><</a>'		
+	}
+	for(var i=1; i<=total_pages; i++)
+	{
+		if(i == page + 1)
+			div_data += '<span class="fw fco" style="border:1px solid #ff610b;padding:4px 10px;margin-left:2px;" >' + i + '</span>'		
+		else
+			div_data += '<a class="fw fco" style="border:1px solid #bbb;padding:4px 10px;cursor:pointer;margin-left:2px;" href="javascript:;" onclick="get_comments(\'' + product_code + '\',\'' + (i - 1) + '\')" >' + i + '</a>'		
+	}
+	if(page < total_pages - 1)
+	{
+		div_data += '<a class="fw fco" style="border:1px solid #bbb;padding:4px 10px;cursor:pointer;margin-left:2px;" href="javascript:;" onclick="get_comments(\'' + product_code + '\',\'' + (page + 1) + '\')" >></a>'
+		div_data += '<a class="fw fco" style="border:1px solid #bbb;padding:4px 10px;cursor:pointer;margin-left:2px;" href="javascript:;" onclick="get_comments(\'' + product_code + '\',\'' + (total_pages - 1) + '\')" >>|</a>'
+	}
+	$('#paging').html(div_data);
+}
+-->
+</script>  
+  
+<div class="box_store_product box_radius mtop_normal left">
+	<div class="product_related left">
+		<form style="margin-top: 0px" class="box_right_product left mtop_normal mbot_normal" id="comment_form" name="comment_form" method="POST">
+			<div class="form left mleft_normal mtop_normal">	
+				<div class="line_row_FAQs mtop_medium left">	
+					<h4 class="faqs_title_item left" style="width: auto">{{=product_title}}</h4>
+				</div>				
+				<div class="line_row_FAQs mtop_medium left">	
+					<div id="notify_place" style="color:red"></div>
+					<div class="faqs_title_item left">
+						Email<font color="red"> (*)</font>
+					</div>
+					<input class="form_line box_radius left" name = "email" id = "form_email" value="{{=session.username if session.authorized else ''}}">
+				</div>	
+				
+				<div class="line_row_FAQs mtop_medium left">						
+					<div class="faqs_title_item left">
+						Bình luận<font color="red"> (*)</font>
+					</div>							
+					<div class="left">
+						<div id="myNicPanel2" style="width: 510px;"></div>
+						<textarea class="area box_radius left" style="width: 510px;" id="binh_luan" name="binh_luan"></textarea>
+					</div>
+				</div>				
+					
+				<div class="line_row_FAQs mtop_medium left">						
+					<input type="hidden" name="captchas_random" value="{{=captchas_random}}"/>				
+					<div class="faqs_title_item left">
+						Mã xác nhận<font color="red"> (*)</font>
+					</div>
+					<div class="left">
+						<div>
+							<input style="width:100px;" class="form_line box_radius left" name="captchas_value"/>
+							<span>&nbsp;</span>
+						</div>
+						<br>
+						<div style="color:red">
+							<!-- {{if captchas_error > 0:}} -->
+							Mã xác nhận không hợp lệ.
+							<!-- {{pass}} -->
+						</div>
+					</div>
+					<div style="overflow:hidden;width:80px;height:40px;">
+					<img style="margin-top: -20px;margin-bottom: -15px; margin-left:-10px; border: none; vertical-align: bottom" id="captchas.net" 
+					src="{{=captchas_image}}" width="100" height="80" alt="The CAPTCHA image" />
+					</div>							
+				</div>				
+							
+				<div  class="btn btn-classbook" id="send" onclick="javascript: submitform();">
+                    Bình luận
+			</div>  	
+							<!--<input id="captcha" type = "text" name ="captcha"/>-->
+					
+		</form>  
+	</div>
+</div>
+
+<div class="box_store_product box_radius mtop_normal left">
+	<div class="box_right_product left mtop_normal mbot_normal">
+		<div class="slide_product left" id="comments">
+		</div>
+	</div>
+	<div style="float:left;margin-top:0px;padding-bottom:15px;padding-left:10px;" id="paging"></div>
+</div>
+
+<script type="text/javascript"> 
+<!-- 
+	function captchas_image_error (image) 
+	{ 
+		if (!image.timeout) return true; 
+		image.src = image.src.replace (/^http:\/\/image\.captchas\.net/, 'http://image.backup.captchas.net'); 
+		return captchas_image_loaded (image); 
+	} 
+	function captchas_image_loaded (image) 
+	{ 
+		if (!image.timeout) return true; 
+		window.clearTimeout (image.timeout); 
+		image.timeout = false; 
+		return true; 
+	} 
+	var image = document.getElementById ('captchas.net'); 
+	image.onerror = function() 
+	{
+		return captchas_image_error (image);
+	}; 
+	image.onload = function() 
+	{
+		return captchas_image_loaded (image);
+	}; 
+	image.timeout = window.setTimeout( "captchas_image_error (document.getElementById ('captchas.net'))", 10000); 
+	image.src = image.src; 
+//--> 
+</script>			

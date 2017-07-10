@@ -1,0 +1,17 @@
+{{extend 'layout.html'}}
+
+<h1>Push Notification IOS</h1>
+
+<form method="POST">
+    <h4>Nhập thông điệp gửi đi:</h4>
+    <div>
+        {{if mess != '':}}
+            Thông báo: {{=mess}}
+        {{pass}}
+    </div>
+    ​<textarea cols="8" rows="10" name="mess" maxlength="256" size="256"></textarea>
+    <br/>
+    <input type="submit">
+</form>
+<script>
+</script>

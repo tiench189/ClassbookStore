@@ -1,0 +1,33 @@
+{{extend 'cbw_layout.html'}}
+{{block main_banner}}{{end}}
+{{block title_content}}{{end}}
+
+        <div id="breadcrumb">
+            <ol class="breadcrumb">
+              <li><a href="/">Trang chủ</a></li>
+              <li class="active">{{=topic_name}}</li>
+            </ol>
+        </div>
+        <div class="cate-content">
+            <h1 class="cate-name">{{=topic_name}}</h1>
+            <div class="cate-list">
+                <div class="booklist booklist-cat">
+                    <div class="booklist-wrap">
+                        <ul class="clearfix">
+                        {{for product in products:}}
+                        <li>
+                                <a p_id="{{=product['product_id']}}" class="blw-thumb detail-link" title="{{=product['product_title']}}"><span class="thumb"><img src="{{=product['product_cover']}}" alt="{{=product['product_title']}}"></span></a>
+                                <h2 class="blw-title"><a p_id="{{=product['product_id']}}" class="thumb  detail-link" title="{{=product['product_title']}}">{{=product['product_title']}}</a></h2>
+                                <h3 class="blw-writer">{{=product['product_creator']}}</h3>
+                                <span class="old-price">{{=product['cover_price']}}</span>
+                                <a href="javascript:action_cart('{{=product["product_id"]}}')" class="blw-cart">
+                                <i id="cart{{=product['product_id']}}" class="cart{{=product['product_id']}} blw-cart-icon mr10 {{=' in-cart' if str(product['product_id']) in session.shopping_cart else ''}}"></i>{{=product['product_price']}}</a>
+                                <div class="clearfix"></div>
+                        </li>
+                        {{pass}}
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>

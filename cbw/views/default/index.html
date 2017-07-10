@@ -1,0 +1,142 @@
+{{extend 'cbw_layout.html'}}
+{{block main_banner}}{{end}}
+{{block title_content}}{{end}}
+{{import urllib}}
+<div id="home_topic">
+
+</div>
+<script>
+    var position = 0;
+    var home_topic = []
+    "{{for topic in home_topic:}}"
+    home_topic[home_topic.length] = {name: "{{=topic['topic_name']}}", id: "{{=topic['topic_id']}}", code: "{{=topic['topic_code']}}", type: "{{=topic['type']}}"}
+    "{{pass}}"
+    getTopicItems();
+    function getTopicItems(){
+        var html = ""
+        var topic = home_topic[position]
+        var class_header = (topic.type == "book")?"booklist":"booklist applist"
+        $.ajax({
+            url: "/home_topic.json/" + topic.code + "/" + topic.id,
+            success: function (data) {
+                var view_all = (data.items.length > 6)?"<a href='/home_product/" + topic.code + "/" + topic.id + "?topic=" + topic.name +"' class='pull-right title-more'>Xem tất cả<i class='fa fa-angle-right ml10'></i></a>":""
+                html += "<h1 class='title'><span>" + topic.name +
+                        "</span>" + view_all + "</h1>"
+                html += "<div class='" + class_header + "' id='" + topic.code + topic.id + "'>"
+                html += "<div class='booklist-wrap'>"
+                html += "<ul class='clearfix'>"
+                for (var i = 0; i < data.items.length; i++){
+                    var item = data.items[i]
+                    html += "<li>"
+                    html += "<a p_id='" + item.product_id + "' class='blw-thumb detail-link' title='" + item.product_title + "'><span class='thumb'><img src='/static/covers/"
+                            + item.product_code + "/thumb.png' alt='" + item.product_title + "'></span></a>"
+                    html += "<h2 class='blw-title'><a p_id='" + item.product_id + "' class='thumb detail-link' title='" + item.product_title + "'>" + item.product_title + "</a></h2>"
+                    html += "<h3 class='blw-writer'>" + item.product_creator + "</h3>"
+
+                    html += "<span class='old-price' style='height: 15px'>" + item.cover_price + "</span>"
+                    html += "<a href='javascript:action_cart(\"" + item.product_id + "\")' class='blw-cart'>"
+                    var in_cart = (item.in_cart)?"in_cart":"in";
+                    html += "<i id='cart" + item.product_id + "' class='cart" + item.product_id + " blw-cart-icon mr10 " + in_cart + "'></i>" + item.product_price
+                    html += "</a><div class='clearfix'></div>"
+                    html += "</li>"
+                }
+                html += "</ul>"
+                html += "</div>"
+                html += "<div class='controls'>"
+                html += "<button class='blw-btn blw-prev'><i class='fa fa-angle-left'></i></button>"
+                html += "<button class='blw-btn blw-next'><i class='fa fa-angle-right'></i></button>"
+                html += "</div>"
+                html += "</div>"
+                html += "<div class='clearfix'></div>"
+//                console.log(html);
+                $("#home_topic").append(html)
+                slideHome();
+                setNextTopic();
+            },
+            error: function (err) {
+                setNextTopic();
+            }
+        });
+    }
+
+    function setNextTopic(){
+        if (position < home_topic.length - 1){
+            position ++;
+            getTopicItems();
+        }
+    }
+
+
+    function str2price(str){
+        str = str + "";
+        if (str == "0"){
+            return "Miễn phí";
+        }else{
+            return str.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1") + "đ";
+        }
+    }
+
+    function slideHome(){
+        var slyFrame = [];
+        var options = {
+			horizontal: 1,
+			itemNav: 'basic',
+			smart: 1,
+			activateOn: false,
+			mouseDragging: 1,
+			touchDragging: 1,
+			releaseSwing: 1,
+			startAt: 0,
+			scrollBar: false,
+			scrollBy: 1,
+			pagesBar: false,
+			activatePageOn: 'click',
+			speed: 300,
+			elasticBounds: 1,
+			easing: 'easeOutExpo',
+			dragHandle: 1,
+			dynamicHandle: 1,
+			clickBar: 1,
+			scrollSource: 'mixed'
+			// Buttons
+			// prevPage: $wrap.find('.blw-prev'),
+			// nextPage: $wrap.find('.blw-next')
+		};
+        var frameArr = []
+        var wraps = document.getElementsByClassName("booklist")
+//        console.log("wraps: " + wraps.length)
+        $.each(wraps, function(index, wrap){
+            frameArr[frameArr.length] = $("#" + wrap.id + " .booklist-wrap");
+//            console.log(frameArr[frameArr.length - 1])
+        });
+	    $.each( frameArr, function( i, val ) {
+	       	var $frame = val;
+	       	slyFrame.push($frame);
+	      	var $slidee = $frame.children('ul').eq(0);
+	      	var $wrap   = $frame.parent();
+	      	var tmp = options;
+	      	tmp.prevPage = $wrap.find('.blw-prev');
+	      	tmp.nextPage = $wrap.find('.blw-next');
+	      	$frame.sly(tmp);
+	    });
+
+        $('.detail-link').each(function(i, obj) {
+            var id = $(this).attr("p_id");
+            var title = $(this).attr("title");
+            $(this).attr('href',"/store_detail/" + friendly(title.toLowerCase()).toLowerCase() + "/" + id);
+        });
+
+        $('.category-link').each(function(i, obj) {
+            var id = $(this).attr("p_id");
+            var title = $(this).attr("title");
+            $(this).attr('href',"/category/" + friendly(title.toLowerCase()).toLowerCase() + "/" + id);
+        });
+
+        $('.parent-link').each(function(i, obj) {
+            var id = $(this).attr("p_id");
+            var title = $(this).attr("title");
+            $(this).attr('href',"/pcategory/" + friendly(title.toLowerCase()).toLowerCase() + "/" + id);
+        });
+    }
+
+</script>

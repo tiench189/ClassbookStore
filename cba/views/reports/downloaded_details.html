@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>{{extend "layout.html"}}
+{{import scripts}}
+{{
+getTime = 2
+if request.vars.getbyyear:
+    getTime = int(request.vars.getbyyear)
+pass
+getby = "mm-yyyy"
+viewMod = 1
+getbyTmp = "%m-%Y"
+if getTime == 1:
+        getby = "yyyy"
+        getbyTmp = "%Y"
+        viewMod = 2
+pass
+if getTime == 3:
+        getby = "dd-mm-yyyy"
+        getbyTmp = "%d-%m-%Y"
+        viewMod = 0
+pass
+}}
+{{dict_vars = request.vars}}
+{{more_view=request.vars['more_from'] if request.vars['more_from'] else ""}}
+{{dict_vars['more_from'] = "downloaded"}}
+<link href="{{=URL('static','css/datepicker.css')}}" type="text/css"  rel="stylesheet"/>
+<script src="{{=URL('static','js/canvg/canvg.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/jsapi')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/rgbcolor.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/bootstrap-datepicker.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/locales/bootstrap-datepicker.vi.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/jquery.tablesorter.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/tableToExcel.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/chartToImage.js')}}" type="text/javascript"></script>
+
+<div class="clsb_container"   style="margin-top: 20px;">
+            <div align="left" style="font-weight: bold; width: 100%; font-size: 16pt">Thống kê lượt tải{{=str_type}}{{=str_cp}} trong {{=str_time}}: Tổng {{=total}} <button class="btn" style="float: right;" onclick="tableToExcel('tablelistTotal', 'Thống kê lượt tải{{=str_type}}{{=str_cp}} trong {{=str_time}}: Tổng {{=total}}')">Xuất ra Excel</button></div><br/>
+            {{=TABLE(
+                    THEAD(
+                            TR(
+                                TH("ID", _class="header"),
+                                TH("Mã sản phẩm", _class="header"),
+                                TH("Tên sản phẩm", _class="header"),
+                                TH("Danh mục", _class="header"),
+                                TH("Lớp", _class="header"),
+                                TH("Lượt tải", _class="header"),
+                            ),
+                    ),
+                    *[TR(
+                        TD(list_total[i]['id']),
+                        TD(list_total[i]['product_code']),
+                        TD(list_total[i]['product_title']),
+                        TD(list_total[i]['category']),
+                        TD(list_total[i]['class']),
+                        TD(list_total[i]['download_time'])
+                     ) for i in range(len(list_total))],
+                    _id="tablelistTotal",
+                    _class="tablesorter"
+            )}}
+            {{pass}}
+</div>
+
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+
+<!-- breadcrumb -->
+        <div id="breadcrumb">
+            <ol class="breadcrumb">
+              <li><a href="index">Trang chủ</a></li>
+              <li class="active">Gift Card</li>
+            </ol>
+        </div>
+        <!--/breadcrumb -->
+        <!-- cate content -->
+        <div class="cate-content">
+            <h1 class="cate-name">Nhập mã thẻ tại đây</h1>
+            <div class="cate-list">
+            	<div class="cl-title cl-title-line">
+                	<span class="clt"></span>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-page-container">
+                	<div class="f-left">
+                        {{if result != 'default':}}
+                        <div id="notify_place" class="code-noti {{='sc' if check else ''}}">{{=result}}</div>
+                        {{pass}}
+                        <div class="f-form">
+                            <form method="post" class="form-horizontal" id="paycode">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Mã thẻ</label>
+                                    <div class="col-sm-8">
+                                        <input name="code" type="text" class="form-control" id="code">
+                                    </div>
+                                    <div class="col-sm-2" style="top: -2px;">
+                                        <a onclick="submitCode()" href="#" class="btn btn-classbook btn-lg">OK</a>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!--/cate content -->
+        <div class="clearfix"></div>
+
+        <script>
+
+            function submitCode(){
+                var code = $("#code").val().trim();
+                if (code == ""){
+                    openAlert("Vui lòng nhập mã thanh toán");
+                }else{
+                    $("#paycode").submit();
+                }
+            }
+        </script>
+<style>
+    .code-noti{
+        color:red;font-size: 1.1em;text-align: center;padding-bottom: 20px;
+    }
+    .sc{
+        color: green;
+    }
+</style>

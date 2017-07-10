@@ -1,0 +1,85 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+
+<!-- breadcrumb -->
+        <div id="breadcrumb">
+            <ol class="breadcrumb">
+              <li><a href="index">Trang chủ</a></li>
+              <li class="active">Đổi mật khẩu</li>
+            </ol>
+        </div>
+        <!--/breadcrumb -->
+        <!-- cate content -->
+        <div class="cate-content">
+            <h1 class="cate-name">Đổi mật khẩu</h1>
+            <div class="cate-list">
+            	<div class="cl-title cl-title-line">
+                	<span class="clt"></span>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-page-container">
+                	<div class="f-left">
+                        {{if result != 'default':}}
+                        <div id="notify_place" style="color:red">{{=result}}</div>
+                        {{pass}}
+                        <div class="f-form">
+                            <form method="post" class="form-horizontal" id="changepass">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Mật khẩucũ<span>*</span></label>
+                                    <div class="col-sm-8">
+                                        <input name="oldpassword" type="password" class="form-control" id="old_password">
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-sm-4 control-label">Mật khẩu mới<span>*</span></label>
+                                    <div class="col-sm-8">
+                                        <input name="newpassword" type="password" class="form-control" id="new_password">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Xác nhận mật khẩu mới<span>*</span></label>
+                                    <div class="col-sm-8">
+                                        <input type="password" class="form-control" id="confirm_password">
+                                    </div>
+                                </div>
+                                <div class="form-group mt20">
+                                	<div class="row mt10"></div>
+                                    <label class="col-sm-4 control-label"></label>
+                                    <div class="col-sm-8">
+                                        <a onclick="submitSignup()" href="#" class="btn btn-classbook btn-lg">Đổi mật khẩu</a>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!--/cate content -->
+        <div class="clearfix"></div>
+
+        <script>
+            $( document ).ready(function() {
+                "{{if result == '':}}"
+                openAlert("Đổi mật khẩu thành công");
+                "{{pass}}"
+            });
+
+            function submitSignup(){
+                var password = $("#new_password").val().trim();
+                var confirm_password = $("#confirm_password").val().trim();
+                console.log(password + "/" + confirm_password);
+                if (password.length < 6){
+                    openAlert("Mật khẩu cần ít nhất 6 kí tự");
+                }else if (password != confirm_password){
+                    openAlert("Mật khẩu nhập lại không đúng");
+                }else{
+                    $("#changepass").submit();
+                }
+            }
+        </script>

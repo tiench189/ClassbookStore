@@ -1,0 +1,10 @@
+{{extend 'layout.html'}}
+<form method="post" action="{{=URL('index')}}" id="cat_form">
+	<h3 style="float:left;">Choose category:</h3>
+	<select onchange="$('#cat_form').submit();" style="margin-top: 15px; margin-left: 10px;" name="category" id="category">
+		<option value="0">Tất cả</option>
+		<!-- {{for category in categories:}} -->
+		<option value='{{=category["id"]}}'>{{=category["category_name"]}}</option>
+		<!-- {{pass}} -->
+	</select>
+</form>

@@ -1,0 +1,87 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+
+<!-- breadcrumb -->
+        <div id="breadcrumb">
+            <ol class="breadcrumb">
+              <li><a href="index.html">Trang chủ</a></li>
+              <li class="active">Góc giáo viên</li>
+            </ol>
+        </div>
+        <!--/breadcrumb -->
+        <h1 class="cate-name">Góc giáo viên</h1>
+        <div class="cate-content">
+        	<div class="tp-top">
+            	<h2 class="cate-sub">Tài nguyên khai thác</h2>
+            	<div class="tpt-right"><img src="{{=URL('static','store2.2/images/teacher-01.jpg')}}" title="" alt=""></div>
+                <div class="tpt-left">
+                	<ul>
+                    	<li><a href="/pcategory/sach-giao-vien/26"><span class="tc-icon tci-01"></span></a> Tư liệu <a href="/pcategory/sach-giao-vien/26"><strong>Sách giáo viên</strong></a> đầy đủ, phong phú</li>
+                        <!--<li><a href="/search?keyword=bai%20giang&category_id=3"><span class="tc-icon tci-02"></span></a> Hơn 7000 mẫu bài giảng chọn lọc từ <a href="/search?keyword=bai%20giang&category_id=3"><strong>Violet</strong></a>, sắp xếp khoa học cho từng khối lớp, môn học. Giáo viên có thể tải về, biên tập lại theo yêu cầu hoặc sử dụng ngay.</li>-->
+                        <li><a href="/pcategory/sach-on-thi-de-thi/102"><span class="tc-icon tci-03"></span></a> <a href="/pcategory/sach-on-thi-de-thi/102"><strong>Đề thi</strong></a> mẫu phong phú được tổng hợp từ các kì thi khác nhau của các trường trên cả nước, sắp xếp hệ thống và chọn lọc dễ dàng theo các khối lớp và môn học.</li>
+                        <li><a href="/store_detail/shaping-the-way-we-teach-english/2408"><span class="tc-icon tci-04"></span></a> <a href="/store_detail/shaping-the-way-we-teach-english/2408"><strong>Shaping the way we teach English</strong></a> là giáo trình bài giảng bộ môn Tiếng Anh của Đại học Oregon, được Việt hóa với sự tài trợ của ĐSQ Mỹ tại Việt Nam cùng Đề án Ngoại ngữ Quốc gia 2020.</li>
+                        <li><a href="/store_detail/on-thi-10-chuyen/4428"><span class="tc-icon tci-05"></span></a> <a href="/store_detail/on-thi-10-chuyen/4428"><strong>Ôn thi 10 chuyên</strong></a>: Tổng hợp các khóa học nâng cao, ôn thi vào 10 chuyên do đội ngũ giảng viên của trường PTTH Khoa học tự nhiên, ĐH Quốc Gia Hà Nội giảng dạy.</li>
+                        <li><a href="/category/ung-dung-hoc-tap/13"><span class="tc-icon tci-06"></span></a> Hệ thống <a href="/category/ung-dung-hoc-tap/13"><strong>ứng dụng bổ trợ học tập</strong></a> luôn được cập nhật và cung cấp miễn phí cho các lớp học Classbook:
+                        	<p class="mt10">- Tiếng Anh: English test, Luyện thi, …</p>
+                            <p>- Hóa học: Thí nghiệm ảo, Bảng tuần hoàn hóa học,…</p>
+                            <p>- Sinh học: Mô phỏng cơ thể người</p>
+                            <p>- Toán: Bé làm toán, Công thức toán, máy tính đa năng,…</p>
+                            <p>- Văn: Gấu ghép vần, bài tập trắc nghiệm...</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="tp-bottom">
+            	<div class="tpb-left"><img src="{{=URL('static','store2.2/images/teacher-02.jpg')}}" title="" alt=""></div>
+                <div class="tpb-right">
+                	<h2 class="cate-sub">Chia sẻ nội dung</h2>
+                    <p>Không chỉ hướng tới các nhà xuất bản cung cấp nội dung lớn, Classbook còn mang đến cơ hội cho tất cả các cá nhân đang sở hữu những nội dung giáo dục và học liệu điện tử. Chỉ cần bạn có một trong những loại nội dung: ứng dụng, trò chơi, đề thi, bài tập, bài giảng, dữ liệu mở rộng... bạn đã có thể trở thành <a href="/author"><strong>Nhà cung cấp nội dung của Classbook</strong></a></p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+<style>
+    .tc-more{
+        display: inherit;
+    }
+    .tc-icon{
+        width: 60px;
+        height: 60px;
+        background-size: 100% 100%;
+        background-position: 0 0;
+    }
+    .tpt-left ul li {
+        padding-left: 80px;
+        height: 50px;
+    }
+    .tpt-left ul li .tci-01 {
+        top: 0;
+    }
+    .tci-01{
+        background-image: url("{{=URL('static','store2.2/images/icon_books.png')}}");
+    }
+    .tci-02{
+        background-image: url("{{=URL('static','store2.2/images/icon_lecture.png')}}");
+    }
+    .tci-03{
+        background-image: url("{{=URL('static','store2.2/images/icon_tests.png')}}");
+    }
+    .tci-04{
+        background-image: url("{{=URL('static','store2.2/images/icon_shaping.png')}}");
+    }
+    .tci-05{
+        background-image: url("{{=URL('static','store2.2/images/icon_hsgs.png')}}");
+    }
+    .tci-06{
+        background-image: url("{{=URL('static','store2.2/images/icon_apps.png')}}");
+    }
+</style>
+
+<script>
+    console.log("tiench: {{=test_func()}}")
+</script>

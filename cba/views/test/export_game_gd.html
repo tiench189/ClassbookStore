@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thống kê lượt tải theo sản phẩm</title>{{extend "layout.html"}}
+<link href="{{=URL('static','css/datepicker.css')}}" type="text/css"  rel="stylesheet"/>
+<script src="{{=URL('static','js/canvg/canvg.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/jsapi')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/rgbcolor.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/bootstrap-datepicker.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/locales/bootstrap-datepicker.vi.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/jquery.tablesorter.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/tableToExcel.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/chartToImage.js')}}" type="text/javascript"></script>
+
+<div class="clsb_container">
+    <button class="btn" style="float: right;" onclick="tableToExcel('tablelistTotal', 'Thống kê')">Xuất ra Excel</button>
+    {{if datas:}}
+            {{=TABLE(
+                    THEAD(
+                            TR(
+                                TH("ID", _class="header"),
+                                TH("Title", _class="header"),
+                                TH("Package", _class="header"),
+                                TH("Publisher", _class="header"),
+                                TH("Creator", _class="header"),
+                                TH("Cover url", _class="header"),
+                                TH("Thumb url", _class="header"),
+                            ),
+                    ),
+                    *[TR(
+                        TD(datas[i]['id']),
+                        TD(datas[i]['product_title']),
+                        TD(datas[i]['product_code']),
+                        TD(datas[i]['publisher_name']),
+                        TD(datas[i]['creator_name']),
+                        TD("http://classbook.vn/static/covers/" + datas[i]['product_code'] + "/cover.clsbi"),
+                        TD("http://classbook.vn/static/covers/" + datas[i]['product_code'] + "/thumb.png"),
+                     ) for i in range(len(datas))],
+                    _id="tablelistTotal",
+                    _class="tablesorter"
+            )}}
+            {{pass}}
+</div>
+<script src="{{=URL('static','js/bootstrap-select.min.js')}}" type="text/javascript"></script>
+</head>
+<body>
+
+</body>
+</html>

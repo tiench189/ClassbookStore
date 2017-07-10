@@ -1,0 +1,136 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+<!-- breadcrumb -->
+        <div id="breadcrumb">
+            <ol class="breadcrumb">
+              <li><a href="/">Trang chủ</a></li>
+              <li class="active">Hỗ trợ</li>
+            </ol>
+        </div>
+        <!--/breadcrumb -->
+        <!-- cate content -->
+        <div class="cate-content">
+            <div class="support-list">
+            	<div class="sl-tabs">
+                	<ul>
+                    	<li><a href="/support" title="">FAQs</a></li>
+                        <li><a href="/support_form" title="">Phản hồi</a></li>
+                        <li><a href="/warranty_adddevice" title="">Đăng ký bảo hành</a></li>
+                        <li class="active"><a href="#" title="">Phần mềm quản lý</a></li>
+                        <li><a href="/download" title="">Download</a></li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+                <div class="sl-content">
+<div class="box_store_product box_radius mtop_normal left">
+    <div class="box_detail_full mtop_titletocontent left">
+        <div class="left">
+        	<img src="{{=URL('static','images/support_manager/1.png')}}" />
+        </div>
+        <div class="content_text_right mright_normal mtop_titletocontent right" style="width: 350px;">
+        	<div class="line_row_sub_withimg fs20 fcb left lh25">
+            	Đồng bộ thiết bị Classbook với máy tính PC của bạn.
+            </div>
+			<span class="left mtop_normal fs14">
+				Đồng bộ nội dung sách giáo khoa, sách bài tập, sách tham khảo, ứng dụng học tập từ máy tính PC và thiết bị Classbook của bạn một cách thuận tiện và kết nối qua cổng USB đơn giản.
+			</span>
+        </div>    
+    </div>    
+</div>
+
+<div class="box_store_product box_radius mtop_normal left">
+	
+	<div class="box_detail_full mtop_titletocontent left">
+		
+		<div class="right">
+			<img src="{{=URL('static','images/support_manager/2.png')}}" />
+		</div>
+		<div class="content_text_right mleft_normal mtop_titletocontent left" style="width: 350px;">
+			<div class="line_row_sub_withimg fs20 fcb left">
+				Giao diện đẹp mắt, dễ sử dụng 
+			</div>
+			<span class="left mtop_normal fs14">
+				Phần mềm cho máy tính Classbook Manager 2013 có giao diện được cập nhật mới nhất và có danh mục thân thiện với người dùng, cho phép bạn kết nối, đồng bộ hóa, quản lý và cập nhật thiết bị Classbook của mình một cách dễ dàng.
+			</span>
+		</div>
+	
+	</div>
+	
+</div>
+
+<div class="box_store_product box_radius mtop_normal left">	
+	<div class="box_detail_full mtop_titletocontent left">		
+		<div class="left">
+			<img src="{{=URL('static','images/support_manager/3.png')}}"/>
+		</div>
+		<div class="content_text_right mright_normal mtop_titletocontent right" style="width: 350px;">
+			<div class="line_row_sub_withimg fs20 fcb left lh25">
+				Khai thác kho sách và ứng dụng học tập Classbook Store
+			</div>
+			<span class="left mtop_normal fs14">
+				Tải về các sách tham khảo, ứng dụng học tập từ Classbook Store vào thiết bị và sau đó bạn có thể sử dụng dễ dàng sử dụng bất cứ đâu.
+			</span>
+		</div>	
+	</div>	
+</div>
+
+<div class="box_store_product box_radius mtop_normal left">	
+	<div class="box_detail_full mtop_titletocontent left">		
+		<div class="right">
+			<img src="{{=URL('static','images/support_manager/4.png')}}" />
+		</div>
+		<div class="content_text_right mleft_normal mtop_titletocontent left" style="width: 350px;">
+			<div class="line_row_sub_withimg fs20 fcb left">
+				Dễ dàng quản lý các ứng dụng của bạn 
+			</div>
+			<span class="left mtop_normal fs14">
+				Bổ sung và gỡ bỏ các ứng dụng, trò chơi phục vụ giáo dục và nhiều chức năng hơn nữa.
+			</span>
+		</div>	
+	</div>	
+</div>
+
+<div class="box_store_product box_radius mtop_normal left">	
+	<div class="box_detail_full mtop_titletocontent left">		
+		<div class="left">
+			<img src="{{=URL('static','images/support_manager/5.png')}}"/>
+		</div>
+		<div class="content_text_right mright_normal  mtop_titletocontent right" style="width: 350px;">
+			<div class="line_row_sub_withimg fs20 fcb left">
+				Chuyển nội dung giữa các thiết bị Classbook của bạn
+			</div>
+			<span class="left mtop_normal fs14">
+                Những cuốn sách và ứng dụng đã mua có thể được chuyển sang thiết bị Classbook mới của bạn một cách thuận tiện. Bạn không  phải mua lại các nội dung này khi thay đổi thiết bị.			</span>
+			<span class="mtop_titletocontent fcr left">
+                * Số lượng thiết bị có thể đồng bộ phụ thuộc vào chính sách của công ty
+            </span>
+		</div>	
+	</div>	
+</div>
+
+<div class="box_store_product box_radius mtop_normal left">	
+	<div class="box_detail_full mtop_titletocontent left">		
+		<div class="btn_manager_content right" style="width:500px;padding-left:0px;">
+			<a href="{{=URL('download')}}"><img src="{{=URL('static','images/btn_pdf.png')}}" class="left" /></a>
+			<a href="{{=URL('download')}}"><img src="{{=URL('static','images/btn_driver.png')}}" class="right" /></a>
+			<a href="{{=URL('download')}}"><img src="{{=URL('static','images/btn_video.png')}}" class="mright_normal right" /></a>
+		</div>
+		
+		<div class="content_text_right_special mleft_normal left">
+			<div class="line_row_sub_withimg fs20 fcb left">
+				Cài đặt và sử dụng dễ dàng
+			</div>
+			<span class="left mtop_normal fs14">
+				•	Tài liệu hướng dẫn cài đặt - <a href="{{=URL('download')}}">Tải tại đây</a><br>
+				•	Trình kết nối thiết bị - <a href="{{=URL('download')}}">Tải tại đây</a><br>
+				•	Classbook Manager - <a href="{{=URL('download')}}">Tải tại đây</a><br>
+			</span>
+		</div>	
+	</div>	
+</div>
+                    </div>
+                </div>
+            </div>

@@ -1,0 +1,114 @@
+{{extend 'layout.html' }}
+
+<script src="{{=URL(request.application,'static','js/ckeditor/ckeditor.js')}}"></script>
+<script src="{{=URL(request.application,'static','js/ckeditor/adapters/jquery.js')}}"></script>
+
+<div id="create_question">
+    <form id="frmCreateQuestion" name="frmCreateQuestion" action="">
+        <input type="hidden" value="1" id="count" name="count"/>
+        <table class="question_table">
+            <tr>
+                <td>Yêu cầu câu hỏi</td>
+                <td><input type="text" id="question_guide" name="question_guide" style="width: 650px;"/></td>
+            </tr>
+            <tr>
+                <td>Nội dung câu hỏi:</td>
+                <td><textarea cols="15" rows="10" id="question_content" name="question_content"></textarea></td>
+            </tr>
+            <tr>
+                <td>
+                    Giải thích
+                </td>
+                <td>
+                    <textarea id="question_info" cols="15" rows="10" name="question_info"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>Danh sách đáp án</td>
+                <td id="answer_list">
+                    <input type="radio" id="rdb_ans1" name="rdb_ans1"/> <input type="text" id="txt_ans1"
+                                                                               name="txt_ans1"/><input type="button"
+                                                                                                       id="btnDel1"
+                                                                                                       value="Xóa"
+                                                                                                       onclick="delete_answer(1)"/><br
+                        id="br1"/>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="button" id="btnAddAnswer" value="Thêm đáp án"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="button" value="Lưu câu hỏi" id="btnSaveQuestion"/>
+                </td>
+                <td>
+                    <input type="button" value="Quay lại" id="btnBack"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        $("#btnAddAnswer").click(function () {
+            var count = parseInt($("#count").val());
+
+            count += 1;
+            $("#count").val(count);
+            var content = '<input type="radio" name = "rdb_ans' + count + '" id="rdb_ans' + count + '"/> ' +
+                    '<input type="text" name = "txt_ans' + count + '" id="txt_ans' + count + '"/><input type="button" id ="btnDel' + count + '" value="Xóa"' +
+                    ' onclick="delete_answer(' + count + ')" class="btn"/><br id="br' + count + '"/>';
+
+            $("#answer_list").append(content);
+        });
+
+        $("#btnSaveQuestion").click(function () {
+            var question_content = CKEDITOR.instances['question_content'].getData()
+            $("#question_content").val(question_content);
+
+            var question_info = CKEDITOR.instances['question_info'].getData()
+            $("#question_info").val(question_info);
+
+            $.ajax({
+                type: "POST",
+                url: "{{=URL("cbq", "question", "create.json")}}",
+                data: $('#frmCreateQuestion').serialize(),
+                success: function (data) {
+                    alert('xong');
+                }
+            });
+
+        });
+
+
+    });
+    function delete_answer(order) {
+        var rdb_id = '#rdb_ans' + order;
+        var txt_ans = '#txt_ans' + order;
+        var btnDel = '#btnDel' + order;
+        var br = '#br' + order;
+        var count = $("#count").val();
+        $(rdb_id).hide();
+        $(txt_ans).val("");
+        $(txt_ans).hide();
+        $(btnDel).hide();
+        $(br).hide();
+    }
+
+
+</script>
+<script type="text/javascript">
+    var ckeditor1 = CKEDITOR.replace('question_content', {
+        filebrowserBrowseUrl: "{{=URL('cbq', 'test',  'test_file')}}",
+        filebrowserUploadUrl: "{{=URL('cbq', 'upload',  'ckeditor_upload')}}"
+    });
+
+    var ckeditor2 = CKEDITOR.replace('question_info', {
+//        filebrowserBrowseUrl: "{{=URL('cbq', 'upload',  'uploadfile')}}",
+//        filebrowserUploadUrl: "{{=URL('cbq', 'upload',  'ckeditor_upload')}}"
+    });
+</script>

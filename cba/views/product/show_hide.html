@@ -1,0 +1,92 @@
+{{extend 'layout.html'}}
+<h3>Ẩn hiện sản phẩm: </h3>
+<form method="post" action="" style="margin-left: 40px">
+<table>
+    <tr>
+        <td class="td-title">Loại sản phẩm:</td>
+        <td>
+            <select name="product_type" id="product_type" onchange="updateStatus('product_type')">
+            {{for type in product_type:}}
+                <option value="{{=type['id']}}" {{='selected' if type['id'] == vars['product_type'] else ''}}>{{=type['type_name']}}</option>
+            {{pass}}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-title">CP:</td>
+        <td>
+            <select name="auth" id="auth" onchange="updateStatus('auth')">
+            {{for auth in author_cp:}}
+                <option value="{{=auth['id']}}" {{='selected' if auth['id'] == vars['auth'] else ''}}>{{=auth['email']}}</option>
+            {{pass}}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-title">Danh mục:</td>
+        <td>
+            <select name="category" id="category" onchange="updateStatus('category')">
+            {{for cat in list_cate_child:}}
+                <option value="{{=cat['id']}}" {{='selected' if cat['id'] == vars['category'] else ''}}>{{=cat['category_name']}}</option>
+            {{pass}}
+            </select>
+        </td>
+    </tr>
+</table>
+<table>
+{{for show_on in list_show:}}
+    <tr>
+        <td><input type="checkbox" {{='checked' if show_on in current_status else ''}} id="{{=show_on}}" value="{{=show_on}}" name="{{=show_on}}"></td>
+        <td>{{=dict_show[show_on]}}</td>
+    </tr>
+{{pass}}
+</table>
+<input type="submit" value="Xác nhận" name="submit">
+</form>
+
+<script>
+$(document).ready(function () {
+
+});
+function updateStatus(mode){
+    var link = "{{=URL(f='get_list_show_hide')}}.json/" + $('#product_type').val() + "/" + $('#auth').val() + "/" + $('#category').val();
+    console.log(link);
+     $.ajax({
+         url: link,
+         success: function (data) {
+             console.log(data);
+            if (data.err){
+                alert(data.err);
+            }else{
+                var value_show = data.value_show;
+                {{for show_on in list_show:}}
+                    $("#" + "{{=show_on}}").prop("checked", (value_show.indexOf("{{=show_on}}") != -1));
+                {{pass}}
+            }
+         }
+     });
+
+    if (mode == 'product_type'){
+        var content_cat = ""
+        {{for cat in list_cate_child:}}
+        {{if cat['id'] == 0:}}
+            content_cat += '<option value="{{=cat['id']}}" selected>{{=cat['category_name']}}</option>\n'
+        {{else:}}
+        if ($('#product_type').val() == "{{=cat['category_type']}}"){
+            content_cat += '<option value="{{=cat['id']}}">{{=cat['category_name']}}</option>\n'
+        }
+        {{pass}}
+        {{pass}}
+        console.log(content_cat)
+        $('#category').html(content_cat);
+    }
+
+}
+</script>
+
+<style>
+    .td-title{
+        text-align: right;
+        width: 120px;
+    }
+</style>

@@ -1,0 +1,17 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+            <div id="breadcrumb">
+                <ol class="breadcrumb">
+                  <li><a href="/">Trang chủ</a></li>
+                  <li class="active">Tin tức</li>
+                </ol>
+            </div>
+            <div class="cate-list">
+                <div class="news-list">
+                    <iframe src="{{=link}}" id="myIframe" frameborder="0"
+    style="position: relative; height: 1000px; width: 100%;"></iframe>
+                </div>
+            </div>

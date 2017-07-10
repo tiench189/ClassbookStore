@@ -1,0 +1,33 @@
+{{extend "layout.html"}}
+<form action="" method="post">
+    <fieldset>
+        <legend>Chọn sách muốn upload</legend>
+        <input type="submit" value="Upload" />
+        <input type="checkbox" checked="true" id="check_all" onchange="clickAll()"> Check All<br /><br />
+        {{for category in list_file:}}
+        <input class="file" id="{{=category['category']}}" checked="true" type="checkbox" onchange="checkCategory(event)"/> {{=category['category']}}<br />
+        {{for file in category['files']:}}
+            <input style="margin-left: 20px" name="files" class="file {{=category['category']}}" checked="true" type="checkbox" value="{{=(category['category'] + '/' + file)}}"> {{=file}}<br />
+        {{pass}}
+        {{pass}}
+    </fieldset>
+</form>
+<script>
+function clickAll(){
+    var list_cb = document.getElementsByClassName("file");
+    for (var i = 0; i < list_cb.length; i++){
+        var cb = list_cb[i];
+        cb.checked = document.getElementById('check_all').checked;
+    }
+}
+
+function checkCategory(event){
+    var list_cb = document.getElementsByClassName(event.target.id);
+    for (var i = 0; i < list_cb.length; i++){
+        var cb = list_cb[i];
+        cb.checked = event.target.checked;
+    }
+}
+</script>
+<style>
+</style>

@@ -1,0 +1,138 @@
+{{extend 'layout.html'}}
+{{import scripts}}
+{{import usercp}}
+<div class="homepage" style="min-height: 500px; margin-top: 20px;">
+
+
+
+    <div class="singlewideWrapper">
+
+        <!--<div class="singlewide">
+            <div class="singlewideicon">
+                <a id="contractsignup"
+                   href="{{=URL(a='cpa',c='users',f='info')}}">
+                    <img src="{{=URL('static', 'images/contracts.png')}}" width="45" height="52">
+                </a>
+            </div>
+            <div class="singlewidetext">
+                <h2>
+                    <a id="contractsignup"
+                       href="{{=URL(a='cpa',c='users',f='info')}}">Thông tin nhà phát triển</a>
+                </h2>
+
+                <p>Quản lý thông tin liên hệ, tài khoản ngân hàng.</p>
+            </div>
+        </div>-->
+        <div class="singlewide" style="cursor: pointer;">
+            <div class="singlewideicon"><img
+                    src="{{=URL('static', 'images/CatalogReports.png')}}" width="45" height="27"></div>
+            <div class="singlewidetext">
+                <h2><a href="#">Báo cáo</a></h2>
+                <p>Xem thống kê lượt tải và xuất báo cáo về doanh thu.</p>
+            </div>
+            <ul class="pop">
+                <li>
+                    <a href="{{=URL(a='cpa',c='histories',f='payment')}}"><div class="singlewidetext"><img
+                        src="{{=URL('static', 'images/money.png')}}" width="45" height="27" style="display: inline-block; margin: 10px;"> <span>Thống kê doanh thu</span>
+                    </div></a>                </li>
+                <li>
+                    <a href="{{=URL(a='cpa',c='histories',f='downloaded')}}"><div class="singlewidetext"><img
+                        src="{{=URL('static', 'images/download.png')}}" width="45" height="27" style="display: inline-block; margin: 10px;"> <span>Thống kê lượt tải</span>
+                    </div></a>
+                </li>
+            </ul>
+        </div>
+        <div class="singlewide">
+            <div class="singlewideicon"><a
+                    href="{{=URL(a='cpa',c='users',f='member_register')}}"><img
+                    src="{{=URL('static', 'images/manageusers.png')}}" width="45" height="46"></a></div>
+            <div class="singlewidetext">
+                <h2><a href="{{=URL(a='cpa',c='users',f='member_register')}}">Quản lý thành viên</a></h2>
+                <p>Phân quyền và kiểm soát thành viên trong nhóm.</p>
+            </div>
+        </div>
+        <!--<div class="singlewide">
+            <div class="singlewideicon"><a
+                    href="{{=URL(a='cpa',c='histories',f='payment')}}"><img
+                    src="{{=URL('static', 'images/money.png')}}" width="45" height="27"></a></div>
+            <div class="singlewidetext">
+                <h2><a href="{{=URL(a='cpa',c='histories',f='payment')}}">Thống kê doanh thu</a></h2>
+
+                <p>Xem thống kê và xuất báo cáo về doanh thu.</p>
+            </div>
+        </div>
+         <div class="singlewide">
+            <div class="singlewideicon"><a
+                    href="{{=URL(a='cpa',c='histories',f='downloaded')}}"><img
+                    src="{{=URL('static', 'images/CatalogReports.png')}}" width="41" height="50"></a></div>
+            <div class="singlewidetext">
+                <h2><a href="{{=URL(a='cpa',c='histories',f='downloaded')}}">Xuất báo cáo</a></h2>
+
+                <p>Thống kê số liệu, xuất báo cáo dữ liệu được tải về.</p>
+            </div>
+        </div>-->
+
+
+    </div>
+
+    <div class="singlewideWrapper">
+        <div class="singlewide">
+            <div class="singlewideicon"><a
+                    href="{{=URL(a='cpa',c='products',f='index')}}"><img
+                    src="{{=URL('static', 'images/managerbooks.png')}}" width="35" height="57"></a></div>
+            <div class="singlewidetext">
+                <h2><a href="{{=URL(a='cpa',c='products',f='index')}}">Quản lý sách</a></h2>
+
+                <p>Thêm, sửa, xóa, xem dữ liệu sách của bạn trên store.</p>
+            </div>
+        </div>
+        <div class="singlewide">
+            <div class="singlewideicon"><a
+                    href="{{=URL(a='cpa',c='apps',f='index')}}"><img
+                    src="{{=URL('static', 'images/manageapps.png')}}" width="35" height="57"></a></div>
+            <div class="singlewidetext">
+                <h2><a href="{{=URL(a='cpa',c='apps',f='index')}}">Quản lý ứng dụng</a></h2>
+
+                <p>Thêm, sửa, xóa, xem ứng dụng của bạn trên store.</p>
+            </div>
+        </div>
+        <div class="singlewide">
+            <div class="singlewideicon"><a
+                    href="{{=URL(a='cpa',c='quiz',f='exercises')}}"><img
+                    src="{{=URL('static', 'images/managerquiz.png')}}" width="35" height="57"></a></div>
+            <div class="singlewidetext">
+                <h2><a href="{{=URL(a='cpa',c='quiz',f='exercises')}}">Quản lý trắc nghiệm</a></h2>
+
+                <p>Thêm, sửa, xóa, xem dữ liệu trắc nghiệm của bạn trên store.</p>
+            </div>
+        </div>
+
+
+
+        <!--<div class="singlewide">
+            <div class="singlewideicon">
+                <a href="{{=URL(a='cpa',c='default',f='forum')}}" target="_blank"><img
+                        src="{{=URL('static', 'images/DevForums.png')}}" alt="Developer Forums" width="39" height="34"></a>
+            </div>
+            <div class="singlewidetext">
+                <h2><a href="{{=URL(a='cpa',c='default',f='forum')}}" target="_blank">Developer
+                    Forums</a></h2>
+
+                <p>Tìm kiếm hỗ trợ, thảo luận cùng phát triển.</p>
+            </div>
+        </div>
+
+        <div class="singlewide">
+            <div class="singlewideicon"><a
+                    href="{{=URL(a='cpa',c='default',f='contact')}}"><img
+                    src="{{=URL('static', 'images/email.png')}}" width="45" height="29"></a></div>
+            <div class="singlewidetext">
+                <h2><a href="{{=URL(a='cpa',c='default',f='contact')}}">Liên hệ</a></h2>
+
+                <p>Tìm kiếm câu trả lời hoặc gửi câu hỏi cho bộ phận hỗ trợ Classbook Store.</p>
+            </div>
+        </div>-->
+    </div>
+</div>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>

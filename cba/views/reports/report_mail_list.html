@@ -1,0 +1,10 @@
+{{extend 'layout.html'}}
+{{=form}}
+<script src="{{=URL('static','js/bootstrap-select.min.js')}}" type="text/javascript"></script>
+<script>
+    if($("#clsb20_user_report_list_user_id").length){
+        $("#clsb20_user_report_list_user_id").addClass("show-menu-arrow");
+        $("#clsb20_user_report_list_user_id").attr("data-live-search","true");
+        $("#clsb20_user_report_list_user_id").selectpicker();
+    }
+</script>

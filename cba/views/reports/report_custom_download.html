@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thống kê lượt tải theo sản phẩm</title>{{extend "layout.html"}}
+<link href="{{=URL('static','css/datepicker.css')}}" type="text/css"  rel="stylesheet"/>
+<script src="{{=URL('static','js/canvg/canvg.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/jsapi')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/rgbcolor.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/bootstrap-datepicker.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/locales/bootstrap-datepicker.vi.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/jquery.tablesorter.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/tableToExcel.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/chartToImage.js')}}" type="text/javascript"></script>
+
+<div class="clsb_container">
+<form style="position: relative; text-align: center;">
+Limit Downloaded <input type="number" name="limit" value="1">
+    <button type="submit">Submit</button>
+</form>
+    <button class="btn" style="float: right;" onclick="tableToExcel('tablelistTotal', 'Thống kê lượt tải theo sản phẩm')">Xuất ra Excel</button>
+    {{if products:}}
+            {{=TABLE(
+                    THEAD(
+                            TR(
+                                TH("Product ID", _class="header"),
+                                TH("Product Code", _class="header"),
+                                TH("Downloaded", _class="header"),
+                                TH("Product Title", _class="header")
+                            ),
+                    ),
+                    *[TR(
+                        TD(products[i]['id']),
+                        TD(products[i]['product_code']),
+                        TD(products[i]['count']),
+                        TD(products[i]['product_title'])
+                     ) if int(products[i]['id']) > 0 else TR() for i in range(len(products))],
+                    _id="tablelistTotal",
+                    _class="tablesorter"
+            )}}
+            {{pass}}
+</div>
+<script src="{{=URL('static','js/bootstrap-select.min.js')}}" type="text/javascript"></script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+{{extend 'layout.html'}}
+
+<form method="POST" action="{{=URL('cbq', 'exam', 'gen_exam')}}" id="frmCreateExam">
+    <table>
+        <tr>
+            <td>Số lượng đề muốn tạo</td>
+            <td><input type="text" id="txtNumberOfExam" name="txtNumberOfExam" value=""></td>
+        </tr>
+        <tr>
+            <td>Số lượng segment trong đề</td>
+            <td><input type="text" id="txtNumberOfSegment" name="txtNumberOfSegment" value=""></td>
+        </tr>
+        <tr>
+            <td>Tỉ lệ trùng lặp câu hỏi</td>
+            <td>
+                <select id="duplicate" name="duplicate">
+                    <option value="0">0%</option>
+                    <option value="10">10%</option>
+                    <option value="20">20%</option>
+                    <option value="30">30%</option>
+                    <option value="30">40%</option>
+                    <option value="30">50%</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td><input type="button" value="Thoát" id="btnBack" ></td>
+            <td><input type="submit" value="Tiếp tục" id="btnGo"></td>
+        </tr>
+    </table>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#btnGo").click(function () {
+
+        });
+    });
+</script>

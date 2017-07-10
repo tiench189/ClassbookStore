@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thống kê lượt tải theo sản phẩm</title>{{extend "layout.html"}}
+<link href="{{=URL('static','css/datepicker.css')}}" type="text/css"  rel="stylesheet"/>
+<script src="{{=URL('static','js/canvg/canvg.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/jsapi')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/canvg/rgbcolor.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/bootstrap-datepicker.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/locales/bootstrap-datepicker.vi.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/jquery.tablesorter.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/tableToExcel.js')}}" type="text/javascript"></script>
+<script src="{{=URL('static','js/chartToImage.js')}}" type="text/javascript"></script>
+
+<div class="clsb_container">
+    <button class="btn" style="float: right;" onclick="tableToExcel('tablelistTotal', 'Thống kê')">Xuất ra Excel</button>
+    {{if datas:}}
+            {{=TABLE(
+                    THEAD(
+                            TR(
+                                TH("Product ID", _class="header"),
+                                TH("Product Code", _class="header"),
+                                TH("Product Title", _class="header"),
+                                TH("Product Price", _class="header"),
+                                TH("Cover Price", _class="header"),
+                                TH("Product Description", _class="header"),
+                                TH("Product Status", _class="header"),
+                                TH("Khổ cỡ", _class="header"),
+                                TH("Năm xuất bản", _class="header"),
+                                TH("Số trang", _class="header"),
+                                TH("Tác giả", _class="header"),
+                                TH("Đồng tác giả", _class="header"),
+                            ),
+                    ),
+                    *[TR(
+                        TD(datas[i]['product_id']),
+                        TD(datas[i]['product_code']),
+                        TD(datas[i]['product_title']),
+                        TD(datas[i]['product_price']),
+                        TD(datas[i]['cover_price']),
+                        TD(datas[i]['product_description']),
+                        TD(datas[i]['product_status']),
+                        TD(datas[i]['format']),
+                        TD(datas[i]['pub_year']),
+                        TD(datas[i]['page_number']),
+                        TD(datas[i]['product_creator']),
+                        TD(datas[i]['co_author']),
+                     ) for i in range(len(datas))],
+                    _id="tablelistTotal",
+                    _class="tablesorter"
+            )}}
+            {{pass}}
+</div>
+<script src="{{=URL('static','js/bootstrap-select.min.js')}}" type="text/javascript"></script>
+</head>
+<body>
+
+</body>
+</html>

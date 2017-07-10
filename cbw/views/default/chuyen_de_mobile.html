@@ -1,0 +1,548 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="stylesheet" href="/static/view_pdf/css/swiper.min.css">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <script src="/static/view_pdf/js/jquery-1.12.0.min.js"></script>
+    <script src="/static/view_pdf/js/swiper.js"></script>
+</head>
+
+<body>
+<div id="container" style="overflow: hidden; width: 100%; height: 100vh">
+    <input type="checkbox" id="menuToggle" checked>
+    <label for="menuToggle" class="menu-icon">&#9776;</label>
+    <nav class="left_menu">
+        <a href="http://thiquocgia.vn" style="position: absolute" target="_top">
+            <img src="/static/store2.2/images/logo-tqg-black.png" title="Thi quốc gia" alt="Thi quốc gia"/>
+        </a>
+        <select id="select_chuyen_de">
+            <option value="0" {{='selected' if len(request.args)== 0 else
+            ''}}>Tổng hợp</option>
+            {{for cd in chuyen_de:}}
+            <option value="{{=cd['id']}}" {{='selected' if len(request.args)> 0 and str(cd['id']) ==
+                str(request.args[0])
+                else
+                ''}}>{{=cd['title']}}
+            </option>
+            {{pass}}
+        </select>
+        {{if len(request.args) == 0:}}
+        <ol class="tree">
+            {{for cd in chuyen_de:}}
+            <li>
+                <label for="subfolder{{=cd['id']}}">{{=cd['title']}}</label> <input type="checkbox"
+                                                                                    id="subfolder{{=cd['id']}}"/>
+                <ol>
+                    {{for bt in cd['bai_tap']:}}
+                    <li class="file"><a
+                            href="javascript:viewDocument('{{=bt['code']}}')">{{=bt['title']}}</a></li>
+                    {{pass}}
+                    {{for cd1 in cd['children']:}}
+                    <li>
+                        <label for="subfolder{{=cd1['id']}}">{{=cd1['title']}}</label> <input type="checkbox"
+                                                                                              id="subfolder{{=cd1['id']}}"/>
+                        <ol>
+                            {{for bt1 in cd1['bai_tap']:}}
+                            <li class="file"><a href="javascript:viewDocument('{{=bt1['code']}}')">{{=bt1['title']}}</a>
+                            </li>
+                            {{pass}}
+                            {{for cd2 in cd1['children']:}}
+                            <li>
+                                <label for="{{=cd2['id']}}">{{=cd2['title']}}</label> <input type="checkbox"
+                                                                                             id="{{=cd2['id']}}"/>
+                                <ol>
+                                    {{for bt2 in cd2['bai_tap']:}}
+                                    <li class="file"><a
+                                            href="javascript:viewDocument('{{=bt2['code']}}')">{{=bt2['title']}}</a>
+                                    </li>
+                                    {{pass}}
+                                    {{for cd3 in cd2['children']:}}
+                                    <li>
+                                        <label for="{{=cd3['id']}}">{{=cd3['title']}}</label> <input type="checkbox"
+                                                                                                     id="{{=cd3['id']}}"/>
+                                        <ol>
+                                            {{for bt3 in cd3['bai_tap']:}}
+                                            <li class="file"><a
+                                                    href="javascript:viewDocument('{{=bt3['code']}}')">{{=bt3['title']}}</a>
+                                            </li>
+                                            {{pass}}
+                                        </ol>
+                                    </li>
+                                    {{pass}}
+                                </ol>
+                            </li>
+                            {{pass}}
+                        </ol>
+                    </li>
+                    {{pass}}
+                </ol>
+            </li>
+            {{pass}}
+        </ol>
+        {{else:}}
+        <ol class="tree">
+            {{for cd in chuyen_de:}}
+            {{if str(cd['id']) == str(request.args[0]):}}
+            {{for bt in cd['bai_tap']:}}
+            <li class="file"><a
+                    href="javascript:viewDocument('{{=bt['code']}}')">{{=bt['title']}}</a></li>
+            {{pass}}
+            {{for cd1 in cd['children']:}}
+            <li>
+                <label for="subfolder{{=cd1['id']}}">{{=cd1['title']}}</label> <input type="checkbox"
+                                                                                      id="subfolder{{=cd1['id']}}"/>
+                <ol>
+                    {{for bt1 in cd1['bai_tap']:}}
+                    <li class="file"><a
+                            href="javascript:viewDocument('{{=bt1['code']}}')">{{=bt1['title']}}</a>
+                    </li>
+                    {{pass}}
+                    {{for cd2 in cd1['children']:}}
+                    <li>
+                        <label for="{{=cd2['id']}}">{{=cd2['title']}}</label> <input type="checkbox"
+                                                                                     id="{{=cd2['id']}}"/>
+                        <ol>
+                            {{for bt2 in cd2['bai_tap']:}}
+                            <li class="file"><a
+                                    href="javascript:viewDocument('{{=bt2['code']}}')">{{=bt2['title']}}</a>
+                            </li>
+                            {{pass}}
+                            {{for cd3 in cd2['children']:}}
+                            <li>
+                                <label for="{{=cd3['id']}}">{{=cd3['title']}}</label> <input type="checkbox"
+                                                                                             id="{{=cd3['id']}}"/>
+                                <ol>
+                                    {{for bt3 in cd3['bai_tap']:}}
+                                    <li class="file"><a
+                                            href="javascript:viewDocument('{{=bt3['code']}}')">{{=bt3['title']}}</a>
+                                    </li>
+                                    {{pass}}
+                                </ol>
+                            </li>
+                            {{pass}}
+                        </ol>
+                    </li>
+                    {{pass}}
+                </ol>
+            </li>
+            {{pass}}
+            {{pass}}
+            {{pass}}
+        </ol>
+        {{pass}}
+    </nav>
+    <div id="viewer" style="display: none">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+        <div class="swiper-button-next" style="position: fixed"></div>
+        <div class="swiper-button-prev" style="position: fixed"></div>
+    </div>
+</div>
+</body>
+</html>
+<style type="text/css">
+    #select_chuyen_de {
+        left: 0;
+        top: 50px;
+        margin: 10px;
+        padding: 0px 5px;
+        position: absolute;
+    }
+
+    /* Just some base styles not needed for example to function */
+    *, html {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+    }
+
+    body, form, ul, li, p, h1, h2, h3, h4, h5 {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: #ffffff;
+        color: #000000;
+        margin: 0;
+    }
+
+    img {
+        border: none;
+    }
+
+    p {
+        font-size: 1em;
+        margin: 0 0 1em 0;
+    }
+
+    html {
+        font-size: 100%; /* IE hack */
+    }
+
+    body {
+        font-size: 1em; /* Sets base font size to 16px */
+    }
+
+    table {
+        font-size: 100%; /* IE hack */
+    }
+
+    input, select, textarea, th, td {
+        font-size: 1em;
+    }
+
+    .left_menu {
+        width: 90%;
+        height: 100%;
+        position: absolute;
+        background: #fff;
+        left: -90%;
+        transition: all .3s ease-in-out;
+        -webkit-transition: all .3s ease-in-out;
+        -moz-transition: all .3s ease-in-out;
+        -ms-transition: all .3s ease-in-out;
+        -o-transition: all .3s ease-in-out;
+        height: 100vh;
+        overflow: auto;
+        z-index: 10;
+    }
+
+    #viewer {
+        transition: all .3s ease-in-out;
+        -webkit-transition: all .3s ease-in-out;
+        -moz-transition: all .3s ease-in-out;
+        -ms-transition: all .3s ease-in-out;
+        -o-transition: all .3s ease-in-out;
+    }
+
+    /* CSS Tree menu styles */
+    ol.tree {
+        margin-top: 100px;
+        float: left;
+        padding: 0 0 0 30px;
+    }
+
+    li {
+        position: relative;
+        margin-left: -15px;
+        list-style: none;
+    }
+
+    li.file {
+        margin-left: -1px !important;
+    }
+
+    li.file a {
+        background: url('/static/images/document.png') 0 0 no-repeat;
+        color: #000;
+        padding-left: 21px;
+        text-decoration: none;
+        display: block;
+    }
+
+    li input {
+        position: absolute;
+        left: 0;
+        margin-left: 0;
+        opacity: 0;
+        z-index: 2;
+        cursor: pointer;
+        height: 1em;
+        width: 1em;
+        top: 0;
+    }
+
+    li input + ol {
+        background: url('/static/images/toggle-small-expand.png') 40px 0 no-repeat;
+        margin: -0.938em 0 0 -44px; /* 15px */
+        height: 1em;
+    }
+
+    li input + ol > li {
+        display: none;
+        margin-left: -14px !important;
+        padding-left: 1px;
+    }
+
+    li label {
+        background: url('/static/images/folder-horizontal.png') 15px 1px no-repeat;
+        cursor: pointer;
+        display: block;
+        padding-left: 37px;
+    }
+
+    li input:checked + ol {
+        background: url('/static/images/toggle-small.png') 40px 5px no-repeat;
+        margin: -1.25em 0 0 -44px; /* 20px */
+        padding: 1.563em 0 0 70px;
+        height: auto;
+    }
+
+    li input:checked + ol > li {
+        display: block;
+        margin: 0 0 0.3em; /* 2px */
+    }
+
+    li input:checked + ol > li:last-child {
+        margin: 0 0 0.063em; /* 1px */
+    }
+
+    .menu-icon {
+        padding: 10px 20px;
+        background: #999;
+        color: #fff;
+        cursor: pointer;
+        float: left;
+        z-index: 20;
+        border-radius: 5px;
+        transition: all .3s ease-in-out;
+        -webkit-transition: all .3s ease-in-out;
+        -moz-transition: all .3s ease-in-out;
+        -ms-transition: all .3s ease-in-out;
+        -o-transition: all .3s ease-in-out;
+        top: 5px;
+        left: 5px;
+        position: fixed;
+    }
+
+    #menuToggle {
+        display: none;
+    }
+
+    #menuToggle:checked ~ .left_menu {
+        position: absolute;
+        left: 0;
+    }
+
+    #menuToggle:checked ~ #viewer {
+        display: none;
+    }
+
+    #menuToggle:checked ~ .menu-icon {
+        position: absolute;
+        left: 90%;
+    }
+</style>
+<!-- Demo styles -->
+<style>
+    body {
+        background: #eee;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color: #000;
+        margin: 0;
+        padding: 0;
+    }
+
+    .swiper-container {
+
+        margin: 0px auto;
+    }
+
+    .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+    }
+
+    .piece {
+        position: absolute;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+
+    .swiper-button-next {
+        top: 20px;
+        background-position: right center;
+    }
+
+    .swiper-button-prev {
+        top: 20px;
+        background-position: left center;
+    }
+
+    #zoom {
+        z-index: 10;
+        position: fixed;
+        right: 20px;
+        top: 20px;
+    }
+
+    .icon-zoom {
+        background-size: 100% 100%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+    }
+
+    .icon-zoom.in {
+        background-image: url("/static/view_pdf/img/zoom_in.png");
+    }
+
+    .icon-zoom.out {
+        margin-top: 20px;
+        background-image: url("/static/view_pdf/img/zoom_out.png");
+    }
+
+    .swiper-container-horizontal > .swiper-pagination .swiper-pagination-bullet {
+        margin: 0 3px;
+    }
+
+    .swiper-pagination-bullet {
+        width: 6px;
+        height: 6px;
+    }
+</style>
+
+<script>
+    function detectmob() {
+        if (navigator.userAgent.match(/Android/i)
+                || navigator.userAgent.match(/webOS/i)
+                || navigator.userAgent.match(/iPhone/i)
+                || navigator.userAgent.match(/iPad/i)
+                || navigator.userAgent.match(/iPod/i)
+                || navigator.userAgent.match(/BlackBerry/i)
+                || navigator.userAgent.match(/Windows Phone/i)
+        ) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    if (!detectmob()) {
+//        window.location.href = "/chuyen_de"
+    }
+    $("#select_chuyen_de").on('change', function () {
+        if (this.value == "0") {
+            window.location.href = "/chuyen_de_mobile";
+        } else {
+            window.location.href = "/chuyen_de_mobile/" + this.value;
+        }
+    });
+    var current_code;
+    var mW, mH;
+    var mscale = 1;
+    var slides;
+    var split = 4;
+    function viewDocument(code) {
+        $.ajax({
+            url: "/view_pdf.json/" + code,
+            success: function (data) {
+                $("#viewer").show();
+                $("#menuToggle").prop('checked', false);
+                setView(code, parseInt(data.page_count));
+            },
+            error: function (data) {
+                alert("Có lỗi xảy ra")
+            }
+        });
+
+    }
+    function setView(code, count) {
+        current_code = code;
+        var num_page = count;
+        $(".swiper-wrapper").html("");
+        for (var i = 0; i < num_page; i++) {
+            $(".swiper-wrapper").append("<div class='swiper-slide'></div>");
+        }
+        slides = document.getElementsByClassName("swiper-slide");
+        var img = new Image();
+        img.src = "/static/view_pdf/document/" + code + "/page1/0.png"
+        $(".swiper-button-next").height(window.innerHeight - 40 + "px")
+        $(".swiper-button-prev").height(window.innerHeight - 40 + "px")
+
+        $(".swiper-button-next").width(window.innerWidth / 8 + "px");
+        $(".swiper-button-prev").width(window.innerWidth / 8 + "px");
+        img.onload = function () {
+            mW = this.width;
+            mH = this.height;
+            console.log(mW + "/" + mH)
+            //Caculate size
+            setViewPdf();
+        };
+
+
+        var swiper = new Swiper('.swiper-container', {
+            pagination: '.swiper-pagination',
+            slidesPerView: 1,
+            paginationClickable: true,
+            spaceBetween: 30,
+            keyboardControl: true,
+            nextButton: '.swiper-button-next',
+            prevButton: '.swiper-button-prev',
+        });
+    }
+
+    function setViewPdf() {
+        if (!('ontouchstart' in document.documentElement)) {
+            $(".swiper-container").height(window.innerHeight * mscale + "px");
+            $(".swiper-container").width((mW * (window.innerHeight - 0) / mH) * mscale + "px");
+        } else {
+            $("#zoom").hide();
+            $(".swiper-container").width(window.innerWidth - 40 + "px");
+            $(".swiper-container").height(mH * (window.innerWidth - 40) / mW + "px");
+            if (window.innerHeight > $(".swiper-container").height()) {
+                $(".swiper-container").css("margin-top", (window.innerHeight - $(".swiper-container").height()) / 2 + "px");
+            }
+        }
+
+        //
+        for (var j = 1; j <= slides.length; j++) {
+            console.log("slide: " + j);
+            var slide = slides[j - 1];
+            var realW = $(".swiper-container").width();
+            console.log(realW)
+            for (var i = 0; i < (split * split); i++) {
+                var piece = document.createElement("div");
+                piece.className = "piece piece" + j + " part-" + j + "-" + (i + 1);
+                slide.appendChild(piece);
+            }
+
+
+            var pW = realW / split;
+            var pH = mH * (pW / mW)
+
+            $(".piece" + j).width(pW);
+            $(".piece" + j).height(pH);
+
+            for (var i = 0; i < (split * split); i++) {
+                var element = $(".part-" + j + "-" + (i + 1));
+                element.css("background-image", "url(/static/view_pdf/document/" + current_code + "/page" + j + "/" + i + ".png)");
+                element.css("left", (i % split) * pW + "px ");
+                element.css("top", parseInt((i / split)) * pH + "px");
+            }
+        }
+    }
+
+    $('#menuToggle').on('change', function () {
+        // From the other examples
+        if (this.checked) {
+            $("#viewer").hide();
+        } else {
+            $("#viewer").show();
+        }
+    });
+
+</script>

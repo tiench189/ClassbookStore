@@ -1,0 +1,1056 @@
+{{extend 'cbw_tqg_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+
+<div class="cate-content">
+    <div class="cate-list">
+        <div class="cl-title cl-title-line" style="border: none">
+
+        </div>
+        <div class="checkout-page-container">
+            <div class="cpc-left">
+                <div id="box-note" style="display: none">
+                    <div id="tut_content">
+                        <p>Sau khi giao dịch nạp tiền thực hiện thành công, tiền sẽ được cộng vào tài khoản thiquocgia.vn
+                            của bạn. Vui lòng kiểm tra tài khoản tại <a href="profile.html" title="">Thông tin cá
+                                nhân</a>. Mọi thắc mắc phát sinh nếu có vui lòng liên hệ số điện thoại <span
+                                    class="red"> 047-302-0888</span> hoặc truy cập <a href="index.html"
+                                                                                      title="">Website</a> để biết thêm
+                            chi tiết</p>
+
+                        <p id="tutorial"><strong>Hướng dẫn bước tiếp theo</strong></p>
+                        <ul id="detail_note">
+                            <li>Cung cấp đầy đủ <span class="red">Thông tin chủ thẻ</span> cho hệ thống ngân lượng.</li>
+                            <li><span class="red">Không đóng trình duyệt, tắt máy khi giao dịch đang thực hiện</span>
+                                (trong trạng thái waiting).
+                            </li>
+                            <li>Sau khi giao dịch thành công, hệ thống sẽ tự động chuyển về trang <span><a
+                                    href="profile.html" title="">Thông tin cá nhân</a></span> để kiểm tra tài khoản
+                            </li>
+                            <li><p id="min_pay">Theo quy định của hệ thống, giá trị giao dịch tối thiểu là 2.000đ</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="box mt20" id="box-account">
+                        <div class="box-content">
+                            <div style="text-align: center">
+                                <table cellspacing="0px" cellpadding="0px" style="width: 100%">
+                                    <tbody>
+                                    <tr>
+                                        <td class="text-right">Tài khoản:</td>
+                                        <td><span>{{=session.username}}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">Số dư tài khoản Classbook:</td>
+                                        <td><span>{{=session.userfund}}</span></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box mt20" id="box-tqg-card">
+                        <div class="box-content" id="content-tqg">
+                            <div class="tqg-card card50"></div>
+                            <div class="tqg-card card100"></div>
+                            <div class="tqg-card card200"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ttnapthe" style="display: none;">
+                    <form id="NLNapThe" name="NLNapThe" action="" method="post">
+                        <div id="body12" style="padding: 10px;  width: 100%;">
+                            <table align="center" style="margin:auto">
+
+                                <tr>
+                                    <td align="center" style="padding:0;text-align:center;">
+                                        <label for="92"><img src="{{=URL('static', 'images/nganluong/mobifone.jpg')}}"
+                                                             alt=""/></label>
+                                    </td>
+                                    <td align="center" style="padding:0;text-align:center;"><label for="93">
+                                        <img src="{{=URL('static', 'images/nganluong/vinaphone.jpg')}}" alt=""/></label>
+                                    </td>
+                                    <td align="center" style="padding:0;text-align:center;"><label for="107">
+                                        <img src="{{=URL('static', 'images/nganluong/viettel.jpg')}}" width="110"
+                                             height="35"/></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="padding:0;text-align:center;">
+                                        <input type="radio" name="select_method" checked="checked" value="VMS" id="92"/>
+                                    </td>
+                                    <td align="center" style="padding:0;text-align:center;">
+                                        <input type="radio" name="select_method" value="VNP" id="93"/>
+                                    </td>
+                                    <td align="center" style="padding:0;text-align:center;">
+                                        <input type="radio" name="select_method" value="VIETTEL" id="107"/>
+                                    </td>
+                                </tr>
+
+                            </table>
+                            <div class="my-discount incr" id="mobile_card_discount_noti" style="margin-top: 10px"></div>
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <td class="text-right"></td>
+                                    <td>
+                                        <select id="select_mobile_card" class="form-control ml10">
+                                            <option value="0">Chọn mệnh giá</option>
+                                            <option value="10000">10.000 VND</option>
+                                            <option value="20000">20.000 VND</option>
+                                            <option value="50000">50.000 VND</option>
+                                            <option value="100000">100.000 VND</option>
+                                            <option value="200000">200.000 VND</option>
+                                            <option value="500000">500.000 VND</option>
+                                        </select>
+                                    </td>
+                                    <td class="text-left"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><span style="line-height: 34px;">Mã số thẻ :</span></td>
+                                    <td><input type="text" id="txtSoPin" name="txtSoPin" class="form-control ml10"></td>
+                                    <td class="text-left"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><span style="line-height: 34px;">Số Seri :</span></td>
+                                    <td><input type="text" id="txtSoSeri" name="txtSoSeri" class="form-control ml10">
+                                    </td>
+                                    <td class="text-left"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><span style="line-height: 34px;">Mã khuyến mãi (nếu có):</span></td>
+                                    <td><input id="mobile_card_discount" type="text"
+                                               class="discount-code form-control ml10" name="discount-code">
+                                    </td>
+                                    <td class="text-left"><span><a href="javascript:activeCode('mobile_card_discount')"
+                                                                   class="btn btn-classbook ml10" title="">Áp
+                                        dụng</a></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"></td>
+                                    <td align="center" style="text-align:center;">
+                                        <input name="NLNapThe" value="" style="display: none">
+                                        <span><a href="javascript:submit_tc()" class="btn btn-classbook ml10" title="">Nạp
+                                            tiền</a></span>
+                                        <span><a href="javascript:back_step()" class="btn btn-classbook ml10" title="">Quay
+                                            lại</a></span>
+                                    </td>
+                                    <td class="text-left"></td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+
+                </div>
+                <div id="tqg_input" style="display: none;">
+                    <form id="TQGNapThe" name="TQGNapThe" action="" method="post">
+                        <div class="my-discount incr" id="tqg_card_promotion_noti"></div>
+                        <div id="tb_tqg" class="clearfix text-center mt20" style="">
+                            <table class="table">
+                                <tbody>
+                                <tr style="display: none">
+                                    <td class="text-right"></td>
+                                    <td>
+                                        <select id="select_tqg_card" class="form-control ml10">
+                                            <option value="0">Chọn mệnh giá</option>
+                                            <option value="50000">50.000 VND</option>
+                                            <option value="100000">100.000 VND</option>
+                                            <option value="200000">200.000 VND</option>
+                                        </select>
+                                    </td>
+                                    <td class="text-left"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><span style="line-height: 34px;">Mã thẻ:</span></td>
+                                    <td><input type="text" value="" class="form-control ml10" style="width: 100%"
+                                               name="tqg_card" id="tqg_card" placeholder=""></td>
+                                    <td class="text-left">
+                                        <input name="tqgpayment" id="tqgpayment" value="" style="display: none">
+                                        <!--<span><a href="javascript:submit_tqg()" class="btn btn-classbook ml10" title="">Nạp-->
+                                        <!--thẻ</a></span>-->
+                                        <!--<span><a href="javascript:back_step()" class="btn btn-classbook ml10" title="">Quay-->
+                                        <!--lại</a></span>-->
+                                    </td>
+                                </tr>
+                                <tr style="display: none">
+                                    <td class="text-right"><span style="line-height: 34px;">Mã khuyến mãi:</span></td>
+                                    <td><input id="tqg_card_promotion" type="text" value="" class="form-control ml10"
+                                               style="width: 100%"
+                                               name="discount-code" placeholder=""></td>
+                                    <td class="text-left">
+                                        <span><a href="javascript:activeCode('tqg_card_promotion')"
+                                                 class="btn btn-classbook ml10" title="">Áp dụng</a></span>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"></td>
+                                    <td align="center" style="text-align:center;">
+                                        <input name="NLNapThe" value="" style="display: none">
+                                        <span><a href="javascript:submit_tqg()" class="btn btn-classbook ml10" title="">Nạp
+                                            tiền</a></span>
+                                        <span><a href="javascript:back_step()" class="btn btn-classbook ml10" title="">Quay
+                                            lại</a></span>
+                                    </td>
+                                    <td class="text-left"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div id="note-tqg-card">
+                                Các thẻ Thi Quốc Gia có số seri:
+                                <ul class="list-seri-note">
+                                    <li>Từ 0050-000-001 đến 0050-004-305 và từ 0050-005-086 đến 0050-014-895 mệnh giá 50.000 VND</li>
+                                    <li>Từ 0100-000-001 đến 0100-000-500 mệnh giá 100.000 VND</li>
+                                    <li>Từ 0200-000-001 đến 0200-000-050 và từ 0200-000-061 đến 0200-000-200 mệnh giá 200.000 VND</li>
+                                </ul>
+                                là thẻ tặng, không bán, và có giá trị khi nạp vào tài khoản đến ngày <span style="text-decoration: line-through">31/03/2016</span> (gia hạn đến ngày 03/04/2016).
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div id="tqg_tranfer" style="display: none;">
+                    <form id="TQGTranfer" name="TQGTranfer" action="" method="post">
+                        <div id="tb_tranfer" class="clearfix text-center mt20" style="">
+                            <div class="my-discount" id="tqg_tranfer_discount_noti"></div>
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <td class="text-right"><span style="line-height: 34px;">Số tiền chuyển:</span></td>
+                                    <td><input type="number" value="" class="form-control ml10" name="tranfer_fund"
+                                               id="tranfer_fund" placeholder="VD: 10000" min="0"></td>
+                                    <td class="text-left">
+                                        <input name="tqgtranfer" value="" style="display: none" min="0">
+                                        <!--<span><a href="javascript:submit_tranfer()" class="btn btn-classbook ml10"-->
+                                        <!--title="">Chuyển tiền</a></span>-->
+                                        <!--<span><a href="javascript:back_step()" class="btn btn-classbook ml10" title="">Quay-->
+                                        <!--lại</a></span>-->
+                                    </td>
+                                </tr>
+                                <tr style="display: none">
+                                    <td class="text-right"><span style="line-height: 34px;">Mã khuyến mãi:</span></td>
+                                    <td><input id="tqg_tranfer_discount" type="text" value="" class="form-control ml10"
+                                               name="discount-code"></td>
+                                    <td class="text-left">
+                                        <span><a href="javascript:activeCode('tqg_tranfer_discount')"
+                                                 class="btn btn-classbook ml10"
+                                                 title="">Áp dụng</a></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!--<div class="table-divider"></div>-->
+                            <table class="table" >
+                                <tbody>
+                                <tr style="display: none">
+                                    <td class="text-right"><span class="bold-big">Số tiền phải trả:</span>
+                                    </td>
+                                    <td><input type="text" value="" class="form-control ml10 after-discount"
+                                               id="tranfer_after_discount" name="discount-value" readonly="readonly">
+                                    </td>
+                                    <td class="text-left">
+                                        <span class="noti-dc">Bạn được giảm giá {{='10%' if total_pay < 750000 else '25%'}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"></td>
+                                    <td align="center" style="text-align:center;">
+                                        <input name="NLNapThe" value="" style="display: none">
+                                        <span><a href="javascript:submit_tranfer()" class="btn btn-classbook ml10"
+                                                 title="">Nạp
+                                            tiền</a></span>
+                                        <span><a href="javascript:back_step()" class="btn btn-classbook ml10" title="">Quay
+                                            lại</a></span>
+                                    </td>
+                                    <td class="text-left"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+
+                </div>
+                <form id="choose_type" action="" method="post" name="NLpayBank">
+                    <div id="tb_amount" class="clearfix text-center mt20" style="display: none">
+                        <div class="my-discount" id="nl_discount_noti"></div>
+                        <table class="table">
+                            <tbody>
+                            <tr class="choose-visa">
+                                <td class="text-right"><span style="line-height: 34px;">Chọn loại thẻ:</span></td>
+                                <td>
+                                    <select name="bank_code" class="form-control ml10">
+                                        <option value="VISA">VISA</option>
+                                        <option value="MASTER">MASTER CARD</option>
+                                        <option value="JCB">JCB</option>
+                                    </select>
+                                </td>
+                                <td class="text-left"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span style="line-height: 34px;">Số tiền nạp:</span></td>
+                                <td><input type="number" value="" class="form-control ml10" name="buyer_amount"
+                                           id="buyer_amount" placeholder="VD: 100000" min="2000"></td>
+                                <td class="text-left">
+                                    <input name="nlpayment" value="" style="display: none">
+                                    <span class="cl-orange" id="min-nl"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><span style="line-height: 34px;">Mã khuyến mãi (nếu có):</span></td>
+                                <td><input id="nl_discount" type="text" value="" class="form-control ml10"
+                                           name="discount-code"></td>
+                                <td class="text-left">
+                                        <span><a href="javascript:activeCode('nl_discount')"
+                                                 class="btn btn-classbook ml10"
+                                                 title="">Áp dụng</a></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="table-divider"></div>
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td class="text-right"><span class="bold-big">Số tiền phải trả:</span></td>
+                                <td><input type="text" value="" class="form-control ml10 after-discount"
+                                           id="amount_after_discount" name="discount-value" readonly="readonly"></td>
+                                <td class="text-left">
+                                    <span class="noti-dc">Bạn được giảm giá {{='10%' if total_pay < 750000 else '25%'}}</span>
+                                </td>
+                            </tr>
+                            <td class="text-right"></td>
+                            <td align="center" style="text-align:center;">
+                                <input name="NLNapThe" value="" style="display: none">
+                                        <span><a href="javascript:submit_amount()" class="btn btn-classbook ml10"
+                                                 title="">Nạp
+                                            tiền</a></span>
+                                        <span><a href="javascript:back_step()" class="btn btn-classbook ml10" title="">Quay
+                                            lại</a></span>
+                            </td>
+                            <td class="text-left"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="box-note-discount" class="clearfix text-left mt20 cl-black" style="display: none">
+                        <div class="divider-discount"></div>
+                        <div></div>
+                        <p>* Thành viên VIP: Nạp tổng mệnh giá thẻ cào 750.000 VNĐ để nhận ngay 1 triệu trong tài khoản. Thưởng thêm 33,34% giá trị thẻ nạp cho mỗi giao dịch tiếp theo</p>
+                        <p>* Thành viên thường: Nạp tổng mệnh giá thẻ cào dưới 750.000 VNĐ, Thưởng thêm 11,12% giá trị thẻ nạp</p>
+                        <p>Ví dụ:</p>
+                        <p>Chỉ cần nạp 90.000 VNĐ ==> Nhận ngay 100.000 VNĐ trong tài khoản Thi Quốc Gia</p>
+                        <p>Chỉ cần nạp 180.000 VNĐ ==> Nhận ngay 200.000 VNĐ trong tài khoản Thi Quốc Gia</p>
+                        <p>Nạp 750.000 VNĐ ==> Nhận ngay 1 triệu VNĐ trong tài khoản Thi Quốc Gia</p>
+                    </div>
+                    <div id="box-note-discount-increase" class="clearfix text-left mt20 cl-black" style="display: none">
+                        <div class="divider-discount"></div>
+                        <div></div>
+                        <p>* Thành viên VIP: Nhận ngay 1 triệu VNĐ vào tài khoản Thiquocgia, chỉ phải thanh toán 750.000 VNĐ. Tiếp tục giảm giá 25% số tiền muốn nhận trong các giao dịch tiếp theo</p>
+                        <p>* Thành viên thường: Chuyển dưới 1 triệu VNĐ vào tài khoản Thiquocgia, được giảm giá ngay 10% khi thanh toán</p>
+                        <p>Ví dụ:</p>
+                        <p>Nhận ngay 100.000 VNĐ vào tài khoản thiquocgia.vn ==> Chỉ phải thanh toán 90.000 VNĐ</p>
+                        <p>Nhận ngay 200.000 VNĐ vào tài khoản thiquocgia.vn ==> Chỉ phải thanh toán 180.000 VNĐ</p>
+                        <p>Nhận ngay 1.000.000 VNĐ vào tài khoản thiquocgia.vn ==> Chỉ phải thanh toán 750.000 VNĐ (VIP)</p>
+                    </div>
+                    <ul id="form-choose" class="list-content">
+                        <li class="active">
+                            <div class="cpc-icon"><img src="{{=URL('static','images/the_tqg.png')}}" title="" alt="">
+                            </div>
+                            <label class="c-title"><input checked="checked" type="radio" name="option_payment"
+                                                          value="TQG" id="TQG">Nạp tiền bằng thẻ Thi quốc gia
+                                <p class="desc">Nạp vào tài khoản sử dụng trên site <a target="_blank"
+                                                                                       style="text-decoration: underline"
+                                                                                       href="http://thiquocgia.vn">Thi
+                                    quốc gia</a></p>
+                            </label>
+                            <a href="javascript:next_step()" class="btn btn-classbook" title="">Tiếp tục</a>
+                        </li>
+                        <li class="">
+                            <div class="cpc-icon"><img src="{{=URL('static','store2.2/images/classbook-app.png')}}"
+                                                       title="" alt=""></div>
+                            <label class="c-title"><input type="radio" name="option_payment" value="TRANFER"
+                                                          id="TRANFER">Chuyển tiền từ tài khoản Classbook sang tài khoản
+                                Thi quốc gia
+                                <p class="desc">Chuyển tiền sang tài khoản <a target="_blank"
+                                                                              style="text-decoration: underline"
+                                                                              href="http://thiquocgia.vn">Thi quốc
+                                    gia</a></p>
+                            </label>
+                            <a href="javascript:next_step()" class="btn btn-classbook" title="">Tiếp tục</a>
+                        </li>
+                        <li class="">
+                            <div class="cpc-icon"><img src="{{=URL('static','store2.2/images/payment-04.png')}}"
+                                                       title="" alt=""></div>
+                            <label class="c-title"><input type="radio" name="option_payment" value="TC" id="TC">Nạp tiền
+                                bằng thẻ điện thoại
+                                <p class="desc">Chấp nhận các loại thẻ của Mobifone, Vinaphone, Viettel</p>
+                            </label>
+                            <a href="javascript:next_step()" class="btn btn-classbook" title="">Tiếp tục</a>
+                        </li>
+                        <li class="">
+                            <div class="cpc-icon"><img src="{{=URL('static','store2.2/images/payment-02.png')}}"
+                                                       title="" alt=""></div>
+                            <label class="c-title"><input type="radio" name="option_payment" value="ATM_ONLINE"
+                                                          id="ATM_ONLINE">Nạp tiền bằng thẻ ngân hàng nội địa
+                                <p class="desc">Chấp nhận các thẻ ATM của các ngân hàng nội địa. Lựa chọn để xem danh
+                                    sách chi tiết.</p>
+                            </label>
+
+                            <div class="boxContent">
+                                <p><span style="color: #F00; font-weight: bold;">Lưu ý</span>: Bạn cần đăng ký
+                                    Internet-Banking hoặc dịch vụ Nạp tiền trực tuyến tại ngân hàng trước khi thực hiện.
+                                </p>
+                                <ul class="cardList clearfix">
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;"
+                                                  title="Ngân hàng TMCP Ngoại Thương Việt Nam" class="VCB"></span>
+                                            <input type="radio" name="bankcode" value="VCB" checked>
+
+                                        </label></li>
+
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng Đông Á"
+                                                  class="DAB"></span>
+                                            <input type="radio" name="bankcode" value="DAB">
+
+                                        </label></li>
+
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng Kỹ Thương"
+                                                  class="TCB"></span>
+                                            <input type="radio" name="bankcode" value="TCB">
+
+                                        </label></li>
+
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng Quân Đội"
+                                                  class="MB"></span>
+                                            <input type="radio" name="bankcode" value="MB">
+
+                                        </label></li>
+
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng Sài Gòn - Hà Nội"
+                                                  class="SHB"></span>
+                                            <input type="radio" name="bankcode" value="SHB">
+
+                                        </label></li>
+
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng Quốc tế"
+                                                  class="VIB"></span>
+                                            <input type="radio" name="bankcode" value="VIB">
+
+                                        </label></li>
+
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng Công Thương Việt Nam"
+                                                  class="ICB"></span>
+                                            <input type="radio" name="bankcode" value="ICB">
+
+                                        </label></li>
+
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng Xuất Nhập Khẩu"
+                                                  class="EXB"></span>
+                                            <input type="radio" name="bankcode" value="EXB">
+
+                                        </label></li>
+
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng Á Châu"
+                                                  class="ACB"></span>
+                                            <input type="radio" name="bankcode" value="ACB">
+
+                                        </label></li>
+
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng Phát triển Nhà TPHCM"
+                                                  class="HDB"></span>
+                                            <input type="radio" name="bankcode" value="HDB">
+
+                                        </label></li>
+
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng Hàng Hải"
+                                                  class="MSB"></span>
+                                            <input type="radio" name="bankcode" value="MSB">
+
+                                        </label></li>
+
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng Nam Việt"
+                                                  class="NVB"></span>
+                                            <input type="radio" name="bankcode" value="NVB">
+
+                                        </label></li>
+
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng Việt Á"
+                                                  class="VAB"></span>
+                                            <input type="radio" name="bankcode" value="VAB">
+
+                                        </label></li>
+
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân Hàng Việt Nam Thịnh Vượng"
+                                                  class="VPB"></span>
+                                            <input type="radio" name="bankcode" value="VPB">
+
+                                        </label></li>
+
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng Sài Gòn Thương tín"
+                                                  class="SCB"></span>
+                                            <input type="radio" name="bankcode" value="SCB">
+                                        </label>
+                                    </li>
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng Xăng dầu Petrolimex"
+                                                  class="PGB"></span>
+                                            <input type="radio" name="bankcode" value="PGB">
+
+                                        </label>
+                                    </li>
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng TMCP Dầu khí Toàn Cầu"
+                                                  class="GPB"></span>
+                                            <input type="radio" name="bankcode" value="GPB">
+
+                                        </label>
+                                    </li>
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;"
+                                                  title="Ngân hàng Nông nghiệp &amp; Phát triển nông thôn"
+                                                  class="AGB"></span>
+                                            <input type="radio" name="bankcode" value="AGB">
+                                        </label>
+                                    </li>
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;"
+                                                  title="Ngân hàng Đầu tư &amp; Phát triển Việt Nam"
+                                                  class="BIDV"></span>
+                                            <input type="radio" name="bankcode" value="BIDV">
+                                        </label>
+                                    </li>
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;"
+                                                  title="Ngân hàng TMCP Đại Dương (OceanBank)" class="OJB"></span>
+                                            <input type="radio" name="bankcode" value="OJB">
+
+                                        </label>
+                                    </li>
+                                    <li class="bank-online-methods">
+                                        <label>
+                                            <span style="font-style: italic;" title="Ngân hàng Sài Gòn Công Thương"
+                                                  class="SGB"></span>
+                                            <input type="radio" name="bankcode" value="SGB">
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="clearfix"></div>
+                            <a href="javascript:next_step()" class="btn btn-classbook" title="">Tiếp tục</a>
+                        </li>
+
+                        <li class="">
+                            <div class="cpc-icon"><img src="{{=URL('static','store2.2/images/payment-03.png')}}"
+                                                       title="" alt=""></div>
+                            <label class="c-title"><input type="radio" name="option_payment" value="VISA" id="VISA">Nạp
+                                tiền bằng thẻ tín dụng & ghi nợ quốc tế
+                                <p class="desc">Chấp nhận các loại thẻ <b>Visa</b>, <b>MasterCard</b></p>
+                            </label>
+                            <a href="javascript:next_step()" class="btn btn-classbook" title="">Tiếp tục</a>
+                        </li>
+                        <li>
+                            <div class="cpc-icon"><img src="{{=URL('static','store2.2/images/payment-01.png')}}"
+                                                       title="" alt=""></div>
+                            <label class="c-title"><input type="radio" name="option_payment" value="NL" id="NL">Nạp tiền
+                                bằng Ví điện tử NgânLượng
+                                <p class="desc">Thuận tiện, nhanh chóng và bảo mật cao.</p>
+                            </label>
+
+                            <div class="boxContent">
+                                <p>
+                                    Nạp tiền trực tuyến AN TOÀN và ĐƯỢC BẢO VỆ, sử dụng thẻ ngân hàng trong và ngoài
+                                    nước hoặc nhiều hình
+                                    thức tiện lợi khác.
+                                    Được bảo hộ &amp; cấp phép bởi NGÂN HÀNG NHÀ NƯỚC, ví điện tử duy nhất được cộng
+                                    đồng ƯA THÍCH NHẤT 2 năm
+                                    liên tiếp, Bộ Thông tin Truyền thông trao giải thưởng Sao Khuê
+                                </p>
+                            </div>
+                            <a href="javascript:next_step()" class="btn btn-classbook" title="">Tiếp tục</a>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+            <div class="cpc-right">
+                <div class="box box-contact">
+                    <div class="box-content">
+                        Mọi thắc mắc xin vui lòng liên hệ:
+                        <p class="hotline">Hotline: 047-302-0888</p>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<script>
+    var container_w = $(".cpc-left").width();
+    console.log("w: " + $(".cpc-left").width());
+    var card_w = parseInt((container_w - 100) / 3);
+    var card_h = parseInt(card_w * 25 / 40);
+    $(".tqg-card").css("width", card_w + "px");
+    $(".tqg-card").css("height", card_h + "px");
+    $("#content-tqg").css("height", (card_h + 50) + "px");
+
+</script>
+<script>
+    $("#menu-dropdown").hover(function (e) {
+        $("#main").toggleClass("overlay");
+    });
+</script>
+<script>
+    jQuery(document).ready(function () {
+        $("input[name='option_payment']").bind('click', function () {
+            $(".list-content li").removeClass('active');
+            $(this).parent().parent().addClass('active');
+        });
+    });
+</script>
+<script>
+    function openAlert(message) {
+        $("#done_popup").hide();
+        $("#cacel_popup").show();
+        $("#myModalLabel").html("Thông báo");
+        $("#modal-body").html(message);
+        console.log(message);
+        $('#pop-demo').modal('show');
+    }
+    function openConfirm(message) {
+        $("#done_popup").show();
+        $("#cacel_popup").hide();
+        $("#myModalLabel").html("Xác nhận");
+        $("#modal-body").html(message);
+        $('#pop-demo').modal('show');
+    }
+    function showLoading() {
+        $("#bg-loading").show();
+    }
+    function hideLoading() {
+        $("#bg-loading").hide();
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        "{{if session.alerts is not None:}}"
+        console.log("{{=session.alerts['content']}}");
+        openAlert("{{=session.alerts['content']}}");
+        "{{session.alerts = None}}"
+        "{{pass}}"
+
+        "{{if success:}}"
+        openTQG("Chúc mừng bạn đã nạp thành công. Bạn có {{=tqg_fund}} trong tài khoản thiquocgia.vn");
+        $("#done_tqg").click(function () {
+            window.location.href = "{{=session.site_back}}"
+        });
+        "{{pass}}"
+    });
+
+    function next_step() {
+        var option_payment = $("input[name='option_payment']:checked").val();
+        $("#form-choose").hide();
+        $("#box-note").show();
+        if (option_payment == "TC") {
+            $("#box-account").hide();
+            $("#ttnapthe").show();
+            $("#tut_content").hide();
+            $("#box-tqg-card").hide();
+        } else if (option_payment == "TQG") {
+            $("#tqg_input").show();
+            $("#box-tqg-card").show();
+            $("#box-account").hide();
+            $("#tut_content").hide();
+        } else if (option_payment == "TRANFER") {
+            $("#tqg_tranfer").show();
+            $("#box-account").show();
+            $("#tut_content").hide();
+            $("#box-tqg-card").hide();
+        } else {
+            $("#box-account").hide();
+            $("#box-tqg-card").hide();
+            $("#tb_amount").show();
+            $("#tut_content").show();
+            if (option_payment == "VISA"){
+                $(".choose-visa").show();
+                $("#buyer_amount").attr("min", "50000");
+                $("#min-nl").html("Số tiền tối thiểu: 50.000 VND")
+            }else{
+                $(".choose-visa").hide();
+                if (option_payment == "NL"){
+                    $("#buyer_amount").attr("min", "2000");
+                    $("#min-nl").html("Số tiền tối thiểu: 2.000 VND")
+                }else{
+                    $("#buyer_amount").attr("min", "10000");
+                    $("#min-nl").html("Số tiền tối thiểu: 10.000 VND")
+                }
+            }
+        }
+    }
+    $(".my-discount").hide();
+    $(".noti-dc").hide();
+    $("#box-note-discount").hide();
+    function back_step() {
+        $("#form-choose").show();
+        $("#tb_amount").hide();
+        $("#box-note").hide();
+        $("#ttnapthe").hide();
+        $("#tqg_input").hide();
+        $("#tqg_tranfer").hide();
+        $("#box-tqg-card").hide()
+        $("#box-note-discount").hide();
+        $("#box-note-discount-increase").hide();
+        $(".my-discount").hide();
+        $(".noti-dc").hide();
+        isActiveDiscount = false;
+        updateNotiDC(0, 0);
+    }
+
+    function submit_amount() {
+        $("#choose_type").submit();
+    }
+
+    function submit_tc() {
+        $("#NLNapThe").submit();
+    }
+
+    function submit_tqg() {
+        console.log($("#tqg_card").val().trim());
+        if ($("#tqg_card").val().trim() == "") {
+//            openAlert("Số tiền nhập vào không hợp lệ");
+        } else {
+            $("#TQGNapThe").submit();
+        }
+    }
+
+    function submit_tranfer() {
+        console.log($("#tranfer_fund").val());
+        if (parseInt($("#tranfer_fund").val()) > 0) {
+            $("#TQGTranfer").submit();
+        } else {
+            openAlert("Số tiền nhập vào không hợp lệ");
+        }
+    }
+    var isActiveDiscount = false;
+    var total_pay = parseInt("{{=total_pay}}");
+    var promotionCode = "";
+    function activeCode(input_id) {
+        promotionCode = $("#" + input_id).val();
+        showLoading();
+        var link = "/cba/promotion/check_tvt_code.json?code=" + promotionCode;
+
+        $.ajax({
+            url: link,
+            success: function (data) {
+                hideLoading();
+                if (data.result) {
+                    isActiveDiscount = true;
+                    $(".my-discount").show();
+                    if (input_id == "tqg_tranfer_discount") {
+                        $("#box-note-discount-increase").show();
+                    } else if (input_id == "nl_discount") {
+                        $("#box-note-discount-increase").show();
+                    } else if (input_id == "mobile_card_discount") {
+                        $("#box-note-discount").show();
+                    } else if (input_id == "tqg_card_promotion") {
+                        $("#box-note-discount").show();
+                    }
+                } else {
+                    isActiveDiscount = false;
+                    openAlert(data.mess)
+                }
+                updateNotiDC(0, 0);
+                if (input_id == "tqg_tranfer_discount") {
+                    updateTranferDiscount();
+                } else if (input_id == "nl_discount") {
+                    updateNLDiscount();
+                } else if (input_id == "mobile_card_discount") {
+                    updateNotiDC(parseInt($("#select_mobile_card").val()), 0);
+                } else if (input_id == "tqg_card_promotion") {
+                    updateNotiDC(parseInt($("#select_tqg_card").val()), 0);
+                }
+
+            },
+            error: function (data) {
+                isActiveDiscount = false;
+                hideLoading();
+                openAlert("Không kiểm tra được");
+            }
+        })
+    }
+
+    function calculateDiscount(beforeValue) {
+        var afterValue = 0;
+        if (total_pay < 750000) {
+            afterValue = beforeValue * 0.9;
+        } else {
+            afterValue = beforeValue * 0.75;
+        }
+        return afterValue;
+    }
+
+    function calculatePromotion(beforeValue) {
+        var afterValue = 0;
+        if (total_pay + beforeValue < 750000) {
+            afterValue = parseInt(beforeValue * 1.112);
+        } else {
+            afterValue = parseInt(beforeValue * 1.334);
+        }
+        return afterValue;
+    }
+
+    function updateTranferDiscount() {
+        var beforeValue = 0;
+        if ($("#tranfer_fund").val().trim() != "") {
+            beforeValue = parseInt($("#tranfer_fund").val().trim());
+            if (isActiveDiscount) {
+                $("#tranfer_after_discount").val(formatMoney("" + calculateDiscount(beforeValue)));
+            } else {
+                $("#tranfer_after_discount").val(formatMoney("" + beforeValue));
+            }
+        }
+        updateNotiDC(calculateDiscount(beforeValue), beforeValue);
+    }
+
+    function updateNLDiscount() {
+        var beforeValue = 0;
+        if ($("#buyer_amount").val().trim() != "") {
+            beforeValue = parseInt($("#buyer_amount").val().trim());
+            if (isActiveDiscount) {
+                $("#amount_after_discount").val(formatMoney("" + calculateDiscount(beforeValue)));
+            } else {
+                $("#amount_after_discount").val(formatMoney("" + beforeValue));
+            }
+        }
+        updateNotiDC(calculateDiscount(beforeValue), beforeValue);
+    }
+
+    $('#tranfer_fund').on('input', function () {
+        updateTranferDiscount();
+        var fund = parseInt($("#tranfer_fund").val().trim());
+        if ($("#tranfer_fund").val().trim() == "") {
+            fund = 0;
+        }
+        updateNotiDC(calculateDiscount(fund), fund);
+    });
+
+    $('#buyer_amount').on('input', function () {
+        updateNLDiscount();
+        var fund = parseInt($("#buyer_amount").val().trim());
+        if ($("#buyer_amount").val().trim() == "") {
+            fund = 0;
+        }
+        updateNotiDC(calculateDiscount(fund), fund);
+    });
+
+    function updateNotiDC(fund, real_fund) {
+        var cal = total_pay + fund;
+        if (cal >= 750000) {
+            $(".my-discount").html("Số tiền bạn sẽ thanh toán là <strong>" + formatMoney("" + fund) + " VNĐ</strong></br>" +
+                    "Số tiền bạn nhận vào tài khoản Thiquocgia là <strong>" + formatMoney("" + calculatePromotion(fund)) + " VNĐ</strong><br>" +
+                    "Do sử dụng Mã khuyến mãi <strong>" + promotionCode.toUpperCase() + "</strong> nên bạn <strong>đã được giảm giá 25%</strong><br><br>" +
+                    "Bạn hiện đang là thành viên VIP của Thiquocgia.vn. Nhập Mã khuyến mại " + promotionCode.toUpperCase() + " để được <strong>giảm giá 25%</strong> khi thanh toán  cho mọi giao dịch tiếp theo.");
+            $(".incr").html("Mệnh giá thẻ nạp là <strong>" + formatMoney("" + fund) + " VNĐ</strong></br>" +
+                    "Số tiền bạn nhận vào tài khoản Thiquocgia là <strong>" + formatMoney("" + calculatePromotion(fund)) + " VNĐ</strong><br>" +
+                    "Do sử dụng Mã khuyến mãi <strong>" + promotionCode.toUpperCase() + "</strong> nên bạn <strong>đã được thưởng thêm 33.34% giá trị thẻ nạp</strong><br><br>"+
+                    "Bạn hiện đang là thành viên VIP của Thiquocgia.vn. Nhập Mã khuyến mại " + promotionCode.toUpperCase() + " để được <strong>thưởng thêm tới 33.34%</strong> cho mọi thẻ nạp tiếp theo.");
+        } else {
+            $(".my-discount").html("Số tiền bạn sẽ thanh toán là <strong>" + formatMoney("" + fund) + " VNĐ</strong></br>" +
+                    "Số tiền bạn nhận vào tài khoản Thiquocgia là <strong>" + formatMoney("" + real_fund) + " VNĐ</strong><br>" +
+                    "Do sử dụng Mã khuyến mãi <strong>" + promotionCode.toUpperCase() + "</strong> nên bạn <strong>đã được giảm giá 10%</strong><br><br>" +
+                    "Bạn có thể trở thành thành viên VIP nếu nhập Mã khuyến mại <strong>" + promotionCode.toUpperCase() + "</strong>" +
+                    " & Đạt hạn mức thanh toán 750.000 VNĐ (còn thiếu " + formatMoney("" + (750000 - cal)) +" VNĐ nữa)," +
+                    " khi đó tài khoản Thi Quốc Gia của bạn sẽ có ngay <strong>1 triệu VNĐ</strong>," +
+                    " và mỗi lần giao dịch tiếp theo bạn sẽ được <strong>giảm giá 25% khi thanh toán</strong>");
+            $(".incr").html("Mệnh giá thẻ nạp là <strong>" + formatMoney("" + fund) + " VNĐ</strong></br>" +
+                    "Số tiền bạn nhận vào tài khoản Thiquocgia là <strong>" + formatMoney("" + calculatePromotion(fund)) + " VNĐ</strong><br>" +
+                    "Do sử dụng Mã khuyến mãi <strong>" + promotionCode.toUpperCase() + "</strong> nên bạn <strong>đã được thưởng thêm 11.12% giá trị thẻ nạp</strong><br><br>" +
+                    "Bạn có thể trở thành thành viên VIP nếu nhập Mã khuyến mại <strong>" + promotionCode.toUpperCase() + "</strong>" +
+                    " & Có tổng mệnh giá thẻ nạp đạt 750.000 VNĐ (còn thiếu " + formatMoney("" + (750000 - cal)) +" VNĐ nữa)," +
+                    " khi đó tài khoản Thi Quốc Gia của bạn sẽ có ngay <strong>1 triệu VNĐ</strong>," +
+                    " và mỗi lần giao dịch tiếp theo bạn sẽ được <strong>thêm tới 33.34% giá trị thẻ nạp</strong>");
+        }
+    }
+
+    function formatMoney(num) {
+        var price = num.trim()
+        var index = 0;
+        var str_price = "";
+        for (var i = price.length - 1; i >= 0; i--) {
+            index++;
+            str_price = price[i] + str_price;
+            if (index == 3 && i != 0) {
+                str_price = "." + str_price;
+                index = 0;
+            }
+        }
+        return str_price;
+    }
+
+    $('#select_mobile_card').on('change', function () {
+        var card_value = parseInt($(this).val());
+        updateNotiDC(card_value, 0);
+    });
+    $('#select_tqg_card').on('change', function () {
+        var card_value = parseInt($(this).val());
+        updateNotiDC(card_value, 0);
+    });
+</script>
+<style>
+    .after-discount {
+        color: #f28013;
+        font-weight: bold;
+    }
+
+    #box-note ul {
+        display: block;
+        list-style-type: disc;
+        -webkit-margin-before: 1em;
+        -webkit-margin-after: 1em;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;
+        -webkit-padding-start: 40px;
+    }
+
+    ul li {
+        list-style: inherit;
+    }
+
+    .cpc-left .table td {
+        border-color: #fff;
+    }
+
+    .cpc-left .table {
+        border: none;
+    }
+
+    .tqg-card {
+        width: 170px;
+        height: 110px;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        float: left;
+        position: relative;
+        margin: 10px;
+    }
+
+    .card50 {
+        background-image: url("/static/images/card50.png");
+    }
+
+    .card100 {
+        background-image: url("/static/images/card100.png");
+    }
+
+    .card200 {
+        background-image: url("/static/images/card200.png");
+    }
+
+    .divider-discount {
+        width: 100%;
+        height: 1px;
+        background: #888;
+        margin-bottom: 20px;
+        box-shadow: 0px 0px 1px #888888;
+    }
+
+    .cl-black {
+        color: #000;
+    }
+
+    .cpc-left .table {
+        margin-bottom: 10px !important;
+    }
+
+    .noti-dc {
+        line-height: 34px;
+        color: #f28013;
+    }
+
+    .total-pay {
+        font-weight: bold;
+    }
+
+    .my-discount {
+        text-align: left;
+        color: #f28013;
+        padding: 0px 50px;
+        font-size: 0.95em;
+        margin-left: 20px;
+    }
+
+    .bold-big {
+        line-height: 34px;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+
+    .table-divider {
+        width: 60%;
+        margin-left: 20%;
+        height: 1px;
+        background-color: #999;
+    }
+    #min-nl{
+        line-height: 34px;
+    }
+    .cl-orange {
+        color: #f28013;
+    }
+    #note-tqg-card{
+        text-align: left;
+        margin: 20px;
+        line-height: 22px;
+        color: #666;
+        font-weight: bold;
+    }
+    .list-seri-note{
+        list-style: circle;
+        margin-left: 20px;
+    }
+    #box-note-discount{
+        font-size: 0.95em;
+        margin-left: 20px;
+    }
+    #box-note-discount-increase{
+        font-size: 0.95em;
+        margin-left: 20px;
+    }
+</style>

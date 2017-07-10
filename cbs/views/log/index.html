@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script>
+            var is_processing = false;
+            var is_scroll = true;
+            var is_process = true;
+            
+            $.ajaxSetup({
+                error: function(xhr, status, error) {
+                    alert("An AJAX error occured: " + status + "\nError: " + error +
+                            "\nError detail: " + xhr.responseText);
+                } 
+            });
+            
+            function load_data(){
+                if(is_processing || !is_process){
+                    return;
+                }
+                
+                is_processing = true;
+                $.get("http://192.168.50.75:8000/cbs/log/get_log", function( data ) {
+                    try {
+                        var jsonobj = $.parseJSON(data);
+                        var html = "";
+                        for(var i=0; i<jsonobj.length; i++){
+                            html += "<div>" + jsonobj[i].time;
+                            html += " /" + jsonobj[i]["application"] + "/" + jsonobj[i]["controller"] + "/" +
+                                    jsonobj[i]["function"] + "." + jsonobj[i]["extension"];
+                            html += "<div style='margin-left:20px;'>Client: " + jsonobj[i]["client"] + "</div>";
+                            html += "<div style='margin-left:20px;'>Args: " + jsonobj[i]["args"] + "</div>";
+                            var vars = $.map(jsonobj[i].vars, function(value, key){return key + ": " + value;});
+                            html += "<div style='margin-left:20px;'>Vars: " + vars + "</div>";
+                            html += "<div style='margin-left:20px;'>Data: " + jsonobj[i]["data"] + "</div>";
+                            html += "</div>";
+                        }
+                        $("#console").html(html);
+                    } catch(err) {
+                        console.log("Error: " + err);
+                    }
+                    if(is_scroll){
+                        $("body").scrollTop = $('body').height();
+                    }
+                    is_processing = false;
+                });
+            }
+            
+            function clear_logs(){
+                $.get("http://192.168.50.75:8000/cbs/log/cmd?cmd=clear", function(data){
+                    console.log(data);
+                    load_data();
+                });
+            }
+            
+            $(document).ready(function(){
+                load_data();
+                setInterval(load_data, 1000);
+                $("#auto_scroll").change( function(){
+                    is_scroll = !is_scroll;
+                });
+                $("#on_off").change( function(){
+                    is_process = !is_process;
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="console"></div>
+        <div style="position: fixed; right: 10px; top: 0;">
+            <input type="button" onclick="clear_logs();" value="Clear Logs">
+            <input type="checkbox" id="on_off" checked>
+            <label for="on_off">On/Off</label>
+            <input type="checkbox" id="auto_scroll" checked>
+            <label for="auto_scroll">Auto Scroll</label>
+        </div>
+    </body>
+</html>

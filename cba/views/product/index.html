@@ -1,0 +1,369 @@
+{{extend 'layout.html'}}
+    
+<form method="post" action="{{=URL('index')}}" id="cat_form">
+	<h3 style="float:left;">Choose category:</h3>
+	<select onchange="$('#cat_form').submit();" style="margin-top: 15px; margin-left: 10px;" name="category" id="category">
+		<option value="0">Tất cả</option>
+		<!-- {{for category in categories:}} -->
+		<!-- {{if str(session.catid) == str(category["id"]):}} -->
+		<option value='{{=category["id"]}}' selected="selected">{{=category["category_name"]}}</option>
+		<!-- {{else:}} -->
+		<option value='{{=category["id"]}}'>{{=category["category_name"]}}</option>
+		<!-- {{pass}} -->
+		<!-- {{pass}} -->
+	</select>
+</form>
+{{=form}}
+<script>
+var list_show = ["ANDROID_APP", "IOS_APP", "CBM", "STORE_WEB", "STORE_APP"];
+$(document).ready(function () {
+     for (var i = 0; i < list_show.length; i++){
+        console.log(list_show[i])
+        $("#" + list_show[i]).change(function() {
+            console.log("Click " + $(this).val())
+            changeValueShow();
+        });
+    }
+});
+</script>
+<script>
+
+jQuery(document).ready(function(){
+	jQuery('#update_zip_file').click(function(){if(this.checked) if(!confirm(
+        "{{=T('Sure you want to update a new product\'s zip file detected?')}}"))
+      this.checked=false});
+    {{if request.url.find('clsb_product/new/clsb_product') >= 0:}}
+    document.getElementById("clsb_product_product_publisher").selectedIndex = 11;
+    {{pass}}
+    $('input[name=records]').change(function() {
+        var a= $(this).attr('value');
+         $.ajax({
+                    type: "POST",
+                    url: '{{=URL("cba", "product", "execute_product_id", host=True)}}',
+                    data: {product_id :  a  },
+                    success: function(msg){
+                        }
+                });
+    });
+
+    {{
+        product_list_id = session.product_id_list
+        product_arr = product_list_id.split(",")
+        for product in product_arr:
+
+    }}
+        $("input[value='" + {{=product}} + "']").attr('checked', 'checked');
+    {{pass}}
+});
+
+    function changeValueShow(){
+        var show_val = "";
+        for (var i = 0; i < list_show.length; i++){
+            if($("#" + list_show[i]).is(':checked')){
+                if (show_val != ""){
+                    show_val += "/";
+                }
+                show_val += list_show[i];
+            }
+        }
+        $("#clsb_product_show_on").val(show_val);
+
+    }
+
+	function changeFunc(id) {
+	    var selectBox = document.getElementById("selectbox" + id);
+	    
+	    if(selectBox != null){
+		    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+		    request_args = "";
+		    var page = "{{=URL("index", host=True)}}";
+		    if(selectedValue == "Attentions"){
+		    	request_arg = "/clsb_product/clsb_attention.product_id/" + id;
+		    //	alert(page+request_arg)
+				window.location = page+request_arg; // redirect
+		    }
+		    else if(selectedValue == "Product metadata"){
+		    	request_arg = "/clsb_product/clsb_product_metadata.product_id/" + id;
+		    	//alert(page+request_arg)
+		    			window.location = page+request_arg; // redirect
+		    	
+		    }
+		    else if(selectedValue == "Download Archieves"){
+		    	request_arg = "/clsb_product/clsb_download_archieve.product_id/" + id;
+		    	//alert(page+request_arg)
+		    			window.location = page+request_arg; // redirect
+		    	
+		    }
+		    else if(selectedValue == "Home Topic Items"){
+		    	request_arg = "/clsb_product/clsb_home_topic_item.product_id/" + id;
+		    	//alert(page+request_arg)
+		    			window.location = page+request_arg; // redirect
+		    	
+		    }
+		    else if(selectedValue == "Product Relations"){
+		    	request_arg = "/clsb_product/clsb_product_relation.product_id/" + id;
+		    	//alert(page+request_arg)
+		    			window.location = page+request_arg; // redirect
+		    	
+		    }
+		    else if(selectedValue == "Choose linked table"){
+		    	request_arg = "Choose linked table" + id;
+		    	//alert(request_arg)
+		    }
+	    }
+	    else
+	    	alert("selectBox is null");
+	}
+
+	// To control select box metadata_id in the form /cba/product/index/clsb_product/clsb_product_metadata.product_id  
+	function metadata_id_onchange(id) {
+		var selectBox = document.getElementById("clsb_product_metadata_metadata_id");
+		if(selectBox != null){
+			var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+			//alert(selectedValue);
+			
+			var metadata_value_row = document.getElementById("clsb_product_metadata_metadata_value__row");
+			var new_metadata_value_row = document.getElementById("new_clsb_product_metadata_metadata_value__row");
+			
+				request_args = "";
+				var page = "{{=URL("index", host=True)}}";
+				if(selectedValue == id){
+					//alert("haha OK");
+					if (metadata_value_row != null){
+						metadata_value_row.style.display = "none"
+					}
+					if (new_metadata_value_row != null){
+						new_metadata_value_row.style.display = "table-row"
+					}
+				}
+				else{
+					if (metadata_value_row != null){
+						metadata_value_row.style.display = "table-row"
+					}
+					if (new_metadata_value_row != null){
+						new_metadata_value_row.style.display = "none"
+					}
+				}
+		}
+	}
+	
+	function subject_name_onchange(){
+		//alert("haha");
+		var subjectBox = document.getElementById("product_subject_name");
+		var classesBox = document.getElementById("product_classes_name");
+		
+		//if(subjectBox != null){
+		//	var subjectId = subjectBox.options[subjectBox.selectedIndex].value;
+		//	alert(subjectId);
+			
+		//	$.getJSON("{{=URL(a='cbs', c='subjects', f='classes', host=True)}}/" + subjectId, function(msg){
+		//		alert('hahaha');
+		//	});
+		//}
+	}
+jQuery(document).submit(function(){
+	{{if request.url.find('clsb_product/edit/clsb_product') >= 0 and zip_product_code:}}
+	if (!confirm("{{=T('Sure you want to update a new product\'s zip file detected?')}}"))
+		return false;
+	{{pass}}
+});
+
+function caculateSize(product_id){
+    var link = "{{=URL(f='caculate_size')}}.json" + "/" + product_id;
+        console.log(link)
+        $.ajax({
+            url: link,
+            async: false,
+            success: function (data) {
+                if (data.result) {
+                    alert(data.size)
+                } else {
+                    alert(data.error)
+                }
+            },
+            error: function (err) {
+                alert("Lỗi kết nối " + err.message);
+            }
+        });
+}
+</script>
+{{try:}}
+{{if request.url.find('clsb_product/new/clsb_product') >= 0 or request.url.find('clsb_product/edit/clsb_product') >= 0:}}
+<div id="pick_category" class="css-treeview">
+    <h4>Chọn danh mục:</h4>
+<ul>
+
+    {{for cate1 in mcategories:}}
+    <li><input {{="checked" if cate1['category_id'] in expands else ""}} id="pick{{=cate1['category_id']}}" type="checkbox"/><label for="pick{{=cate1['category_id']}}">{{=cate1['category_name']}}</label>
+        <ul>
+            {{for cate2 in cate1['children']:}}
+            <li><input name="{{='pick-cate' if len(cate2['children']) == 0 else ''}}"
+                       value="{{=cate2['category_id']}}"
+                       class="{{='pick' if len(cate2['children']) == 0 else ''}}"
+                       type="{{='checkbox' if len(cate2['children']) > 0 else 'radio'}}"
+                       {{='checked' if cate2['category_id'] == int(session.cat_id) else ''}}
+                       id="pick{{=cate2['category_id']}}" /><label for="pick{{=cate2['category_id']}}">{{=cate2['category_name']}}</label>
+                <ul>
+                    {{for cate3 in cate2['children']:}}
+                    <li><input name="{{='pick-cate' if len(cate3['children']) == 0 else ''}}"
+                               class="{{='pick' if len(cate3['children']) == 0 else ''}}"
+                               value="{{=cate3['category_id']}}"
+                               type="{{='checkbox' if len(cate3['children']) > 0 else 'radio'}}"
+                               {{='checked' if cate3['category_id'] == int(session.cat_id) else ''}}
+                               id="pick{{=cate3['category_id']}}" /><label for="pick{{=cate3['category_id']}}">{{=cate3['category_name']}}</label>
+                        <ul>
+
+                        </ul>
+                    </li>
+                    {{pass}}
+                </ul>
+            </li>
+            {{pass}}
+        </ul>
+    </li>
+    {{pass}}
+
+</ul>
+</div>
+<script>
+//    document.getElementById("category").disabled = true;
+    $("input[name=pick-cate]:radio").change(function () {
+        console.log($("input:radio[name='pick-cate']:checked").val());
+        $('#clsb_product_product_category').val($("input:radio[name='pick-cate']:checked").val());
+    });
+</script>
+<style>
+    #pick_category{
+        position: fixed;
+        overflow: auto;
+        top: 50px;
+        right: 10px;
+        width: 220px;
+        height: 90vh;
+
+    }
+    .css-treeview ul,
+.css-treeview li
+{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.css-treeview input
+{
+    position: absolute;
+    opacity: 0;
+}
+
+.css-treeview .pick{
+    opacity: 1;
+}
+
+.css-treeview
+{
+    font: normal 11px "Segoe UI", Arial, Sans-serif;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.css-treeview a
+{
+    color: #00f;
+    text-decoration: none;
+}
+
+.css-treeview a:hover
+{
+    text-decoration: underline;
+}
+
+.css-treeview input + label + ul
+{
+    margin: 0 0 0 22px;
+}
+
+.css-treeview input ~ ul
+{
+    display: none;
+}
+
+.css-treeview label,
+.css-treeview label::before
+{
+    cursor: pointer;
+}
+
+.css-treeview input:disabled + label
+{
+    cursor: default;
+    opacity: .6;
+}
+
+.css-treeview input:checked:not(:disabled) ~ ul
+{
+    display: block;
+}
+
+.css-treeview label,
+.css-treeview label::before
+{
+    background: url("{{=URL('static', 'images/icons.png')}}") no-repeat;
+}
+
+.css-treeview label,
+.css-treeview a,
+.css-treeview label::before
+{
+    display: inline-block;
+    height: 16px;
+    line-height: 16px;
+    vertical-align: middle;
+}
+
+.css-treeview label
+{
+    background-position: 18px 0;
+     font-size: 12px;
+}
+
+.css-treeview label::before
+{
+    content: "";
+    width: 16px;
+    margin: 0 22px 0 0;
+    vertical-align: middle;
+    background-position: 0 -32px;
+}
+
+.css-treeview input:checked + label::before
+{
+    background-position: 0 -16px;
+}
+
+/* webkit adjacent element selector bugfix */
+@media screen and (-webkit-min-device-pixel-ratio:0)
+{
+    .css-treeview
+    {
+        -webkit-animation: webkit-adjacent-element-selector-bugfix infinite 1s;
+    }
+
+    @-webkit-keyframes webkit-adjacent-element-selector-bugfix
+    {
+        from
+        {
+            padding: 0;
+        }
+        to
+        {
+            padding: 0;
+        }
+    }
+}
+</style>
+{{pass}}
+{{except Exception as e:}}
+{{pass}}
+

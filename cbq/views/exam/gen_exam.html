@@ -1,0 +1,262 @@
+{{extend 'layout.html'}}
+
+<form method="post" action="#" id="frmGenExam">
+    <input type="hidden" name="txtNumberOfExam" value="{{=exam_data['NumberOfExam']}}">
+    <input type="hidden" name="txtNumberOfSegment" value="{{=exam_data['NumberOfSegment']}}">
+    <input type="hidden" name="duplicate" value="{{=exam_data['duplicate']}}">
+
+    <div id="gen_exam_info">
+        <h3>Thông tin về tạo đề</h3>
+        <table>
+            <tr>
+                <td>Số lượng đề muốn tạo</td>
+                <td><label id="txtNumberOfExam" name="txtNumberOfExam"></label></td>
+            </tr>
+            <tr>
+                <td>Số lượng segment trong mỗi đề</td>
+                <td><label id="txtNumberOfSegment" name="txtNumberOfSegment"></label></td>
+            </tr>
+            <tr>
+                <td>Tỉ lệ trùng lặp câu hỏi</td>
+                <td><label id="duplicate" name="duplicate"></label></td>
+            </tr>
+
+        </table>
+    </div>
+    <h3>Thông tin chi tiết cho đề</h3>
+
+    <div id="exam_detail">
+        <table id="segment_info">
+
+
+        </table>
+    </div>
+
+</form>
+
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script>
+
+
+$(document).ready(function () {
+
+    load_data();
+    load_parent_list();
+    load_category_list();
+
+    var number_segment = parseInt("{{=exam_data['NumberOfSegment']}}");
+//        for (var i = 0; i < number_segment; i++)
+//        {
+//        $("#sclParent" + i).change(function () {
+//            load_child_list('sclChild' +i);
+//        });
+//            }
+//
+//        $("#sclChild").change(function () {
+//            load_category();
+//        });
+
+    $("#btnSubmit").click(function () {
+        $("#frmGenExam").submit();
+    });
+
+});
+
+function load_category_list() {
+    $.ajax({
+        url: "{{=URL("cbq", "quiz_category", "get_list_category_name.json", host=True)}}",
+        type: "POST",
+        success: function (data) {
+
+            var arr = new Array();
+            $.each(data, function (key, value) {
+                if (key == 'category_name_list') {
+                    $.each(value, function (k, v) {
+                        arr.push(v.category_name);
+                    });
+                }
+            });
+            var number_segment = parseInt("{{=exam_data['NumberOfSegment']}}");
+            for (var i = 0; i < number_segment; i++)
+            {
+                $("#category" + i).autocomplete({
+                source: arr
+            });
+            }
+        }
+    });
+
+}
+
+function load_parent_list() {
+    $.ajax({
+        url: "{{=URL("cbq", "quiz_category", "get_list_category_has_null_parent.json", host=True)}}",
+        type: "POST",
+        success: function (data) {
+            var content = '';
+            content += '<option value=-1>Chọn lớp</option>';
+            $.each(data, function (key, value) {
+                if (key == 'class_list') {
+                    $.each(value, function (k, v) {
+                        content += '<option  value=' + v.id + '>' + v.category_name + '</option>';
+                    });
+                }
+            });
+            $('#sclParent0').html(content);
+        }
+    });
+}
+//    function load_parent_list() {
+//        $.ajax({
+//            url: "{{=URL("cbq", "quiz_category", "get_list_category_has_null_parent.json", host=True)}}",
+//            type: "POST",
+//            success: function (data) {
+//                var content = '';
+//                content += '<option value=-1>Chọn lớp</option>';
+//                $.each(data, function (key, value) {
+//                    if (key == 'class_list') {
+//                        $.each(value, function (k, v) {
+//                            content += '<option value=' + v.id + '>' + v.category_name + '</option>';
+//                        });
+//
+//                    }
+//                });
+//                var number_segment = parseInt("{{=exam_data['NumberOfSegment']}}");
+//                for (var i = 0; i < number_segment; i++)
+//                {
+//                    $('#sclParent' + i).html(content);
+//                }
+//
+//            }
+//
+//        });
+//
+//    }
+
+function load_child_list(obj) {
+//        var parent_id = $('#' + parentId + ' option:selected').val();
+//        var id = '#' + parentId;
+    var id = '#' + obj.id;
+    var parent_id = $(id).val();
+    $.ajax({
+        url: "{{=URL("cbq", "quiz_category", "get_list_quiz_category_by_parent_id.json", host=True)}}",
+        type: "POST",
+        data: {parent_id: parent_id},
+        success: function (data) {
+            var subject_id = null;
+            var content = '';
+            content += '<select name="sclParent">'
+            content += '<option value=-1>Chọn môn</option>';
+            $.each(data, function (key, value) {
+                if (key == 'category_list') {
+                    $.each(value, function (k, v) {
+                        content += '<option value=' + v.id + '>' + v.category_name + '</option>';
+                    });
+                }
+            });
+            content += '</select>';
+            $('#' + parentId).after(content);
+//                $('#' + childId).html(content);
+        }
+    });
+}
+
+function load_category() {
+    var parent_id = $("#sclChild").val();
+    $.ajax({
+        url: "{{=URL("cbq", "quiz_category", "get_list_quiz_category_by_parent_id.json", host=True)}}",
+        type: "POST",
+        data: {parent_id: parent_id},
+        success: function (data) {
+            var content = "";
+            content += '<div id="question_info">';
+            $.each(data, function (key, value) {
+                if (key == 'category_list') {
+                    $.each(value, function (k, v) {
+                        content += '<option value=' + v.id + '>' + v.category_name + '</option>';
+                    });
+                }
+            });
+            $("#sclCategory").html(content);
+        }
+    });
+}
+
+
+function load_data() {
+    var number_exam = parseInt("{{=exam_data['NumberOfExam']}}");
+    var number_segment = parseInt("{{=exam_data['NumberOfSegment']}}");
+    var duplicate = parseInt("{{=exam_data['duplicate']}}");
+    var mes = "{{=exam_data['result']}}"
+
+    var content = $("#segment_info").val();
+
+    for (var i = 0; i < number_segment; i++) {
+        content += '<tr>';
+        content += '<td>';
+        content += 'Số lượng câu hỏi của segment ' + (i + 1);
+        content += '</td>';
+        content += '<td>';
+        content += '<input type="text" name="seg' + (i) + '">';
+        content += '</td>';
+        content += '<td>';
+        content += 'Thời lượng:';
+        content += '</td>';
+        content += '<td>';
+        content += '<input type="text" name="time_seg' + (i) + '">';
+        content += '</td>';
+        content += '<td>';
+        content += 'Tên segment :';
+        content += '</td>';
+        content += '<td>';
+        content += '<input type="text" name="seg_name' + (i) + '">';
+        content += '</td>';
+        content += '</tr>';
+
+        content += '<tr>';
+        content += '<td>';
+        content += 'Chọn giá ';
+        content += '</td>';
+        content += '<td>';
+        content += '<input type="text" name="category' + i + '" id ="category' + i + '">';
+        content += '</td>';
+        content += '</tr>';
+
+//            content += '<tr>';
+//            content += '<td>';
+//            content += 'Chọn giá ';
+//            content += '</td>';
+//            content += '<td>';
+//            content += '<select id="sclParent' + i + '" onChange="load_child_list(\'sclChild' + i + '\', \'sclParent' + i + '\');"></select>';
+//            content += '</td>';
+//            content += '<td>';
+//            content += '<select id="sclChild' + i + '" onChange="load_child_list(\'sclCategory' + i + '\', \'sclChild' + i + '\');"></select>';
+//            content += '</td>';
+//            content += '<td>';
+//            content += '<select name="sclCategory' + i + '" id="sclCategory' + i + '"></select>';
+//            content += '</td>';
+//            content += '</tr>';
+
+
+    }
+
+    content += '<tr>';
+    content += '<td>';
+    content += '<input type="button" value="Quay lại" id="btnBack">';
+    content += '</td>';
+    content += '<td>';
+    content += '<input type="button" value="Tạo đề" id="btnSubmit">';
+    content += '</td>';
+    content += '</tr>';
+
+    $("#segment_info").html(content);
+    $("#txtNumberOfExam").html(number_exam);
+    $("#txtNumberOfSegment").html(number_segment);
+    $("#duplicate").html(duplicate + "%");
+
+    if (mes != null && mes != '')
+    {
+        alert(mes);
+    }
+}
+</script>

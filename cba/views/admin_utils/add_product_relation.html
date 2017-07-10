@@ -1,0 +1,41 @@
+{{extend 'layout.html'}}
+
+<form method="POST">
+Filter: <input type="text" name="txtfilter" width="50%"/>
+ <p> Danh tìm thấy : </p>
+
+    <table border="1">
+    <tr>
+        <td width="10%">ID</td>
+        <td width="50%">Product title</td>
+        <td width="10%">Check/Uncheck All</td>
+    </tr>
+    {{for p in products:}}
+        <tr>
+        <td width="10%">{{=p['id']}}</td>
+        <td width="50%" id ="{{=p['id']}}">{{=p['product_title']}} </td>
+        <td width="10%">
+            <input type="checkbox" id="checkedval" name="checkedval" value="{{=p['id']}}"/>
+        </td>
+
+        </tr>
+    {{pass}}
+
+    {{if checkedvals is not None:}}
+        {{for pc in checkedvals:}}
+             <li>
+             {{=pc}}
+             </li>
+        {{pass}}
+    {{pass}}
+
+    {{if relations is not None:}}
+        {{for r in relations.list_rel:}}
+            {{=r.product_id}} ... {{=r.relation_id}} <br>
+        {{pass}}
+    {{pass}}
+  </table>
+
+<input type="submit" value="Submit" />
+</form>
+

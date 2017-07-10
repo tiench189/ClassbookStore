@@ -1,0 +1,37 @@
+<div class="container">
+    	<div id="slide-center">
+        	<div class="swiper-wrapper">
+                <div class="swiper-slide" style="background-image: url({{=URL('static','store2.2/images/slide-01.jpg')}});">
+                    <a href="#" class="slide-link" title=""></a>
+                </div>
+                <div class="swiper-slide" style="background-image: url({{=URL('static','store2.2/images/slide-02.jpg')}});">
+                    <a target="_blank" href="/manager" class="slide-link" title=""></a>
+                </div>
+                <div class="swiper-slide" style="background-image: url({{=URL('static','store2.2/images/slide-03.jpg')}}); background-size: 100% 100%">
+                    <a target="_blank" href="http://thiquocgia.vn" class="slide-link" title=""></a>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="clearfix"></div>
+        </div>
+        <div id="slide-right">
+        	<div class="sr-qc320"><a target="_blank" href="https://play.google.com/store/apps/details?id=com.edc.a0tech" title=""><img src="{{=URL('static','store2.2/images/A0Tec_banner_classbookvn.png')}}" alt="" title=""></a></div>
+            <ul class="sr-news">
+            	<li class="srn-big"><a target="_blank" href="{{=URL(f='new', vars=dict(link='http://tintuc.classbook.vn/index.php/15-tin-classbook/147-tru-ng-vi-t-anh-thay-th-sgk-gi-y-b-ng-sgk-di-n-t-classbook'))}}" title="Trường Việt Anh thay thế SGK giấy bằng SGK điện tử Classbook">Trường Việt Anh thay thế SGK giấy bằng SGK điện tử Classbook</a></li>
+                <li><a target="_blank" href="{{=URL(f='new', vars=dict(link='http://tintuc.classbook.vn/index.php/15-tin-classbook/137-di-tim-nha-thong-thai-cung-classbook'))}}" title="Đi tìm nhà thông thái cùng Classbook">Đi tìm nhà thông thái cùng Classbook</a></li>
+                <li><a target="_blank" href="{{=URL(f='new', vars=dict(link='http://tintuc.classbook.vn/index.php/15-tin-classbook/136-b-d-thi-m-u-vao-c-p-3-va-t-t-nghi-p-c-p-3'))}}" title="Bộ đề thi tuyển và tốt nghiệp THPT">Bộ đề thi tuyển và tốt nghiệp THPT</a></li>
+                <li><a target="_blank" href="{{=URL(f='new', vars=dict(link='http://tintuc.classbook.vn/index.php/15-tin-classbook/133-sach-giao-khoa-di-n-t-du-c-vinh-danh-sao-khue-2015'))}}" title="Sách giáo khoa điện tử được vinh danh Sao Khuê">Sách giáo khoa điện tử được vinh danh Sao...</a></li>
+                <li><a target="_blank" href="{{=URL(f='new', vars=dict(link='http://tintuc.classbook.vn/index.php/cong-nghe/148-on-thi-th-nao-d-d-vao-10-chuyen'))}}" title="Ôn thi thế nào để đỗ vào 10 chuyên?">Ôn thi thế nào để đỗ vào 10 chuyên?</a></li>
+                <li><a target="_blank" href="{{=URL(f='new', vars=dict(link='http://tintuc.classbook.vn/index.php/cong-nghe/144-o-long-vi-n-nh-ng-cau-chuy-n-gi-i-tri-tuy-t-v-i'))}}" title="Ô Long Viện – những câu chuyện giải trí tuyệt vời">Ô Long Viện – những câu chuyện giải trí ...</a></li>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+<script>
+    var swiper = new Swiper('#slide-center', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+		loop: true,
+		autoplay: 5000
+    });
+</script>

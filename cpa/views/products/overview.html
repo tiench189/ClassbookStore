@@ -1,0 +1,24 @@
+{{extend "layout.html"}}
+
+<table class="tablesorter web2py_grid">
+    <thead>
+            <th>ID</th>
+            <th style="text-align: center;">Ảnh cover</th>
+            <th>Tiêu đề sách</th>
+            <th>Ngày giờ tạo</th>
+            <th>Giá tiền</th>
+            <th>Trạng thái</th>
+    </thead>
+    <tbody>
+    {{for product in products:}}
+    <tr>
+        <td>{{=product['id']}}</td>
+        <td><img src="/cpa/download/cover/CP56/upload/{{=product['product_code']}}/cover.clsbi" style="width: 55px; margin: 0 auto;"></td>
+        <td>{{=product['product_title']}}</td>
+        <td>{{=product['created_on']}}</td>
+        <td>{{=product['product_price']}}</td>
+        <td>{{=product['product_status']}}</td>
+    </tr>
+    {{pass}}
+    </tbody>
+</table>

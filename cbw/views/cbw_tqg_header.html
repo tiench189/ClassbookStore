@@ -1,0 +1,36 @@
+<div id="header">
+    <div class="container">
+        <div id="logo">
+            <a href="http://thiquocgia.vn/" class="logo-img"><img
+                    src="{{=URL('static','store2.2/images/logo-tqg-black.png')}}" title="Thi quốc gia"
+                    alt="Thi quốc gia"></a>
+        </div>
+        <div style="font-size: 26px;
+                margin-top: 30px;
+                margin-left: 300px;">
+            Tài khoản: <span style="font-weight: bold; color: #F28013">{{=tqg_fund}}</span>
+        </div>
+        <a id="goi" href="http://thiquocgia.vn/packs">Mua gói dịch vụ</a>
+    </div>
+</div>
+<style>
+    #header .container {
+        position: relative;
+        height: 90px;
+    }
+
+    #logo .logo-img img {
+        width: 154px;
+        height: 36px;
+    }
+
+    #goi {
+        position: absolute;
+        margin-left: 600px;
+        margin-top: -35px;
+        padding: 5px 10px;
+        background: #F28013;
+        color: white;
+        border-radius: 3px;
+    }
+</style>

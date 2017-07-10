@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{{=info['title']}}</title>
+	<link rel="stylesheet" href="/static/view_pdf/css/swiper.min.css">
+    <script src="/static/view_pdf/js/jquery-1.12.0.min.js"></script>
+    <script src="/static/view_pdf/js/swiper.js"></script>
+
+    <!-- Demo styles -->
+    <style>
+    body {
+        background: #eee;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color:#000;
+        margin: 0;
+        padding: 0;
+    }
+    .swiper-container {
+
+        margin: 0px auto;
+    }
+    .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+    }
+	.piece{
+		position:absolute;
+		background-repeat:no-repeat;
+		background-size: 100% 100%;
+	}
+        .swiper-button-next{
+            top: 20px;
+            background-position: right center;
+        }
+        .swiper-button-prev{
+            top: 20px;
+            background-position: left center;
+        }
+        #zoom{
+            z-index: 100;
+            position: fixed;
+            right: 20px;
+            top: 20px;
+        }
+        .icon-zoom{
+            background-size: 100% 100%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .icon-zoom.in{
+            background-image: url("/static/view_pdf/img/zoom_in.png");
+        }
+        .icon-zoom.out{
+            margin-top: 20px;
+            background-image: url("/static/view_pdf/img/zoom_out.png");
+        }
+        .swiper-container-horizontal>.swiper-pagination{
+            position: fixed;
+        }
+    </style>
+</head>
+
+<body>
+<div class="swiper-container">
+	<div class="swiper-wrapper">
+
+    </div>
+    <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+</div>
+<div class="swiper-button-next" style="position: fixed"></div>
+<div class="swiper-button-prev" style="position: fixed"></div>
+<div id="zoom">
+    <div class="icon-zoom in" onclick="zoomIn()"></div>
+    <div class="icon-zoom out" onclick="zoomOut()"></div>
+</div>
+</body>
+</html>
+<script>
+
+var num_page = {{=page_count}};
+if (num_page == 0){
+    alert("Chưa có dữ liệu!");
+}
+var split = 4;
+for (var i = 0; i < num_page; i++){
+	$(".swiper-wrapper").append("<div class='swiper-slide'></div>");
+}
+var slides = document.getElementsByClassName("swiper-slide");
+var img = new Image();
+img.src = "/static/view_pdf/document/{{=exer_code}}/page1/0.png"
+var mW, mH;
+var mscale = 1;
+$(".swiper-button-next").height(window.innerHeight - 40 + "px")
+$(".swiper-button-prev").height(window.innerHeight - 40 + "px")
+
+$(".swiper-button-next").width(window.innerWidth / 6 + "px");
+$(".swiper-button-prev").width(window.innerWidth / 6 + "px");
+img.onload = function() {
+	mW = this.width;
+	mH = this.height;
+//	console.log(mW + "/" + mH)
+	//Caculate size
+	setViewPdf();
+};
+
+function setViewPdf(){
+    if (!('ontouchstart' in document.documentElement)){
+		$(".swiper-container").height(window.innerHeight * mscale + "px");
+		$(".swiper-container").width((mW * (window.innerHeight - 0) / mH) * mscale + "px");
+	}else{
+        $("#zoom").hide();
+		$(".swiper-container").width(window.innerWidth - 40 + "px");
+		$(".swiper-container").height(mH * (window.innerWidth - 40) / mW + "px");
+		if (window.innerHeight > $(".swiper-container").height()){
+			$(".swiper-container").css("margin-top", (window.innerHeight - $(".swiper-container").height()) / 2 + "px");
+		}
+	}
+
+	//
+	for (var j = 1; j <= slides.length; j++){
+//	console.log("slide: " + j);
+	var slide = slides[j -1];
+	var realW = $(".swiper-container").width();
+//		console.log(realW)
+		for (var i = 0; i < (split * split); i++){
+			var piece = document.createElement("div");
+			piece.className = "piece piece" + j + " part-" + j + "-" + (i + 1);
+			slide.appendChild(piece);
+		}
+
+
+		var pW = realW / split;
+		var pH = mH * (pW / mW)
+
+		$(".piece" + j).width(pW);
+		$(".piece" + j).height(pH);
+
+		for (var i = 0; i < (split * split); i++){
+			var element = $(".part-"+j+"-" + (i + 1));
+			element.css("background-image", "url(/static/view_pdf/document/{{=exer_code}}/page" + j + "/" + i + ".png)");
+			element.css("left", (i % split) * pW + "px ");
+			element.css("top", parseInt((i / split)) * pH + "px");
+		}
+	}
+}
+var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        slidesPerView: 1,
+        paginationClickable: true,
+        spaceBetween: 30,
+        keyboardControl: true,
+		nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+    });
+
+
+    function zoomIn(){
+        parent.postMessage("zoomIn","*");
+        if (mscale < 2){
+            mscale += 0.25;
+            setViewPdf();
+        }
+    }
+    function zoomOut(){
+        parent.postMessage("zoomOut","*");
+        if (mscale > 0.5){
+            mscale -= 0.25;
+            setViewPdf();
+        }
+    }
+</script>

@@ -1,0 +1,175 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}
+	<div class="banner_sub banner_support"></div>
+{{end}}
+
+{{block title_content}}{{end}}
+            
+<div class="box_store_product box_radius mtop_normal left">
+	<div class="product_related left">
+		<div class="box_content_right_main left">
+			<div class="box_right_title_product left">
+				<a class="box_right_tab_item box_right_tab_item_active fs18 left" href="{{=URL('support')}}">FAQs</a>
+				<a class="box_right_tab_item fs18 mleft_huge left" href="{{=URL('support_form')}}">Phản hồi</a>
+				<a class="box_right_tab_item fs18 mleft_huge left" href="{{=URL('warranty_adddevice')}}">Đăng ký bảo hành</a>
+				<a class="box_right_tab_item box_right_tab_item fs18 mleft_huge left" href="{{=URL('download')}}">Download</a>
+			</div>
+			<div class="box_right_product left mtop_normal mbot_normal">
+				<div class="slide_product left">
+					<div class="tab_child left" id="tabs-faqs">						
+						<ul>
+							<li>
+								<a class="tab_child_item_active left mright_normal" href="#tabs-1">Các câu hỏi về nội dung</a>
+							</li>
+							<li>
+								<a class="tab_child_item left mright_normal" href="#tabs-2">Các câu hỏi về sử dụng</a>
+							</li>
+							<li>
+								<a class="tab_child_item left" href="#tabs-3">Các câu hỏi trong quá trình sử dụng</a>
+							</li>
+						</ul>
+						
+						<div id="tabs-1">
+							<div class="left fcblue line_row_FAQs mtop_normal">1. Khi NXB Giáo dục thay đổi nội dung Sách giáo khoa thì Classbook còn sử dụng được không?</div>							
+							<span class="left mtop_mini fcb">
+								Ngay khi NXB Giáo dục thay đổi nội dung Sách giáo khoa, người dùng Classbook sẽ được cập nhật toàn bộ nội dung mới nhất hoàn toàn miễn phí bằng cách tải xuống từ Kho dữ liệu Classbook Store.
+							</span>							
+							<div class="line_seperate_product mtop_mini left"></div>
+							
+							<div class="left fcblue line_row_FAQs mtop_normal">2. Classbook có thể truy cập Internet hay không?</div>							
+							<span class="left mtop_mini fcb">
+								Classbook không cho phép tự do kết nối Internet, nhằm đảm bảo các em học sinh chỉ sử dụng Classbook cho mục đích học tập. Khi kết nối Internet trên Classbook, người dùng chỉ có thể truy cập Kho dữ liệu Classbook Store để tải về Sách tham khảo và nhiều nội dung thú vị khác.
+							</span>							
+							<div class="line_seperate_product mtop_mini left"></div>
+							
+							<div class="left fcblue line_row_FAQs mtop_normal">3. Classbook có thể cài thêm trò chơi hay đưa thêm tài liệu khác vào được không?</div>							
+							<span class="left mtop_mini fcb">
+								Classbook không có trò chơi, trong phiên bản dành cho học sinh người dùng cũng không thể cài thêm trò chơi vào thiết bị.<br>
+								Với các tài liệu tham khảo, sách, bài giảng khác, Classbook cho phép người dùng đưa thêm vào thông qua thẻ nhớ microSD. Các tài liệu phải ở định dạng file pdf và đặt trong thư mục đặt tên là “teacher”.
+							</span>							
+							<div class="line_seperate_product mtop_mini left"></div>
+							
+							<div class="left fcblue line_row_FAQs mtop_normal">4. Nội dung Classbook có sách giải hay không?</div>							
+							<span class="left mtop_mini fcb">
+								Nội dung có sẵn trong Classbook bao gồm Sách giáo khoa từ lớp 1 tới lớp 12, không bao gồm sách giải. Các nội dung khác người dùng có thể tải về từ Kho dữ liệu Classbook Store.
+							</span>							
+							<div class="line_seperate_product mtop_mini left"></div>
+							
+							<div class="left fcblue line_row_FAQs mtop_normal">5. Học sinh có thể làm bài tập trên Classbook hay không?</div>							
+							<span class="left mtop_mini fcb">
+								Classbook không thay thế vở bài tập của học sinh. Các em đi học sẽ mang theo vở viết như bình thường và Classbook để sử dụng như Sách giáo khoa.
+							</span>							
+							<div class="line_seperate_product mtop_mini left"></div>
+							
+							<div class="left fcblue line_row_FAQs mtop_normal">6. Chúng tôi có thể sử dụng nội dung Sách giáo khoa điện tử trên thiết bị máy tính bảng của mình được không?</div>							
+							<span class="left mtop_mini fcb">
+								Nội dung Sách giáo khoa điện tử không thể lấy ra khỏi thiết bị và chỉ có thể sử dụng trên thiết bị Classbook mà thôi, bản quyền thuộc sở hữu của NXB Giáo dục Việt Nam.
+							</span>							
+							<div class="line_seperate_product mtop_mini left"></div>
+							
+							<div class="left fcblue line_row_FAQs mtop_normal">7. Ngoài Sách giáo khoa, Classbook có thêm gì nữa không?</div>							
+							<span class="left mtop_mini fcb">
+								Ngoài Sách giáo khoa giống như phiên bản giấy, chúng tôi đưa vào Classbook những dữ liệu đa phương tiện như: giọng đọc tiếng Anh chuẩn trong môn tiếng Anh, bài hát trong môn Âm nhạc.<br>
+								Classbook cũng cung cấp một bộ công cụ học tập bao gồm: tử điển, máy tính cầm tay, atlas bản đồ, công cụ tạo thời khóa biểu… Những công cụ học tập này đã có sẵn ở trong Classbook.
+							</span>							
+							<div class="line_seperate_product mtop_mini left"></div>
+							
+							<div class="left fcblue line_row_FAQs mtop_normal">8. Sách ở trên kho dữ liệu Classbook Store có những gì, có miễn phí hay không?</div>							
+							<span class="left mtop_mini fcb">
+								Classbook Store chứa hàng ngàn đầu sách tham khảo, đặc biệt là sách của Nhà xuất bản Giáo dục. Thêm vào đó Classbook Store có kho bài giảng của cộng đồng giáo viên biên soạn. Tùy theo nhà cung cấp hoặc tác giả, những tài liệu nói trên có thể được chia sẻ miễn phí hoặc cần mua. Classbook Store được tích hợp sẵn công cụ thanh toán trực tuyến tiện lợi cho người dùng. Người dùng có thể mua/tải về hàng ngàn đầu sách và tài liệu tham khảo phong phú, đa dạng hơn bất cứ nhà sách nào mà không bị hạn chế về thời gian, không phải mất thời gian di chuyển. Trên mặt bằng chung, giá sách và tài liệu điện tử (bản mềm) thường rẻ hơn bản in.
+							</span>							
+							<div class="line_seperate_product mtop_mini left"></div>							
+						</div>
+						
+						<div id="tabs-2">
+							<div class="left fcblue line_row_FAQs mtop_normal">1. Giá thành của sản phẩm Classbook?</div>							
+							<span class="left mtop_mini fcb">
+								Giá của Classbook là 4.800.000 VNĐ, đã bao gồm toàn bộ nội dung SGK từ lớp 1 tới lớp 12. Giá trên đã bao gồm VAT.
+							</span>						
+							<div class="line_seperate_product mtop_mini left"></div>
+
+							<div class="left fcblue line_row_FAQs mtop_normal">2. Cấu hình, hệ điều hành và dung lượng pin của máy như thế nào?</div>							
+							<span class="left mtop_mini fcb">
+								Thiết bị Classbook sử dụng hệ điều hành Android 4.1, bộ nhớ trong 16GB, dung lượng pin cho phép sử dụng liên tục từ 6-10 tiếng.
+							</span>						
+							<div class="line_seperate_product mtop_mini left"></div>
+
+							<div class="left fcblue line_row_FAQs mtop_normal">3. Thời gian bảo hành của máy như thế nào? Thiết bị có dùng được 3-5 năm hay không?</div>							
+							<span class="left mtop_mini fcb">
+								Công ty EDC bảo hành thiết bị trong vòng 12 tháng. Ngoài thời hạn bảo hành, người dùng có thể sửa chữa thiết bị với mức chi phí hợp lý. “Của bền tại người”, nếu các em học sinh giữ gìn Classbook thì có thể sử dụng được lâu dài, đáp ứng nhu cầu học tập qua nhiều năm.
+							</span>						
+							<div class="line_seperate_product mtop_mini left"></div>
+
+							<div class="left fcblue line_row_FAQs mtop_normal">4. Classbook có thể kết nối ra máy chiếu được không?</div>							
+							<span class="left mtop_mini fcb">
+								Classbook kết nối trực tiếp ra màn hình TV không cần thêm dây chuyển tiếp. Người dùng sử dụng thêm một dây chuyển tiếp có thể kết nối Classbook với máy chiếu để phục vụ trình chiếu.
+							</span>						
+							<div class="line_seperate_product mtop_mini left"></div>
+
+							<div class="left fcblue line_row_FAQs mtop_normal">5. Classbook có thể kết nối với những thiết bị nào, thông qua cổng nào?</div>							
+							<span class="left mtop_mini fcb">
+								Classbook có 3 đường kết nối tới các thiết bị bên , bao gồm:<br>
+									<span style="margin-left:10px;">-	Cổng microSD cho phép đưa thẻ nhớ microSD lên tới 32GB.</span><br>
+									<span style="margin-left:10px;">- Cổng microUSB cho phép kết nối Classbook và máy tính.</span><br>
+									<span style="margin-left:10px;">- Cổng HDMI cho phép Classbook kết nối với màn hình TV hoặc máy chiếu (trường hợp máy chiếu yêu cầu thêm một bộ chuyển đổi).</span>
+							</span>						
+							<div class="line_seperate_product mtop_mini left"></div>
+						</div>
+						
+						<div id="tabs-3">
+							<div class="left fcblue line_row_FAQs mtop_normal">1. Sử dụng Classbook có gây hại cho mắt hay không?</div>
+							<span class="left mtop_mini fcb">
+								Thiết bị Classbook được thiết kế với công nghệ màn hình IPS đảm bảo độ sáng và độ phân giải không gây hại nhiều cho mắt. Sử dụng Classbook ít ảnh hưởng tới thị lực hơn sử dụng máy PC.
+							</span>
+							<div class="line_seperate_product mtop_mini left"></div>
+
+							<div class="left fcblue line_row_FAQs mtop_normal">2. Có cách nào chống mất cắp, chống các em học sinh trong lớp cầm nhầm máy của nhau hay không?</div>
+							<span class="left mtop_mini fcb">
+								Classbook có tính năng “Nhãn vở điện tử”, theo đó mỗi máy được gắn với tên một học sinh. Học sinh khác cầm nhầm máy vì không biết mật khẩu nên không thể thay đổi tên trên nhãn vở.
+							</span>
+							<div class="line_seperate_product mtop_mini left"></div>
+
+							<div class="left fcblue line_row_FAQs mtop_normal">3. Tôi lo ngại con tôi còn nhỏ và hiếu động sẽ làm rơi vỡ thiết bị Classbook?</div>
+							<span class="left mtop_mini fcb">
+								Chúng tôi có thiết kế một bao da đi kèm thiết bị nhằm hạn chế thiệt hại trong trường hợp va đập. Tuy nhiên quý vị phụ huynh vẫn nên hướng dẫn con em mình có ý thức giữ gìn đồ đạc của mình.
+							</span>
+							<div class="line_seperate_product mtop_mini left"></div>
+
+							<div class="left fcblue line_row_FAQs mtop_normal">4. Học sinh có được mang Classbook tới lớp hay không?</div>
+							<span class="left mtop_mini fcb">
+								Classbook là một công cụ chuyên dụng cho học tập. Học sinh không thể cài trò chơi, không thể truy cập Internet thông qua Classbook. Vì vậy, Ban giám hiệu và giáo viên hoàn toàn đồng ý cho các em mang Classbook tới lớp học tập.
+							</span>
+							<div class="line_seperate_product mtop_mini left"></div>
+
+							<div class="left fcblue line_row_FAQs mtop_normal">5. Muốn mua Classbook thì chúng tôi liên hệ ở đâu</div>
+							<span class="left mtop_mini fcb">
+								Quý vị phụ huynh đăng ký với giáo viên chủ nhiệm lớp con em mình học tập. Công ty EDC sẽ tổng hợp danh sách rồi chuyển sản phẩm Classbook về trường theo từng đợt đăng ký.<br> 
+								Quý vị cũng có thể tới đặt hàng tại văn phòng Công ty Sách giáo khoa điện tử EDC tại 187B Giảng Võ, Ba Đình, Hà Nội.
+							</span>
+							<div class="line_seperate_product mtop_mini left"></div>
+
+							<div class="left fcblue line_row_FAQs mtop_normal">6. Tôi muốn tìm hiểu thêm thông tin về Classbook thì phải tìm ở đâu?</div>
+							<span class="left mtop_mini fcb">
+								Để tìm hiểu thêm thông tin, quý vị có thể truy cập website của Công ty chúng tôi tại địa chỉ: <a href="http://www.classbook.vn" style="color: #ff610b;">http://www.classbook.vn</a>								
+							</span>
+							<div class="line_seperate_product mtop_mini left"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$(function()
+{
+	$("#tabs-faqs").tabs({
+		activate: function( event, ui ) 
+		{
+			ui.oldTab.find('.tab_child_item_active').attr('class', 'tab_child_item left mright_normal ui-tabs-anchor');
+			ui.newTab.find('.tab_child_item').attr('class', 'tab_child_item_active left mright_normal ui-tabs-anchor');
+	  	}
+	});
+});
+</script>

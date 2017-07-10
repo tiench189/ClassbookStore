@@ -1,0 +1,268 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+<script type="text/javascript">
+$(document).ready(function() 
+{
+	$('#purchase_date').glDatePicker(
+			{
+				cssName: 'default',
+				onClick: function(target, cell, date, data) {
+			        target.val(date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+			    }
+			});
+	$('#warranty_adddevice_form').find('input:first').focus();
+});
+
+function isDateValid(date) {
+    var m = date.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+	
+	if (!m)
+		return false;
+	else{
+		var currentDate = new Date()
+		var purchase_date = new Date(m[3], m[2]-1, m[1]);
+
+        return purchase_date <= currentDate;
+  	}
+}
+
+/**
+ * @return {boolean}
+ */
+function IsEmail(email) {
+	var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  	return regex.test(email);
+}
+
+function isInteger(n) {
+   return ((typeof n=='number')&&(n%1==0));
+}
+   
+function validate (phone) {
+    var regex = /^\+?(?:[0-9] ?){8,10}[0-9]$/;
+
+    if (regex.test(phone)) {
+        return true;// Valid international phone number
+    } else {
+        return false;// Invalid international phone number
+    }
+} 
+
+function submitform() {
+	/* var nicE = nicEditors.findEditor('noi_dung');
+	var hidTxt = document.getElementById('hiddenText');
+	question = nicE.getContent();
+	hidTxt.value = question; */
+	var isFormOK = validateForm();
+	
+	if(isFormOK) {
+		document.warranty_adddevice_form.submit();
+	}else {
+		return false;
+	}
+}
+
+function trim(str) {
+    str = str.toString();
+    var begin = 0;
+    var end = str.length - 1;
+    while (begin <= end && str.charCodeAt(begin) < 33) { ++begin; }
+    while (end > begin && str.charCodeAt(end) < 33) { --end; }
+    return str.substr(begin, end - begin + 1);
+}
+
+function validateForm()
+{
+	var isOK = true;
+	var error = "";
+	var notify_place = document.getElementById('notify_place');
+	
+	var serial=document.forms["warranty_adddevice_form"]["serial"].value;
+	serial = trim(serial);
+	var retypeserial=document.forms["warranty_adddevice_form"]["retype_serial"].value;
+	var email=document.forms["warranty_adddevice_form"]["email"].value;
+	var purchase_date=document.forms["warranty_adddevice_form"]["purchase_date"].value;
+	var dien_thoai=document.forms["warranty_adddevice_form"]["dien_thoai"].value;
+	dien_thoai = trim(dien_thoai);
+	
+	email = trim(email);
+	if (serial == null || serial == "" || serial.length == 0)
+	{
+	  	error = "Mã thiết bị không hợp lệ!";
+	  	isOK = false;
+	}	
+	else if (retypeserial == null || retypeserial == "" || retypeserial.length == 0 || retypeserial != serial)
+	{
+	  	error = "Hai mã thiết bị không khớp!";
+	  	isOK = false;
+	}
+	else if (email == null || email == "" || email.length == 0 || !IsEmail(email))
+	{
+	  	error = "Email không hợp lệ!";
+	  	isOK = false;
+	}
+	else if (dien_thoai != null && validate(dien_thoai) == false){
+	  	error = "Số điện thoại không hợp lệ!";
+	  	isOK = false;
+	}
+	else if (purchase_date == null || purchase_date == "" || purchase_date.length == 0 || !isDateValid(purchase_date))
+	{
+	  	error = "Ngày mua không hợp lệ!";
+	  	isOK = false;
+	}
+	  
+	if(!isOK) {
+	 	notify_place.innerHTML = error;
+	 	return false;
+	}else{
+	 	notify_place.innerHTML = "";
+	}
+	 return true;
+}
+</script> 
+        <div id="breadcrumb">
+            <ol class="breadcrumb">
+              <li><a href="/">Trang chủ</a></li>
+              <li class="active">Hỗ trợ</li>
+            </ol>
+        </div>
+        <!--/breadcrumb -->
+        <!-- cate content -->
+        <div class="cate-content">
+            <div class="support-list">
+            	<div class="sl-tabs">
+                	<ul>
+                    	<li><a href="/support" title="">FAQs</a></li>
+                        <li><a href="/support_form" title="">Phản hồi</a></li>
+                        <li class="active"><a href="#" title="">Đăng ký bảo hành</a></li>
+                        <li><a href="/support_manager" title="">Phần mềm quản lý</a></li>
+                        <li><a href="/download" title="">Download</a></li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+                <div class="sl-content">
+                <form class="box_right_product left mtop_normal mbot_normal" id="warranty_adddevice_form" name="warranty_adddevice_form" method="POST">
+				<div class="slide_product left">
+					<div class="form left mleft_normal">
+						<div id="notify_place" style="color:red">{{=result}}</div>
+						<!-- warning -->
+						<div>
+							<div class="faqs_title_item left">
+								&nbsp;
+							</div>
+							<div style="font-style:italic;font-size:7pt;">Yêu cầu nhập đầy đủ Mã thiết bị (tìm thấy ở mặt sau của Classbook).</br>Ví dụ: CB01 16GBD-<b style="font-size:8pt">1121201002</b></div>
+						</div>
+						<div class="line_row_FAQs mtop_medium left">
+							<div class="faqs_title_item left">
+								Loại thiết bị<font color="red"> (*)</font>
+							</div>
+							<select class="basic_combobox left" style="width:105px; heigth:18px; margin-right:5px" name="model" />
+								{{i=1}}
+								{{while i <= len(cb_model):}}
+									<option id="{{=i}}">{{=cb_model[str(i)]}}</option>
+									{{i=i+1}}
+								{{pass}}
+							</select>
+						</div>
+						<div class="line_row_FAQs mtop_medium left">
+							<div class="faqs_title_item left">
+								Mã thiết bị<font color="red"> (*)</font>
+							</div>
+							<input class="form_line box_radius left" name="serial" />
+						</div>
+						 <div class="line_row_FAQs mtop_medium left">
+							<div class="faqs_title_item left">
+								Gõ lại Mã thiết bị<font color="red"> (*)</font>
+							</div>
+							<input class="form_line box_radius left" name="retype_serial" />
+						</div>
+
+						<div class="line_row_FAQs mtop_medium left">
+							<div class="faqs_title_item left">Email<font color="red"> (*)</font></div>
+							<input class="form_line box_radius left" name="email" />
+						</div>
+
+						<div class="line_row_FAQs mtop_medium left">
+							<div class="faqs_title_item left">Ngày mua<font color="red"> (*)</font></div>
+							<input class="datetime form_line box_radius left" name="purchase_date" id="purchase_date" />
+						</div>
+
+						<div class="line_row_FAQs mtop_medium left">
+							<div class="faqs_title_item left">Họ và tên</div>
+							<input class="form_line box_radius left" name="fullname"/>
+						</div>
+
+						<div class="line_row_FAQs mtop_medium left">
+							<div class="faqs_title_item left">Số điện thoại<font color="red"> (*)</font></div>
+							<input class="form_line box_radius left" name="dien_thoai" id="dien_thoai"/>
+						</div>
+
+						<div class="line_row_FAQs mtop_medium left">
+							<div class="faqs_title_item left">Địa chỉ</div>
+							<input class="form_line box_radius left" name="address"/>
+						</div>
+
+						<div class="line_row_FAQs mtop_medium left">
+							<input type="hidden" name="captchas_random" value="{{=captchas_random}}"/>
+							<div class="faqs_title_item left">
+								Mã xác nhận<font color="red"> (*)</font>
+							</div>
+							<div class="left">
+								<div>
+									<input style="width:100px;" class="form_line box_radius left" name="captchas_value"/>
+									<span>&nbsp;</span>
+								</div>
+								<br>
+								<div style="color:red">
+								<!-- {{if captchas_result > 0:}} -->
+									Mã không hợp lệ
+								<!-- {{pass}} -->
+								</div>
+							</div>
+							<div style="overflow:hidden;width:80px;height:40px;">
+							<img style="margin-top: -20px;margin-bottom: -15px; margin-left:-10px; border: none; vertical-align: bottom" id="captchas.net"
+							src="{{=captchas_image}}" width="100" height="80" alt="The CAPTCHA image" />
+							</div>
+						</div>
+
+						<div class="line_row_FAQs mtop_medium left">
+							<div class="faqs_title_item left"></div>
+							<div class="btn_send left" onclick = "javascript:submitform();" style="cursor:pointer;"></div>
+						</div>
+					</div>
+				</div>
+			</form>
+                </div>
+            </div>
+        </div>
+<script type="text/javascript"> 
+<!-- 
+	function captchas_image_error (image) 
+	{ 
+		if (!image.timeout) return true; 
+		image.src = image.src.replace (/^http:\/\/image\.captchas\.net/, 'http://image.backup.captchas.net'); 
+		return captchas_image_loaded (image); 
+	} 
+	function captchas_image_loaded (image) 
+	{ 
+		if (!image.timeout) return true; 
+		window.clearTimeout (image.timeout); 
+		image.timeout = false; 
+		return true; 
+	} 
+	var image = document.getElementById ('captchas.net'); 
+	image.onerror = function() 
+	{
+		return captchas_image_error (image);
+	}; 
+	image.onload = function() 
+	{
+		return captchas_image_loaded (image);
+	}; 
+	image.timeout = window.setTimeout( "captchas_image_error (document.getElementById ('captchas.net'))", 10000); 
+	image.src = image.src; 
+//--> 
+</script>

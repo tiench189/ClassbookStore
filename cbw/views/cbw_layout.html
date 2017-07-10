@@ -1,0 +1,491 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{{=response.title}}</title>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script type="text/javascript">
+      (function() {
+       var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+       po.src = 'https://apis.google.com/js/client.js?onload=onLoadCallback';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+     })();
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="imagetoolbar" content="no" />
+<meta name="google-site-verification" content="X6DRUdcWxPX2IuCl1hu-dpc4mB2_0Rb-3awqk-su_nM" />
+{{if URL() == URL('store_detail'):}}
+<meta name="description" content="{{=info['product_description']}}">
+<meta name="keywords" content="{{=info['publisher_name']}}, {{info['category_name']}}">
+{{pass}}
+{{block meta}}{{end}}
+
+<link rel="stylesheet" type="text/css" href="{{=URL('static','css/css.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{=URL('static','css/glDatePicker/glDatePicker.default.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{=URL('static','css/glDatePicker/glDatePicker.flatwhite.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{=URL('static','css/glDatePicker/glDatePicker.darkneon.css')}}" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<link rel="shortcut icon" href="{{=URL('static','store2.2/images/favicon.png')}}" type="image/x-icon" />
+<link rel="apple-itouch-icon" href="{{=URL('static','store2.2/images/favicon.png')}}" />
+<link rel="icon" href="{{=URL('static','store2.2/images/favicon.png')}}" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="{{=URL('static','store2.2/css/bootstrap.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{=URL('static','store2.2/css/media.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{=URL('static','store2.2/css/slide.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{=URL('static','store2.2/css/main.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{=URL('static','store2.2/css/nganluong.css')}}" />
+
+<script type="text/javascript" src="{{=URL('static','store2.2/js/jquery-1.9.1.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static','store2.2/js/bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static','store2.2/js/slide.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static','store2.2/js/sly.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static','store2.2/js/bootstrap-select.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static','store2.2/js/classbook.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static','store2.2/js/jquery.easing.min.js')}}"></script>
+
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,700,500,300,300italic,400italic,500italic,700italic,900,900italic&subset=latin,vietnamese' rel='stylesheet' type='text/css' />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,800italic,400,700,600,800&subset=latin,vietnamese' rel='stylesheet' type='text/css' />
+
+<!--[if IE]>
+<style>
+	@font-face {
+    font-family: Arial, Helvetica, sans-serif;}
+</style>
+<![endif]-->
+
+<script src="{{=URL('static','js/jquery-ui.min.js')}}"></script>
+<script src="{{=URL('static','js/glDatePicker.min.js')}}"></script>
+<script src="{{=URL('static','js/jquery.qtip.min.js')}}"></script>
+<script src="{{=URL('static','js/jquery.lightbox_me.js')}}"></script>
+<script src="{{=URL('static','js/carouFredSel/jquery.carouFredSel-6.2.0.js')}}"></script>
+<script src="{{=URL('static','js/jquery.touchSwipe.min.js')}}"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-43653667-1']);
+  _gaq.push(['_setDomainName', 'classbook.vn']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</head>
+
+<body>
+<div id="bg-loading">
+    <div id="loading"></div>
+</div>
+<div id="navbar">
+    {{include 'cbw_navbar.html'}}
+</div>
+<div id="header">
+	{{include 'cbw_header.html'}}
+</div>
+{{if URL() == URL('index'):}}
+<div id="home-slide">
+    {{include 'cbw_home_slide.html'}}
+</div>
+{{pass}}
+<div class="clearfix"></div>
+<div id="main">
+	<div class="container">
+    {{block title_content}}{{end}}
+    {{include}}
+    </div>
+</div>
+<div class="clearfix"></div>
+<div id="bot-info">
+    {{include 'cbw_bot_info.html'}}
+</div>
+<div id="footer">
+    {{include 'cbw_footer.html'}}
+</div>
+<div class="modal fade" id="pop-demo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-close"></i></button>
+        <h4 class="modal-title" id="myModalLabel">Demo chức năng popup</h4>
+      </div>
+      <div class="modal-body" id="modal-body" style="text-align: center">
+      	Bạn có muốn thanh toán ngay không
+      </div>
+      <div class="modal-footer" style="text-align: center !important;">
+      	<a id="done_popup" class="btn btn-classbook">Đồng ý</a>
+        <a id="cacel_popup" data-dismiss="modal" class="btn btn-classbook2">Đóng lại</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="pop-media" tabindex="-3" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-close"></i></button>
+        <h4 class="modal-title">Danh sách dữ liệu mở rộng</h4>
+      </div>
+      <div class="modal-body" id="modal-media-body">
+      {{if URL() == URL('store_detail'):}}
+          {{for media in media_list:}}
+            <div style='padding:5px;vertical-align: middle;display:inline-block;width: 100%; box-sizing: border-box;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-o-box-sizing: border-box;-ms-box-sizing: border-box;'>
+                <span style='float:left;width: 50px; text-align: center'><div class="media media-{{=media['type']}}"></div></span>
+                <div style='margin-top:11px;float:left;width: 80%; white-space: nowrap; box-sizing: border-box;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;-o-box-sizing: border-box;-ms-box-sizing: border-box;'>
+                    <div style='display: inline-block;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 100%;'>
+                    {{=media['title']}} .......................................................................................................................</div></div>
+                <span style='margin-top:11px;float:right;width: 40px; text-align: center'>{{=media['page']}}</span>
+            </div>
+          {{pass}}
+      {{pass}}
+      </div>
+      <div class="modal-footer" style="text-align: center !important;">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="pop-rename-device" tabindex="-2" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width: 300px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-close"></i></button>
+        <h4 class="modal-title">Đổi tên thiết bị</h4>
+      </div>
+      <div class="modal-body" style="text-align: center">
+      	<input type="text" value="Tên thiết bị" id="edit_name">
+      </div>
+      <div class="modal-footer" style="text-align: center !important;">
+      	<a id="done_rename" class="btn btn-classbook">Hoàn tất</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="pop-third" tabindex="-6" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-close"></i></button>
+        <h4 class="modal-title" id="label-third">Thành công</h4>
+      </div>
+      <div class="modal-body" id="third-body" style="text-align: center">
+      	Chúc mừng bạn đã thực hiện nạp tiền thành công.
+      </div>
+      <div class="modal-footer" style="text-align: center !important;">
+      	<a id="done_third" class="btn btn-classbook" style="width:130px;">Kết thúc</a>
+        <a id="cacel_third" data-dismiss="modal" class="btn btn-classbook" style="width:130px;">Tiếp tục nạp tiền</a>
+      </div>
+    </div>
+  </div>
+</div>
+    <!--<<script type="text/javascript">
+    /* <![CDATA[ */
+    var google_conversion_id = 985277169;
+    var google_custom_params = window.google_tag_params;
+    var google_remarketing_only = true;
+    /* ]]> */
+    </script>
+    <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+    </script>
+    <noscript>
+    <div style="display:inline;">
+    <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/985277169/?value=0&amp;guid=ON&amp;script=0"/>
+    </div>
+    </noscript>
+
+    <script type="text/javascript">
+    adroll_adv_id = "JQAAF7LE6FDXNNBDWIYZV5";
+    adroll_pix_id = "YC2VAYMGTVBCJMUQWS5VLF";
+    (function () {
+    var oldonload = window.onload;
+    window.onload = function(){
+       adroll_loaded=true;
+       var scr = document.createElement("script");
+       var host = (("https:" == document.location.protocol) ? "https://s.adroll.com" : "http://a.adroll.com");
+       scr.setAttribute('async', 'true');
+       scr.type = "text/javascript";
+       scr.src = host + "/j/roundtrip.js";
+       ((document.getElementsByTagName('head') || [null])[0] ||
+        document.getElementsByTagName('script')[0].parentNode).appendChild(scr);
+       if(oldonload){oldonload()}};
+    }());
+    </script>-->
+
+    <!--script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-39941884-1', 'classbook.vn');
+      ga('send', 'pageview');
+    </script-->
+</body>
+</html>
+<script>
+    PopupPrompt = {
+        init: function (config) {
+            this.config = config;
+            $("body").append(config.content || "<div id='prompt'><div class='pop' id='promptPop'></div></div>");
+            document.getElementById("prompt").style.display = "none";
+            document.getElementById("prompt").className = "hide";
+        },
+        showPopup: function (config) {
+            this._flagShow = true;
+            this.config = config;
+            document.getElementById("promptPop").innerHTML = config.content ? config.content : document.getElementById("promptPop").innerHTML;
+            if (config.effect)
+                this.showEffect();
+            else
+                this.show();
+            this.eventListent(config.stopPropagation);
+        },
+        refresh: function () {
+            if (!this._flagLOAD) {
+                var dom = document.getElementById("prompt");
+                dom.style.width = window.innerWidth + "px";
+                dom.style.height = window.innerHeight + "px";
+                var borderTable = document.getElementById("borderTable");
+                if (borderTable)
+                    borderTable.style.maxHeight = (window.innerHeight - 200) + "px";
+                var pop = document.getElementById("promptPop");
+                pop.style.marginTop = ((window.innerHeight - pop.offsetHeight) / 2) + 'px';
+            } else {
+                var loading = document.getElementById("loadingPrompt");
+                loading.style.marginTop = ((window.innerHeight - loading.offsetHeight) / 2) + 'px';
+            }
+        },
+        show: function () {
+            document.getElementById("prompt").className = "show";
+            document.getElementById("prompt").style.display = "block";
+            return true;
+        },
+        showEffect: function () {
+            document.getElementById("prompt").style.display = "block";
+            var t = setTimeout(function () {
+                document.getElementById("prompt").className = "show";
+                clearTimeout(t);
+            }, 1)
+        },
+        hideEffect: function () {
+            document.getElementById("prompt").className = "hide";
+            var t = setTimeout(function () {
+                document.getElementById("prompt").style.display = "none";
+                clearTimeout(t);
+            }, 300)
+        },
+        hide: function () {
+            document.getElementById("prompt").style.display = "none";
+            document.getElementById("prompt").className = "hide";
+        },
+        hidePopup: function (effect) {
+            this._flagShow = false;
+            if (effect)
+                this.hideEffect();
+            else
+                this.hide();
+        },
+        eventListent: function () {
+            this.refresh();
+            var _self = this;
+            if (document.getElementById("promptPop")) {
+                document.getElementById("promptPop").addEventListener("click", function (e) {
+                    if (!_self.config.stopPropagation)
+                        e.stopPropagation();
+                });
+            }
+            if (document.getElementById("prompt")) {
+                document.getElementById("prompt").addEventListener("click", function (e) {
+                    if (!_self.config.stopPropagation) {
+                        e.stopPropagation();
+                        if (_self.config.hidePop)
+                            _self.hidePopup();
+                    }
+                });
+            }
+            if (document.getElementById("promtBtn")) {
+                document.getElementById("promtBtn").addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    if (_self.config._callback)
+                        _self.config._callback();
+                });
+            }
+            if (document.getElementById("closeBtn")) {
+                document.getElementById("closeBtn").addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    _self.hidePopup();
+                });
+            }
+        }
+    };
+
+</script>
+
+<script>
+    var cart_len = parseInt("{{=len(session.shopping_cart)}}");
+    function action_cart(id){
+        var in_cart = false;
+        $.ajax({
+            url: "/check_in_cart.json/" + id,
+            async: false,
+            success: function (data) {
+                in_cart = data.result;
+            },
+            error: function (err) {
+                in_cart = false;
+            }
+        });
+        if (in_cart){
+            remove_from_cart(id)
+        }else{
+            add_to_cart(id)
+        }
+
+    }
+    function add_to_cart(id){
+//        alert("add " + id);
+        $.ajax({
+            url: "/add_to_cart.json/" + id,
+            async: false,
+            success: function (data) {
+                if (data.err){
+                    openAlert(data.err)
+                }else{
+                    cart_len ++;
+                    $(".cart-badge").html(cart_len);
+                    $(".cart" + id).addClass("in-cart")
+                }
+            },
+            error: function (err) {
+                openAlert(err)
+            }
+        });
+    }
+
+    function remove_from_cart(id){
+//        alert("remove " + id);
+        $.ajax({
+            url: "/remove_from_cart.json/" + id,
+            async: false,
+            success: function (data) {
+                if (data.err){
+                }else{
+                    cart_len --;
+                    $(".cart-badge").html(cart_len);
+                    $(".cart" + id).removeClass("in-cart");
+                }
+            },
+            error: function (err) {
+                openAlert(err)
+            }
+        });
+    }
+</script>
+<script>
+    function openAlert(message){
+        $("#done_popup").hide();
+        $("#cacel_popup").show();
+        $("#myModalLabel").html("Thông báo");
+        $("#modal-body").html(message);
+        console.log(message);
+        $('#pop-demo').modal('show');
+    }
+    function openConfirm(message){
+        $("#done_popup").show();
+        $("#cacel_popup").hide();
+        $("#myModalLabel").html("Xác nhận");
+        $("#modal-body").html(message);
+        $('#pop-demo').modal('show');
+    }
+    function showLoading(){
+        $("#bg-loading").show();
+    }
+    function hideLoading(){
+        $("#bg-loading").hide();
+    }
+    function openThird(mess){
+        $("#third-body").html(mess);
+        $('#pop-third').modal('show');
+    }
+</script>
+<script>
+    function link2detail(id, title){
+//        alert(friendly(title));
+        window.location.href = "/store_detail/" + friendly(title.toLowerCase()).toLowerCase() + "/" + id;
+    }
+    function friendly(aa){
+        as = aa.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a");
+       as = as.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e");
+       as = as.replace(/ì|í|ị|ỉ|ĩ/g,"i");
+       as = as.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o");
+       as = as.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u");
+       as = as.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y");
+       as = as.replace(/đ|Đ/g,"d");
+        as = as.replace(/[^a-z0-9]/gi, '-')
+       as = as.replace(/-+-/g,"-"); //thay thế 2- thành 1-
+        return as;
+    }
+</script>
+<script>
+$('.detail-link').each(function(i, obj) {
+    var id = $(this).attr("p_id");
+    var title = $(this).attr("title");
+    $(this).attr('href',"/store_detail/" + friendly(title.toLowerCase()).toLowerCase() + "/" + id);
+});
+
+$('.category-link').each(function(i, obj) {
+    var id = $(this).attr("p_id");
+    var title = $(this).attr("title");
+    $(this).attr('href',"/category/" + friendly(title.toLowerCase()).toLowerCase() + "/" + id);
+});
+
+$('.parent-link').each(function(i, obj) {
+    var id = $(this).attr("p_id");
+    var title = $(this).attr("title");
+    $(this).attr('href',"/pcategory/" + friendly(title.toLowerCase()).toLowerCase() + "/" + id);
+});
+</script>
+<style>
+    .in-cart{
+        background-image: url("{{=URL('static','store2.2/images/sprites1.png')}}");
+        background-repeat: no-repeat;
+        display: inline-block;
+    }
+    .booklist-wrap ul li .blw-cart:hover .in-cart{ background-position: -64px 0;}
+    .media{
+        background-size: 100% 100%;
+        width: 30px;
+        height: 30px;
+    }
+    .media-image{
+        background-image: url("{{=URL('static','store2.2/images/ico_image.png')}}");
+    }
+    .media-quiz{
+        background-image: url("{{=URL('static','store2.2/images/ico_quiz.png')}}");
+    }
+    .media-wiki{
+        background-image: url("{{=URL('static','store2.2/images/ico_wiki.png')}}");
+    }
+    .media-video{
+        background-image: url("{{=URL('static','store2.2/images/ico_video.png')}}");
+    }
+    .media-sound{
+        background-image: url("{{=URL('static','store2.2/images/img_sound.png')}}");
+    }
+    #loading{
+        z-index: 1000;
+        margin-left: 48%;
+        width: 100px;
+        height: 100px;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-image: url("{{=URL('static','store2.2/images/loading-icon.gif')}}");
+    }
+    #bg-loading{
+        display: none;
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+    }
+</style>
+<script>
+    $("#loading").css("margin-top", window.innerHeight *4 / 10 + "px");
+</script>

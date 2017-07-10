@@ -1,0 +1,202 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}
+	<div class="banner_sub banner_manager"></div>
+	<!--div style="margin:0 auto; width:650px;height:70px;margin-top:-70px;"><a class="btn_download_large right" href="{{=URL('download')}}"></a></div-->
+{{end}}
+
+{{block title_content}}{{end}}
+
+
+<script>
+	jQuery(document).ready(function(){
+   		jQuery('#guild_1_xp').click(function(){jQuery('#xp_content').slideToggle("fast")});
+   		jQuery('#guild_w8').click(function(){jQuery('#w8_content').slideToggle("fast")});
+   		jQuery('#guild_w8_0').click(function(){jQuery('#w8_content_0').slideToggle("fast")});
+   		
+});
+</script>
+<style type="text/css">
+    #tech_specs { width:95%; border:1px solid #D9D5BE; margin: 25px; background:white; border-collapse:collapse; }
+    #tech_specs td { border:1px solid #D9D5BE; }
+    #tech_specs .col1 {
+        vertical-align: top;
+        font-size: medium;
+        width:30%;
+    }
+    .mw-list-spot li{
+        margin-left: 40px;
+        list-style-type: square;
+    }
+    h2 {
+        color: #004488;
+        margin-top: 80px;
+        margin-left: 25px;
+
+    }
+    h3{
+        font-weight: normal;
+        color: #004488;
+    }
+</style>
+<div class="box_store_product box_radius mtop_normal left">
+
+    <div class="product_related left">
+		<div class="box_content_right_main left">
+			<div class="box_right_title_product left">
+				<a class="box_right_tab_item fs18 left" href="{{=URL('manager')}}">
+					Các tính năng chính
+				</a>
+				<a class="box_right_tab_item box_right_tab_item_active fs18 mleft_huge left" href="{{=URL('classroom_technical_specs')}}">
+					Thông số kĩ thuật
+				</a>
+                <a class="box_right_tab_item fs18 mleft_huge left" href="{{=URL('classroom_interactive')}}">Nội dung tương tác</a>
+                <a class="box_right_tab_item fs18 mleft_huge left" href="{{=URL('classroom_support')}}">Hỗ trợ</a>
+			</div>
+
+            <div>
+
+            <div>
+             <h2>Các yêu cầu kĩ thuật cần đáp ứng cho phòng học Classbook</h2>
+              <table id="tech_specs">
+                <tbody>
+                  <tr>
+                    <td class="col1">Hệ điều hành</td>
+                    <td>
+                            <h3>Máy tính giáo viên</h3>
+                            <ul class="mw-list-spot">
+                                <li>Windows XP/7/8/10</li>
+                                <!--<li>Windows Server 2003/SP1/SP2</li>
+                                <li>Windows Vista/SP1/SP2</li>
+                                <li>Windows Server 2008</li>
+                                <li>Windows 7/SP1</li>
+                                <li>Windows 7 x64</li>
+                                <li>Windows 8</li>
+                                <li>Windows 8 x64</li>-->
+                            </ul>
+
+                            <h3>Máy tính bảng giáo viên (Android)</h3>
+                            <ul class="mw-list-spot">
+                                <!--<li>Android 3.x</li>-->
+                                <li>Android 4.x</li>
+                            </ul>
+
+                            <h3>Máy tính bảng học sinh (Android)</h3>
+                            <ul class="mw-list-spot">
+                                <!--li>Android 3.x</li>-->
+                                <li>Android 4.x</li>
+                            </ul>
+                        </td>
+                  </tr>
+
+                  <tr>
+                    <td class="col1">Yêu cầu phần cứng</td>
+                    <td>
+                            <h3>Máy tính giáo viên</h3>
+                            <ul class="mw-list-spot">
+                                <li>Tối thiểu: CPU P4 2.8G, 1Gbytes Memory, 128Mbytes Display Card.</li>
+                                <li>Khuyến nghị: CPU Core 2 E6300, 2Gbytes Memory, 256Mbytes Display Card.</li>
+                            </ul>
+
+                            <h3>Máy tính bảng giáo viên (Android)</h3>
+                            <ul class="mw-list-spot">
+                                <li>Tối thiểu: CPU 1G, 1Gbytes Memory.</li>
+                                <li>Khuyến nghị: CPU Dual-core 1.6G, 2Gbytes Memory.</li>
+                            </ul>
+
+                            <h3>Máy tính bảng học sinh (Android)</h3>
+                            <ul class="mw-list-spot">
+                                <li>Tối thiểu: CPU 1G, 512Mbytes Memory.</li>
+                                <li>Khuyến nghị: CPU Dual-core 1G, 1Gbytes Memory.</li>
+                            </ul>
+                        </td>
+
+                  </tr>
+
+                  <tr>
+                    <td class="col1">Mạng wifi</td>
+                    <td>Chuẩn kết nối wifi: 802.11b/g/n.</td>
+
+                  </tr>
+                </tbody>
+              </table>
+
+                <h2>Thiết bị cơ bản</h2>
+                <table style="width: 95%;
+    border: 1px solid #D9D5BE;
+    margin: 25px;
+    background: white;
+    border-collapse: collapse;">
+                <thead>
+                 <tr>
+                     <th>Cấu thành</th>
+                     <th>Số lượng</th>
+                     <th>ĐVT</th>
+                     <th>Sản xuất</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                      <td>Tablet / PC</td>
+                      <td>Theo yêu cầu</td>
+                      <td>Cái</td>
+                      <td>Samsung Tab 4 7”</td>
+                   </tr>
+                    <tr>
+                      <td>Tủ sạc & Bảo quản</td>
+                      <td>1</td>
+                      <td>Cái</td>
+                      <td></td>
+                   </tr>
+                 <tr>
+                      <td>Laptop cho Giáo viên</td>
+                      <td>1</td>
+                      <td>Cái</td>
+                      <td></td>
+                   </tr>
+                <tr>
+                      <td>Bộ phát sóng wifi</td>
+                      <td>1</td>
+                      <td>Cái</td>
+                      <td>Cisco Linksys </td>
+                   </tr>
+                <tr>
+                      <td>Nội dung (License) bản quyền và nội dung tương tác</td>
+                      <td>1</td>
+                      <td>Gói</td>
+                      <td></td>
+                   </tr>
+                <tr>
+                      <td>Phần mềm quản trị</td>
+                      <td>Theo yêu cầu</td>
+                      <td>Khóa</td>
+                      <td> </td>
+                   </tr>
+                <tr>
+                      <td>USB bản quyền phần mềm quản trị</td>
+                      <td>1</td>
+                      <td>Cái</td>
+                      <td></td>
+                   </tr>
+                <tr>
+                      <td>Bảo hành/ bảo trì</td>
+                      <td>1</td>
+                      <td>Gói</td>
+                      <td></td>
+                   </tr>
+                <tr>
+                      <td>Tập huấn/HDSD</td>
+                      <td>1</td>
+                      <td>Gói</td>
+                      <td></td>
+                   </tr>
+                </tbody>
+                </table>
+              </div>
+            </div>
+		</div>
+	</div>
+</div>
+<style>
+    table tr,table td, table th{ border:1px solid #ddd}
+</style>

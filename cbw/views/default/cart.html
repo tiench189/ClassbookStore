@@ -1,0 +1,216 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+
+<!-- breadcrumb -->
+        <div id="breadcrumb">
+            <ol class="breadcrumb">
+              <li><a href="/">Trang chủ</a></li>
+              <li class="active">Giỏ hàng</li>
+            </ol>
+        </div>
+        <!--/breadcrumb -->
+        <!-- cate content -->
+        <div class="cate-content">
+            <h1 class="cate-name">Giỏ hàng của bạn</h1>
+            <div style="margin-top: 10px; font-size: 13px">*Chú ý: Nội dung chỉ khai thác được trên <a style="color: #0088ee" href="/device">thiết bị Classbook</a> hoặc các thiết bị máy tính bảng, điện thoại thông minh có cài đặt <a style="color: #0088ee" href="https://play.google.com/store/apps/details?id=com.edc.classbook.app">ứng dụng Classbook</a>.</div>
+            <div class="cate-list">
+            	<div class="cl-title cl-title-line">
+                	<span class="clt"></span>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="cart-page-container">
+                	<div class="cpc-left">
+                    	<table id="cart-table" class="table table-striped">
+                        	<tr class="cpc-head">
+                            	<td class="book">Ấn phẩm trong giỏ hàng <span id="cart-len" class="btn btn-classbook">{{=len(session.shopping_cart)}}</span></td>
+                                <td class="text-center">Giá bìa</td>
+                                <td class="text-center">Giá bán</td>
+                                <td class="text-center">Dữ liệu mở rộng</td>
+                                <td class="text-right">Thành tiền</td>
+                            </tr>
+                            {{for product in list_products:}}
+                            <tr id="cart-row-{{=product['id']}}">
+                            	<td class="book" style="width: 600px">
+                                	<a class="thumb detail-link"  p_id="{{=product['id']}}" title="{{=product['product_title']}}"><img src="{{=product['product_cover']}}" title="" alt=""></a>
+                                    <div class="book-info">
+                                    	<h2><a class="detail-link" p_id="{{=product['id']}}" title="{{=product['product_title']}}">{{=product['product_title']}}</a></h2>
+                                        <p>Danh mục: {{=product['category_name']}}</p>
+                                        <p>Tác giả: {{=product['creator_name']}}</p>
+                                        <a href="javascript:cart_remove('{{=product["id"]}}')" class="cart-remove"><i class="fa fa-trash"></i><span style="    font-size: 11px;
+    margin-left: 5px;">Xóa khỏi giỏ hàng</span></a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </td>
+                                <td class="text-center"><span class="price-old">{{=str2price(str(product['cover_price'])) if product['cover_price'] > 0 else ' '}}</span></td>
+                                <td class="text-center"><span class="price">{{=str2price(str(product['product_price'])) if not product['check_buy'] else 'Đã mua'}}</span></td>
+                                <td class="text-center"><span class="price">
+                                    {{="+" + str2price(str(product['total_media'])) if product['total_media'] > 0 else ' '}}
+                                </span></td>
+                                <td class="text-right"><span class="cart-price price" price="{{=product['total_price']}}" cover="{{=product['total_cover']}}">{{=str2price(str(product['total_price'])) if product['total_price'] > 0 else '0đ'}}</span></td>
+                            </tr>
+                            {{pass}}
+                        </table>
+                        <a href="/" title=""><i class="fa fa-angle-left mr10"></i>Tiếp tục mua hàng</a>
+                    </div>
+                    <div class="cpc-right">
+                    	<div class="box box-checkout">
+                        	<div class="box-content row">
+                            	<div class="col-sm-6 text-left">Tổng cộng:</div>
+                                <div id="cover_price" class="col-sm-6 text-right">đang tính...</div>
+                                <div class="clearfix"></div>
+                                <div class="col-sm-6 text-left mt10">Giảm giá:</div>
+                                <div id="discount" class="col-sm-6 text-right mt10">đang tính...</div>
+                                <div class="clearfix"></div>
+                                <div class="total">
+                                    <div class="col-sm-6 text-left">Thành tiền</div>
+                                    <div id="real_price" class="col-sm-6 text-right">đang tính...</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="javascript:submit_pay()" title="" class="btn btn-classbook2 btn-block btn-lg">Thanh toán <i class="fa fa-angle-right ml10"></i></a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+
+<script>
+    var cart_len = parseInt("{{=len(session.shopping_cart)}}");
+    var real_price = 0;
+    function cart_remove(id){
+        $.ajax({
+            url: "/remove_from_cart.json/" + id,
+            async: false,
+            success: function (data) {
+                if (data.err){
+                }else{
+                    cart_len --;
+                    $(".cart-badge").html(cart_len);
+                    $("#cart-len").html(cart_len);
+                    $("#cart-row-" + id).remove();
+                    $("#cart" + id).show();
+                    calculate_price();
+                }
+            },
+            error: function (err) {
+                openAlert(err)
+            }
+        });
+    }
+
+    function calculate_price(){
+        var cover_price = 0;
+        real_price = 0;
+        $('.cart-price').each(function(){
+            cover_price += parseInt($(this).attr("cover"));
+            real_price += parseInt($(this).attr("price"));
+        });
+        $("#cover_price").html(format_money(cover_price));
+        $("#real_price").html(format_money(real_price));
+        $("#discount").html(format_money(cover_price - real_price));
+    }
+
+     $( document ).ready(function() {
+        calculate_price();
+     });
+
+    function format_money(number){
+        return number.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + "đ";
+    }
+
+    function submit_pay(){
+//        if(real_price > 0){
+        "{{if not session.authorized or session.expired is True:}}"
+        openConfirm("Bạn cần đăng nhập để thực hiện thanh toán. Bạn có muốn đăng nhập ngay không?")
+        $("#done_popup").click(function(){
+            window.location.href = "/signin?location=cart";
+             $('#pop-demo').modal('hide');
+        });
+        "{{else:}}"
+            var valid_fund = false;
+            $.ajax({
+                        url: "/cbs20/users/check_valid_fund.json/{{=session.token}}/" + real_price,
+                        async: false,
+                        success: function (data) {
+                            if (data.result) {
+                                valid_fund = true
+                            } else {
+                                openAlert(data.mess);
+                            }
+
+                        },
+                        error: function (err) {
+                            openAlert("Lỗi kết nối " + err.message);
+//                        window.location.reload();
+                        }
+            });
+            if (valid_fund) {
+                var list_link = [];
+                "{{for product in list_products:}}"
+                "{{if not product['check_buy']:}}"
+                list_link[list_link.length] = "{{=URL(f='service.json', args=['buy_product_divide', product['product_code'], False, product['product_price']])}}";
+//                console.log(list_link[list_link.length -1])
+                "{{pass}}"
+                "{{if product['has_media'] and not product['check_media']:}}"
+                list_link[list_link.length] = "{{=URL(f='service.json', args=['buy_product_divide', product['product_code'], True, product['payment']['price_media']])}}";
+//                console.log(list_link[list_link.length -1])
+                "{{pass}}"
+                "{{if product['has_quiz'] and not product['check_quiz']:}}"
+                list_link[list_link.length] = "{{=URL(f='service.json', args=['buy_product_divide', "Exer"+product['product_code'], False, product['payment']['price_quiz']])}}";
+//                console.log(list_link[list_link.length -1])
+                "{{pass}}"
+                "{{pass}}"
+                    for (var i = 0; i < list_link.length; i++){
+                        console.log(i + ":" + list_link[i] + ":" + list_link.length);
+                        var isFinal = i < list_link.length - 1;
+                        $.ajax({
+                            url: list_link[i],
+                            success: function (data) {
+                                console.log(data)
+                                if (data.error) {
+                                    if (data.error == 'Tiền trong tài khoản không đủ') {
+                                        openConfirm(data.error + ". Bạn có muốn chuyển đến trang nạp tiền không?");
+                                        $("#done_popup").click(function(){
+                                            window.location.href = "http://classbook.vn/nganluong";
+                                             $('#pop-demo').modal('hide');
+                                        });
+                                    } else {
+                                        openAlert("err" + data.error);
+                                    }
+
+                                } else {
+                                    if (! isFinal){
+                                        isFinal = true;
+                                        openAlert("Thanh toán thành công");
+                                        clearCart();
+//                                        refreshUser();
+                                    }
+                                }
+                            },
+                            error: function () {
+                            }
+                        });
+                    }
+            }
+        "{{pass}}"
+//        }
+    }
+
+    function clearCart(){
+        var link = "{{=URL(f='clear_cart')}}.json";
+        console.log(link);
+        $.ajax({
+            url: link,
+            success: function (data) {
+                console.log("clear");
+                window.location.href = "/"
+            },
+            error: function (err) {
+                window.location.href = "/"
+            }
+        });
+    }
+</script>

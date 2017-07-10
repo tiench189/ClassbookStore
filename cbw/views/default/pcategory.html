@@ -1,0 +1,77 @@
+{{extend 'cbw_layout.html'}}
+
+{{block main_banner}}{{end}}
+
+{{block title_content}}{{end}}
+
+        <!-- cate content -->
+        <div class="cate-content">
+            <!-- breadcrumb -->
+            <div id="breadcrumb">
+                <ol class="breadcrumb">
+                  <li><a href="/">Trang chủ</a></li>
+                  <li class="active">{{=cate_parent['category_name']}}</li>
+                </ol>
+            </div>
+            <!--/breadcrumb -->
+            <h1 class="cate-name">{{=cate_parent['category_name']}}</h1>
+            {{for topic in home_topic:}}
+            <div class="cate-1-list">
+            	<div class="cl-title">
+                	<span class="clt">{{=topic['title']}}</span>
+                    {{if topic['code'] != "top":}}
+                    <a class="pull-right title-more {{='category' if topic['count_child'] == 0 else 'parent'}}-link" p_id="{{=topic['id']}}" title="{{=topic['title']}}">Xem tất cả <i class="fa fa-angle-right ml10"></i></a>
+                    {{pass}}
+                    <div class="clearfix"></div>
+                </div>
+                <div class="booklist"  id="booklist-featured">
+                    <div class="booklist-wrap">
+                        <ul class="clearfix">
+                            {{for product in topic['items']:}}
+                            <li>
+                                <a p_id="{{=product['id']}}" class="blw-thumb detail-link" title="{{=product['product_title']}}"><span class="thumb"><img src="{{=product['product_cover']}}" alt="{{=product['product_title']}}"></span></a>
+                                <h2 class="blw-title"><a p_id="{{=product['id']}}" class="thumb detail-link" title="{{=product['product_title']}}">{{=product['product_title']}}</a></h2>
+                                <h3 class="blw-writer">{{=product['creator_name']}}</h3>
+                                <span class="old-price">{{=str2price(str(product['cover_price'])) if product['cover_price'] > 0 else '.'}}</span>
+                                <a href="javascript:action_cart('{{=product["id"]}}')" class="blw-cart">
+                                <i id="cart{{=product['id']}}" class="cart{{=product['id']}} blw-cart-icon mr10 {{=' in-cart' if str(product['id']) in session.shopping_cart else ''}}"></i>{{=str2price(str(product['product_price']))}}</a>
+                                <div class="clearfix"></div>
+                            </li>
+                            {{pass}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {{pass}}
+        </div>
+        <!--/cate content -->
+
+        <!-- cate left -->
+        <div class="cate-left">
+        	<div class="box cate-menu">
+            	<div class="box-title">{{=cate_parent['category_name']}}</div>
+                <div class="box-content">
+                	<ul class="box-list cm-list">
+                        {{for in_parent in cate_parent['children']:}}
+                        <li><a class="{{='category' if len(in_parent['children']) == 0 else 'parent'}}-link" p_id="{{=in_parent['category_id']}}" title="{{=in_parent['category_name']}}">{{=in_parent['category_name']}}</a></li>
+                        {{pass}}
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!--/cate left -->
+
+<style>
+    .cate-left{width: 200px; float: left; margin-top: 20px;}
+    .cate-content{ margin-top: 5px; float: right;}
+</style>
+<script>
+    var screenW = window.innerWidth
+//    alert(screenW + "/" + (screenW < 1200))
+    if (screenW < 1200){
+        $(".cate-content").css("width", "75%");
+    }else{
+        $(".cate-content").css("width", "920px");
+    }
+</script>
